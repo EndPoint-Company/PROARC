@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PROARC (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PROARC (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
