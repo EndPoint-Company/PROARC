@@ -1,3 +1,5 @@
+/* Janela que aparece ao abrir o programa, mostra a logo antes de ir pra próxima tela */
+    
 <?xml version="1.0" encoding="utf-8"?>
 <Window
     x:Class="PROARC.MainWindow"
