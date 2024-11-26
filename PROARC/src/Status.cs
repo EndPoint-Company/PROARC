@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROARC
+namespace PROARC.src
 {
     [Flags]
     public enum Status
@@ -16,9 +16,9 @@ namespace PROARC
         ArquivadoNaoAtendido = 16,
         ArquivadoAtendido = 32,
 
-        EmTramitacao = EmTramitacaoAguardandoRespostaDaEmpresa 
-            | EmTramitacaoAguardandoRealizacaoDaAudiencia 
-            | EmTramitacaoAguardandoEnvioDaNotificacao 
+        EmTramitacao = EmTramitacaoAguardandoRespostaDaEmpresa
+            | EmTramitacaoAguardandoRealizacaoDaAudiencia
+            | EmTramitacaoAguardandoEnvioDaNotificacao
             | EmTramitacaoAguardandoDocumentacao,
 
         Arquivado = ArquivadoNaoAtendido | ArquivadoAtendido
