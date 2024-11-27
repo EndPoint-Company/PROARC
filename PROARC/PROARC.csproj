@@ -13,7 +13,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="src\Empresa.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Assets\PROARC-logo.svg" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="RegistrarProcessoAdministrativoJanela.xaml" />
+    <None Remove="src\CadastroJanela.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +48,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\CadastroJanela.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="RegistrarProcessoAdministrativoJanela.xaml">
