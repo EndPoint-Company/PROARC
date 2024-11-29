@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROARC.src
+namespace PROARC.src.Models
 {
     class Usuario(string nome, int nivelPermissao, SHA512 pwd)
     {
