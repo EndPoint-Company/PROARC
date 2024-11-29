@@ -64,6 +64,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Controllers\" />
+    <Folder Include="src\Helpers\" />
+    <Folder Include="src\Core\" />
+    <Folder Include="src\Services\" />
+    <Folder Include="src\ViewModels\" />
+    <Folder Include="src\Views\" />
+  </ItemGroup>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution

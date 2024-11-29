@@ -5,19 +5,19 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROARC.src
+namespace PROARC.src.Models
 {
-public class Reclamado()
-{
-    private enum tipoDeReclamado
+    public class Reclamado()
     {
-        PessoaFisica,
-        PessoaJuridica
-    }
+        private enum tipoDeReclamado
+        {
+            PessoaFisica,
+            PessoaJuridica
+        }
 
-        private  string nome;
-        private  SHA512? cpf;
-        private  SHA512? cnpj;
+        private string nome;
+        private SHA512? cpf;
+        private SHA512? cnpj;
 
         public required string Nome { get; set; }
         public required SHA512 Cpf { get; set; }
