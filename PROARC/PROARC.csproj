@@ -13,6 +13,28 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="src\Controllers\**" />
+    <Compile Remove="src\Core\**" />
+    <Compile Remove="src\Helpers\**" />
+    <Compile Remove="src\Services\**" />
+    <Compile Remove="src\ViewModels\**" />
+    <EmbeddedResource Remove="src\Controllers\**" />
+    <EmbeddedResource Remove="src\Core\**" />
+    <EmbeddedResource Remove="src\Helpers\**" />
+    <EmbeddedResource Remove="src\Services\**" />
+    <EmbeddedResource Remove="src\ViewModels\**" />
+    <None Remove="src\Controllers\**" />
+    <None Remove="src\Core\**" />
+    <None Remove="src\Helpers\**" />
+    <None Remove="src\Services\**" />
+    <None Remove="src\ViewModels\**" />
+    <Page Remove="src\Controllers\**" />
+    <Page Remove="src\Core\**" />
+    <Page Remove="src\Helpers\**" />
+    <Page Remove="src\Services\**" />
+    <Page Remove="src\ViewModels\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="src\Empresa.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,11 +87,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\Controllers\" />
-    <Folder Include="src\Helpers\" />
-    <Folder Include="src\Core\" />
-    <Folder Include="src\Services\" />
-    <Folder Include="src\ViewModels\" />
     <Folder Include="src\Views\" />
   </ItemGroup>
 
@@ -89,4 +106,19 @@
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
   </PropertyGroup>
+  <ItemGroup>
+    <PRIResource Remove="src\Helpers\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="src\Core\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="src\Controllers\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="src\ViewModels\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="src\Services\**" />
+  </ItemGroup>
 </Project>
