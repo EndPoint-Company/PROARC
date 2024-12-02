@@ -10,21 +10,21 @@ namespace PROARC.src.Models
     {
         private string caminhoDoArquivo;
         private ArquivoTipo tipo;
-        private DateTime? dataDeCriacao;
-        private DateTime? dataDeModificacao;
+        private DateTime dataDeCriacao;
+        private DateTime dataDeModificacao;
         private long tamanhoEmBytes;
 
-        public Arquivo(string caminhoDoArquivo, ArquivoTipo tipo, DateTime? dataDeCriacao, DateTime? dataDeModificacao, long tamanhoEmBytes)
+        public Arquivo(string caminhoDoArquivo, ArquivoTipo tipo, long tamanhoEmBytes)
         {
             this.caminhoDoArquivo = caminhoDoArquivo;
             this.tipo = tipo;
-            this.dataDeCriacao = dataDeCriacao;
-            this.dataDeModificacao = dataDeModificacao;
+            this.dataDeCriacao = DateTime.Now;
+            this.dataDeModificacao = this.dataDeCriacao;
         }
 
-        public string CaminhoDoArquivo { get; set; }
-        public string Tipo { get; set; }
-        public DateTime? DataDeCriacao { get; set; }
+        public required string CaminhoDoArquivo { get; set; }
+        public required ArquivoTipo Tipo { get; set; }
+        public DateTime? DataDeCriacao { get; }
         public DateTime? DataDeModificacao { get; set; }
     }
 }

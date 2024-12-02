@@ -13,8 +13,15 @@ namespace PROARC.src.Models
         private string? cpf;
         private string? rg;
 
+        public Reclamante(string nome, string? cpf = null, string? rg = null)
+        {
+            this.nome = nome;
+            this.cpf = cpf;
+            this.rg = rg;
+        }
+
         public required string Nome { get; set; }
-        public required string Cpf { get; set; }
-        public required string Rg { get; set; }
+        public string? Cpf { get; set; }
+        public string? Rg { get; set; }
     }
 }

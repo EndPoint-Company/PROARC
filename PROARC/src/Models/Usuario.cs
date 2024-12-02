@@ -13,8 +13,6 @@ namespace PROARC.src.Models
         private int nivelPermissao;
 
         public required string Nome { get; set; }
-        public required int NivelPermissao { get; set; }
-        public required SHA512 Pwd { get; set; }
     }
 }
 
