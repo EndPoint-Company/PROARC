@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    public class Motivo(string motivo)
+    public class Motivo
     {
         private string motivoNome;
         private DateTime? dataDeCriacao;

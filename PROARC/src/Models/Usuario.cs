@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    class Usuario(string nome, int nivelPermissao, SHA512 pwd)
+    class Usuario
     {
         private string nome;
         private int nivelPermissao;
-        private SHA512 pwd;
-
 
         public required string Nome { get; set; }
         public required int NivelPermissao { get; set; }

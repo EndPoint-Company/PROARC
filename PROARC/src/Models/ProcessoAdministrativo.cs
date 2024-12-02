@@ -8,14 +8,15 @@ namespace PROARC.src.Models
 {
     class ProcessoAdministrativo
     {
+        private int ano;
         private Motivo motivo;
         private Reclamado reclamado;
         private Reclamante reclamante;
-        private Arquivo arquivo;
+        private Dictionary<String, Arquivo> arquivo; // String ex. -> 0001/2024 (numero / ano)
 
-        public required Motivo Motivo { get; set; }
-        public required Reclamado Reclamado { get; set; }
-        public required Reclamante Reclamante { get; set; }
-        public required Arquivo Arquivo { get; set; }
+        public Motivo Motivo { get; set; }
+        public Reclamado Reclamado { get; set; }
+        public Reclamante Reclamante { get; set; }
+        public Arquivo Arquivo { get; set; }
     }
 }

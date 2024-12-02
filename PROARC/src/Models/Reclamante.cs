@@ -7,14 +7,14 @@ using System.Security.Cryptography;
 
 namespace PROARC.src.Models
 {
-    class Reclamante()
+    class Reclamante
     {
         private string nome;
-        private SHA512 cpf;
-        private SHA512 rg;
+        private string? cpf;
+        private string? rg;
 
         public required string Nome { get; set; }
-        public required SHA512 Cpf { get; set; }
-        public required SHA512 Rg { get; set; }
+        public required string Cpf { get; set; }
+        public required string Rg { get; set; }
     }
 }
