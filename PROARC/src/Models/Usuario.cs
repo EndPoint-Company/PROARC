@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    class Usuario
+    public class Usuario
     {
         private string nome;
-        private int nivelPermissao;
 
         public required string Nome { get; set; }
     }

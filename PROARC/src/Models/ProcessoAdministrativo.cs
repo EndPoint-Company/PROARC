@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    class ProcessoAdministrativo
+    public class ProcessoAdministrativo
     {
         private string numeroProcesso;
         private int ano;

@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace PROARC.src.Models
 {
-    class Reclamante
+    public class Reclamante
     {
         private string nome;
         private string? cpf;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    class ReclamadoPF : Reclamado
+    public class ReclamadoPF : Reclamado
     {
     }
 }
