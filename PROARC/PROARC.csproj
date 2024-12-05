@@ -11,7 +11,13 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release</Configurations>
+	<WindowsPackageType>None</WindowsPackageType>
+	<SelfContained>true</SelfContained>
   </PropertyGroup>
+	<PropertyGroup Label="Globals">
+		<AppxPackage>false</AppxPackage>
+	</PropertyGroup>
   <ItemGroup>
     <Compile Remove="src\Controllers\**" />
     <Compile Remove="src\Core\**" />
@@ -38,6 +44,7 @@
     <Compile Remove="src\Empresa.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Assets\proarc-logo-dark-156x156.png" />
     <Content Remove="Assets\PROARC-logo.svg" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +113,7 @@
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+    <ApplicationIcon>Assets\proarc-dark-logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="src\Helpers\**" />

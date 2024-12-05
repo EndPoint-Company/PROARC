@@ -10,7 +10,18 @@
     Title="PROARC">
 
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Image Width="200" Loaded="Image_Loaded"/>
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+        <StackPanel.Resources>
+            <!-- Animates the rectangle's opacity. -->
+            <Storyboard x:Name="mainWindowStoryboard">
+                <DoubleAnimation
+                  Storyboard.TargetName="mainWindowLogo"
+                  Storyboard.TargetProperty="Opacity"
+                  From="1.0" To="0.0" Duration="0:0:1" 
+                  AutoReverse="True" 
+                  RepeatBehavior="Forever"/>
+            </Storyboard>
+        </StackPanel.Resources>
+
+        <Image Name="mainWindowLogo" Width="200" Source="..\..\Assets\proarc-logo-white-256x256.png"/>
     </StackPanel>
 </Window>
