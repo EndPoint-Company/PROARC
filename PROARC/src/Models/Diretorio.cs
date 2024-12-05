@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    public class Arquivo
+    public class Diretorio
     {
-        private string caminhoDoArquivo;
+        private string caminhoDoDiretorio;
         private ArquivoTipo tipo;
         private DateTime dataDeCriacao;
         private DateTime dataDeModificacao;
-        private long tamanhoEmBytes;
+        private LinkedList<Arquivo> arquivos;
 
-        public Arquivo(string caminhoDoArquivo, ArquivoTipo tipo, long tamanhoEmBytes)
+        public Diretorio(string caminhoDoDiretorio, ArquivoTipo tipo)
         {
-            this.caminhoDoArquivo = caminhoDoArquivo;
+            this.caminhoDoDiretorio = caminhoDoDiretorio;
             this.tipo = tipo;
             this.dataDeCriacao = DateTime.Now;
             this.dataDeModificacao = this.dataDeCriacao;
-            this.tamanhoEmBytes = tamanhoEmBytes;
+            arquivos = new LinkedList<Arquivo>();
         }
 
         private void AtualizarDataDeModificacao()
@@ -28,18 +28,18 @@ namespace PROARC.src.Models
             this.dataDeModificacao = DateTime.Now;
         }
 
-        public required string CaminhoDoArquivo 
+        public string CaminhoDoArquivo
         {
-            get => this.caminhoDoArquivo;
-                
+            get => this.caminhoDoDiretorio;
+
             set
             {
-                this.caminhoDoArquivo = value;
+                this.caminhoDoDiretorio = value;
                 AtualizarDataDeModificacao();
             }
         }
 
-        public required ArquivoTipo Tipo
+        public ArquivoTipo Tipo
         {
             get => this.tipo;
 

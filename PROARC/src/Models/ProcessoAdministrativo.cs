@@ -13,7 +13,7 @@ namespace PROARC.src.Models
         private Motivo? motivo;
         private Reclamado? reclamado;
         private Reclamante? reclamante;
-        private Dictionary<ArquivoTipo, Arquivo> arquivos;
+        private Dictionary<ArquivoTipo, Diretorio> diretorios;
 
         public ProcessoAdministrativo(string numeroProcesso, int ano, Motivo? motivo = null, Reclamado? reclamado = null, Reclamante? reclamante = null)
         {
@@ -22,12 +22,31 @@ namespace PROARC.src.Models
             this.motivo = motivo;
             this.reclamante = reclamante;
             this.reclamado = reclamado;
-            this.arquivos = new Dictionary<ArquivoTipo, Arquivo>();
+            this.diretorios = new Dictionary<ArquivoTipo, Diretorio>();
         }
 
-        public void adicionarArquivo(Arquivo arquivo)
+        private void AdicionarDiretorio(Arquivo arquivo, string caminhoDoDiretorio)
         {
-            this.arquivos.Add(arquivo.Tipo, arquivo);
+            if (diretorios.ContainsKey(arquivo.Tipo)) return;
+
+            diretorios.Add(arquivo.Tipo, new Diretorio(caminhoDoDiretorio, arquivo.Tipo));
+        }
+
+        public void AdicionarArquivo(Arquivo arquivo, string caminhoDoDiretorio)
+        {
+            AdicionarDiretorio(arquivo, caminhoDoDiretorio);
+
+            // TODO
+        }
+
+        private void RemoverDiretorio() // TODO
+        {
+        
+        }
+
+        public void RemoverArquivo() // TODO
+        {
+
         }
 
         public required string NumeroProcesso { get; set;  }

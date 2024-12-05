@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    public class Reclamado
+    public abstract class Reclamado
     {
-        private string nome;
+        protected string nome;
 
         public string Nome { get; set; }
     }

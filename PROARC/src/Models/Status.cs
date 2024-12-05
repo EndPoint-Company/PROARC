@@ -9,9 +9,9 @@ namespace PROARC.src.Models
     [Flags]
     public enum Status
     {
-        EmTramitacaoAguardandoRespostaDaEmpresa = 1,
-        EmTramitacaoAguardandoRealizacaoDaAudiencia = 2,
-        EmTramitacaoAguardandoEnvioDaNotificacao = 4,
+        EmTramitacaoAguardandoEnvioDaNotificacao = 1,
+        EmTramitacaoAguardandoRespostaDaEmpresa = 2,
+        EmTramitacaoAguardandoRealizacaoDaAudiencia = 4,
         EmTramitacaoAguardandoDocumentacao = 8,
         ArquivadoNaoAtendido = 16,
         ArquivadoAtendido = 32,

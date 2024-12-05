@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    public enum UsuarioPermissoes
+    [Flags]
+    public enum UsuarioPermissao
     {
         
     }
