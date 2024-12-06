@@ -10,8 +10,16 @@ namespace PROARC.src.Models
     public class Usuario
     {
         private string nome;
+        private int nivelDePermissao;
 
-        public required string Nome { get; set; }
+        public Usuario(string nome, int nivelDePermissao)
+        {
+            this.nome = nome;
+            this.nivelDePermissao = nivelDePermissao;
+        }
+
+        public string Nome { get; set; }
+        public int NivelDePermissao { get; }
     }
 }
 

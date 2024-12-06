@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using PROARC.src.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -30,7 +31,7 @@ namespace PROARC.src.Views
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HomePage));
+            Frame.Navigate(typeof(HomePage), new Usuario("", 0));
         }
     }
 }
