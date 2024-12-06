@@ -50,6 +50,8 @@
   <ItemGroup>
     <None Remove="RegistrarProcessoAdministrativoJanela.xaml" />
     <None Remove="src\CadastroJanela.xaml" />
+    <None Remove="src\Views\HomePage.xaml" />
+    <None Remove="src\Views\LoginPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -95,7 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Control\" />
-    <Folder Include="src\Views\" />
   </ItemGroup>
 
   <!--
@@ -129,5 +130,15 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Remove="src\Services\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\HomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
