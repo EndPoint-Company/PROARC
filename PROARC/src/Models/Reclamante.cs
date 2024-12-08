@@ -20,7 +20,7 @@ namespace PROARC.src.Models
             this.rg = rg;
         }
 
-        public required string Nome { get; set; }
+        public string Nome { get; set; }
         public string? Cpf { get; set; }
         public string? Rg { get; set; }
     }

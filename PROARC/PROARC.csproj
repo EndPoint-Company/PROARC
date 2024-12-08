@@ -50,8 +50,13 @@
   <ItemGroup>
     <None Remove="RegistrarProcessoAdministrativoJanela.xaml" />
     <None Remove="src\CadastroJanela.xaml" />
+    <None Remove="src\Views\CadastroPage.xaml" />
     <None Remove="src\Views\HomePage.xaml" />
     <None Remove="src\Views\LoginPage.xaml" />
+    <None Remove="src\Views\ProcessosListaPage.xaml" />
+    <None Remove="src\Views\RegistrarProcesso01Page.xaml" />
+    <None Remove="src\Views\RegistrarProcesso02Page.xaml" />
+    <None Remove="src\Views\RegistrarProcesso03Page.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -130,6 +135,31 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Remove="src\Services\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\ProcessosListaPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\RegistrarProcesso03Page.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\RegistrarProcesso02Page.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\RegistrarProcesso01Page.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\CadastroPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="src\Views\HomePage.xaml">

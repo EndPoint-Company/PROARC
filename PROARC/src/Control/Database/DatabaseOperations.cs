@@ -13,7 +13,7 @@ namespace PROARC.src.Control.Database
     {
         public static (bool, Exception) ValidateUserLogin(SecureString acessKey)
         {
-            var cn = DatabaseConnection.Connect("", "", "", "").Result;
+            var cn = DatabaseConnection.Connect("", "", "", "").Result; // TODO: !!! Ler as credenciais que um arquivo separado que deve ficar no .gitignore !!!
             var cmd = new SqlCommand() { Connection = cn };
 
             cmd.CommandText = "SELECT Id,[dbo].[AcessKey_Check] (@AcessKey) as ValidItem FROM dbo.Users1";

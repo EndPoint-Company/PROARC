@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROARC.src.Models
+using PROARC.src.Models.Tipos;
+
+namespace PROARC.src.Models.Arquivos
 {
     public class Arquivo
     {

@@ -7,19 +7,88 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="AliceBlue">
+
+    <Page.Resources>
+        <!-- Botão -->
+        <Style x:Key="LocalAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource AccentButtonStyle}">
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource LocalAccentButtonStyle}" />
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <!-- Impede mudanças ao passar o mouse -->
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                           Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Gray"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Focused">
+                                        <!-- Impede mudanças ao clicar na caixinha -->
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                           Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                           Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Gray"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border
+                                x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}">
+                                <ScrollViewer
+                                    x:Name="ContentElement"
+                                    Margin="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
 
     <Grid>
         <StackPanel>
-            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-            <TextBlock Text="Login" FontSize="36" Margin="4" TextAlignment="Center"/>
+            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center" Foreground="Black"/>
+            <TextBlock Text="Login" FontSize="36" Margin="4" TextAlignment="Center" Foreground="Black"/>
             <TextBlock x:Name="ErrorMessage" Text="" FontSize="20" Margin="4" Foreground="Red" TextAlignment="Center"/>
-            <TextBlock Text="Insira sua chave de acesso" Margin="0,0,0,20"
+            <TextBlock Text="Insira sua chave de acesso" Margin="0,0,0,20" Foreground="Black"
                TextWrapping="Wrap" Width="300"
                TextAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
             <TextBox x:Name="UsernameTextBox" Margin="4" Width="250"/>
-            <Button x:Name="LoginButton" Content="Login" Background="DodgerBlue" Foreground="White"
+            <Button x:Name="LoginButton" Content="Login"
             Click="LoginButton_Click" Width="80" HorizontalAlignment="Center" Margin="0,20"/>
+            
         </StackPanel>
     </Grid>
 
