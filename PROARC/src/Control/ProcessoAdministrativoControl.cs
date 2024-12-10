@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Control
 {
-    public class ProcessoAdministrativoControl
+    public static class ProcessoAdministrativoControl
     {
         // Engloba o controle das entidades-arquivo.
     }

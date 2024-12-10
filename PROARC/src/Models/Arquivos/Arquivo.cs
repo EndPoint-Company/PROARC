@@ -30,6 +30,16 @@ namespace PROARC.src.Models.Arquivos
             this.dataDeModificacao = DateTime.Now;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            var other = obj as Arquivo;
+            if (other == null) return false;
+
+            return other.caminhoDoArquivo == this.caminhoDoArquivo;
+        }
+
         public required string CaminhoDoArquivo 
         {
             get => this.caminhoDoArquivo;

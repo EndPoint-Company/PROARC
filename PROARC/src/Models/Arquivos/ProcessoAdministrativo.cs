@@ -29,26 +29,31 @@ namespace PROARC.src.Models.Arquivos
 
         private void AdicionarDiretorio(Arquivo arquivo, string caminhoDoDiretorio)
         {
-            if (diretorios.ContainsKey(arquivo.Tipo)) return;
+            if (this.diretorios.ContainsKey(arquivo.Tipo)) return;
 
-            diretorios.Add(arquivo.Tipo, new Diretorio(caminhoDoDiretorio, arquivo.Tipo));
+            this.diretorios.Add(arquivo.Tipo, new Diretorio(caminhoDoDiretorio, arquivo.Tipo));
         }
 
         public void AdicionarArquivo(Arquivo arquivo, string caminhoDoDiretorio)
         {
             AdicionarDiretorio(arquivo, caminhoDoDiretorio);
 
-            // TODO
+            this.diretorios[arquivo.Tipo].AdicionarArquivo(arquivo);
         }
 
-        private void RemoverDiretorio() // TODO
+        public void RemoverDiretorio(ArquivoTipo chave)
         {
-        
+            if (chave != ArquivoTipo.OutrosAnexos)
+            {
+                RemoverArquivo(this.diretorios[chave].getLastArquivo());
+            }
+
+            this.diretorios.Remove(chave);
         }
 
-        public void RemoverArquivo() // TODO
+        public void RemoverArquivo(Arquivo arquivo)
         {
-
+            this.diretorios[arquivo.Tipo].RemoverArquivo(arquivo);
         }
 
         public required string NumeroProcesso { get; set;  }

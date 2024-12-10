@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Control
 {
-    public class FileNetworkControl
+    public static class FileNetworkControl
     {
         // Classe pra gerenciar a transferência de arquivos entre Windows (cliente) e Linux (server)
         // Possível utilização de Samba no server side.

@@ -11,30 +11,30 @@ namespace PROARC.src.Control
 {
     public static class UsuarioControl
     {
-        public static Usuario? getUsuario(int id)
+        public static Usuario? GetUsuario(int id)
         {
             // Pega usuario da database pelo id unico
 
             return null;
         }
 
-        public static Usuario? getUsuario(SecureString acessKey)
+        public static Usuario? GetUsuario(SecureString acessKey)
         {
             // Pega usuario da database pela chave de acesso unica
 
             return null;
         }
 
-        public static LinkedList<Usuario>? getAllUsuario()
+        public static LinkedList<Usuario>? GetAllUsuario()
         {
             // Pega todos os usuarios da database
 
             return null;
         }
 
-        public static void removeUsuario(int id)
+        public static void RemoveUsuario(int id)
         {
-            Usuario? toBeRemoved = getUsuario(id);
+            Usuario? toBeRemoved = GetUsuario(id);
 
             if (toBeRemoved != null)
             {
@@ -44,12 +44,12 @@ namespace PROARC.src.Control
             // Remove o usuario da database por ID
         }
 
-        public static void addUsuario(Usuario usuario)
+        public static void AddUsuario(Usuario usuario)
         {
             // Adiciona o usuario na database
         }
 
-        public static void changeNameUsuario()
+        public static void ChangeNameUsuario()
         {
             // Muda o nome do usuario na database
         }

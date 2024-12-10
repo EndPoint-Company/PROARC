@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Control
 {
-    public class ReclamadoControl
+    public static class ReclamadoControl
     {
     }
 }

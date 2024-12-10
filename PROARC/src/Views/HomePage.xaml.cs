@@ -42,6 +42,5 @@ namespace PROARC.src.Views
         {
             Frame.Navigate(typeof(RegistrarProcesso01Page));
         }
-
     }
 }

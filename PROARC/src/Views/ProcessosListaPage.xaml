@@ -10,7 +10,14 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-        <TextBlock Text="Lista de Processos" FontSize="36" Margin="180" TextAlignment="Center"/>
+        <StackPanel>
+            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
+            <TextBlock Text="Lista de Processos" FontSize="36" Margin="180" TextAlignment="Center"/>
+            <Button x:Name="GoBackBtn" AutomationProperties.Name="Pie" Click="BackPage_Click"
+            Width="50" Height="50" HorizontalAlignment="Center">
+                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
+            </Button>
+            <TextBlock Text="Voltar" FontSize="15" TextAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Page>

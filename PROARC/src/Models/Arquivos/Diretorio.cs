@@ -25,9 +25,24 @@ namespace PROARC.src.Models.Arquivos
             arquivos = new LinkedList<Arquivo>();
         }
 
+        public void AdicionarArquivo(Arquivo arquivo)
+        {
+            this.arquivos.AddLast(arquivo);
+        }
+
+        public void RemoverArquivo(Arquivo arquivo)
+        {
+            this.arquivos.Remove(arquivo);
+        }
+
         private void AtualizarDataDeModificacao()
         {
             this.dataDeModificacao = DateTime.Now;
+        }
+
+        public Arquivo getLastArquivo()
+        {
+            return this.arquivos.Last();
         }
 
         public string CaminhoDoArquivo

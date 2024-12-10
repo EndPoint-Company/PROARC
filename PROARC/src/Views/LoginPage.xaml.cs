@@ -31,7 +31,7 @@ namespace PROARC.src.Views
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HomePage), new Usuario("", 0));
+            Frame.Navigate(typeof(HomePage));
         }
     }
 }

@@ -30,7 +30,7 @@ namespace PROARC.src.Views
 
         private void BackPage_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(LoginPage));
+            Frame.Navigate(typeof(HomePage));
         }
     }
 }

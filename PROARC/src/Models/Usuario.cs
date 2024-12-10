@@ -35,14 +35,12 @@ namespace PROARC.src.Models
 
         public void Rebaixar()
         {
-            if (NivelDePermissao > 0)
+            if (NivelDePermissao <= 0)
             {
-                this.nivelDePermissao--;
+                throw new Exception("Quer ficar num nível negativo, é, meu fi?");
             }
-            else
-            {
-                throw new InvalidOperationException("Quer ficar num nível negativo, é, meu fi?");
-            }
+
+            this.nivelDePermissao--;
         }
 
         public override string ToString()
