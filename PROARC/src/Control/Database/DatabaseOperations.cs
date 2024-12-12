@@ -20,6 +20,7 @@ namespace PROARC.src.Control.Database
             UserID = "placeholder",
             Password = "placeholder",
             InitialCatalog = "placeholder",
+
         }.ConnectionString;
 
         public static void ValidateUserLogin(SecureString acessKey) // TODO
