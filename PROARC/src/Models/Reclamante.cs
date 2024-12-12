@@ -20,8 +20,8 @@ namespace PROARC.src.Models
             this.rg = rg;
         }
 
-        public string Nome { get; set; }
-        public string? Cpf { get; set; }
-        public string? Rg { get; set; }
+        public string Nome { get => this.nome; set { this.nome = value; } }
+        public string? Cpf { get => this.cpf; set { this.cpf = value; } }
+        public string? Rg { get => this.rg; set { this.rg = value; } }
     }
 }

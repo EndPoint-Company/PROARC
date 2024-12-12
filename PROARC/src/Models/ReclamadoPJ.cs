@@ -16,6 +16,6 @@ namespace PROARC.src.Models
             this.cnpj = cnpj;
         }
 
-        public string Cnpj { get; set; }
+        public string Cnpj { get => this.cnpj; set { this.cnpj = value; } }
     }
 }

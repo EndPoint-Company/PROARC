@@ -16,6 +16,6 @@ namespace PROARC.src.Models
             this.cpf = cpf;
         }
 
-        public string Cpf { get; set; }
+        public string Cpf { get => this.cpf; set { this.cpf = value; } }
     }
 }

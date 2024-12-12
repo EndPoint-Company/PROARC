@@ -56,10 +56,10 @@ namespace PROARC.src.Models.Arquivos
             this.diretorios[arquivo.Tipo].RemoverArquivo(arquivo);
         }
 
-        public required string NumeroProcesso { get; set;  }
-        public required int Ano { get; set; }
-        public Motivo? Motivo { get; set; }
-        public Reclamado? Reclamado { get; set; }
-        public Reclamante? Reclamante { get; set; }
+        public string NumeroProcesso { get => this.numeroProcesso; set { this.numeroProcesso = value; }  }
+        public int Ano { get => this.ano; set { this.ano = value; } }
+        public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
+        public Reclamado? Reclamado { get => this.reclamado; set { this.reclamado = value; } }
+        public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
     }
 }

@@ -40,7 +40,7 @@ namespace PROARC.src.Models.Arquivos
             return other.caminhoDoArquivo == this.caminhoDoArquivo;
         }
 
-        public required string CaminhoDoArquivo 
+        public string CaminhoDoArquivo 
         {
             get => this.caminhoDoArquivo;
                 
@@ -51,7 +51,7 @@ namespace PROARC.src.Models.Arquivos
             }
         }
 
-        public required ArquivoTipo Tipo
+        public ArquivoTipo Tipo
         {
             get => this.tipo;
 
@@ -62,7 +62,7 @@ namespace PROARC.src.Models.Arquivos
             }
         }
 
-        public DateTime? DataDeCriacao { get; }
-        public DateTime? DataDeModificacao { get; }
+        public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
+        public DateTime? DataDeModificacao { get => this.dataDeModificacao; }
     }
 }

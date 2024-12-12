@@ -27,11 +27,11 @@ namespace PROARC.src.Models
             this.estado = estado;
         }
 
-        public string Nome { get; set; }
-        public short NumeroDaRua { get; set; }
-        public string Rua { get; set; }
-        public string Bairro { get; set; }
-        public string Cidade { get; set; }
-        public string Estado { get; set; }
+        public string Nome { get => this.nome; set { this.nome = value; } }
+        public short NumeroDaRua { get => this.numeroDaRua; set { this.numeroDaRua = value; } }
+        public string Rua { get => this.rua; set { this.rua = value; } }
+        public string Bairro { get => this.bairro; set { this.bairro = value; } }
+        public string Cidade { get => this.cidade; set { this.cidade = value; } }
+        public string Estado { get => this.estado; set { this.estado = value; } }
     }
 }

@@ -67,7 +67,7 @@ namespace PROARC.src.Models.Arquivos
             }
         }
 
-        public DateTime? DataDeCriacao { get; }
-        public DateTime? DataDeModificacao { get; }
+        public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
+        public DateTime? DataDeModificacao { get => this.dataDeModificacao; }
     }
 }

@@ -48,8 +48,17 @@ namespace PROARC.src.Models
             return $"Nome: {Nome}, Nível de Permissão: {NivelDePermissao}";
         }
 
-        public string Nome { get; set; }
-        public int NivelDePermissao { get; }
+        public string Nome {
+            get => this.nome;
+            set
+            {
+                this.nome = value;
+            }
+        }
+        public int NivelDePermissao 
+        {
+            get => this.nivelDePermissao;
+        }
     }
 }
 
