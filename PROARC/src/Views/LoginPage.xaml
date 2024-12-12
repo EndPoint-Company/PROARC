@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="AliceBlue">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
         <!-- Botão -->
@@ -77,19 +77,99 @@
     </Page.Resources>
 
 
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center" Foreground="Black"/>
-            <TextBlock Text="Login" FontSize="36" Margin="4" TextAlignment="Center" Foreground="Black"/>
-            <TextBlock x:Name="ErrorMessage" Text="" FontSize="20" Margin="4" Foreground="Red" TextAlignment="Center"/>
-            <TextBlock Text="Insira sua chave de acesso" Margin="0,0,0,20" Foreground="Black"
-               TextWrapping="Wrap" Width="300"
-               TextAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
-            <TextBox x:Name="UsernameTextBox" Margin="4" Width="250"/>
-            <Button x:Name="LoginButton" Content="Login"
-            Click="LoginButton_Click" Width="80" HorizontalAlignment="Center" Margin="0,20"/>
-            
-        </StackPanel>
-    </Grid>
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="1277" Height="687">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
 
+        <Border Background="#002B5B" Grid.Column="0" CornerRadius="20,0,0,20">
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                    <Image Grid.Row="0"  Source="/Assets/proarc-logo-white-256x256.png" Margin="0, 0, 0, 20"/>
+                
+                <TextBlock 
+                    Grid.Row="1"
+                    Text="Bem-vindo de volta!" 
+                    Foreground="White" 
+                    FontSize="35" 
+                    FontWeight="Bold" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <Border Background="#FFFFFF" Grid.Column="1" CornerRadius="0,20,20,0" Padding="30">
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <!-- Título -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Caixa de senha -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Checkbox -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Botão -->
+                    <RowDefinition Height="*" />
+                    <!-- Espaçamento -->
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0, 0, 0, 50">
+                    <TextBlock 
+                            Text="PROARC" 
+                            FontSize="40" 
+                            FontWeight="Bold" 
+                            Foreground="#002B5B" 
+                            HorizontalAlignment="Center" />
+                    <TextBlock 
+                            Text="LOGIN" 
+                            FontSize="16" 
+                            Foreground="#002B5B" 
+                            HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <PasswordBox
+                    Grid.Row="1"
+                    
+                    Width="269" 
+                    PlaceholderText="Chave de acesso"
+                    Background="White"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    FontSize="16"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    PasswordChar="*"
+                    Margin="0, 50, 0, 0">
+                </PasswordBox>
+
+
+                <CheckBox 
+                    Grid.Row="2" 
+                    Content="Lembre de mim" 
+                    FontSize="14" 
+                    Foreground="#002B5B" 
+                    HorizontalAlignment="Left"
+                    Margin="90, 3, 0, 50"/>
+
+                <Button 
+                    x:Name="LoginButton"
+                    Click="LoginButton_Click"
+                    Grid.Row="3"
+                    Content="Entrar" 
+                    Background="#002B5B" 
+                    Foreground="#FFFF" 
+                    FontSize="20"  
+                    CornerRadius="12" 
+                    Width="269" 
+                    Height="40"
+                    HorizontalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
 </Page>
