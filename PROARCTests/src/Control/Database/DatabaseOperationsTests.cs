@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PROARC.src.Control.Database;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,13 @@ namespace PROARC.src.Control.Database.Tests
         [TestMethod()]
         public void QuerySqlCommandTest()
         {
-            throw new NotImplementedException();
+            DatabaseOperations.QuerySqlCommand("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'");
         }
 
         [TestMethod()]
         public void CreateProgramDatabaseTest()
         {
-            throw new NotImplementedException();
+            DatabaseOperations.CreateProgramDatabase();
         }
     }
 }
