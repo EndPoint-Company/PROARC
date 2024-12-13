@@ -9,25 +9,52 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-            <TextBlock Text="Home" FontSize="36" Margin="180" TextAlignment="Center"/>
-            <Button x:Name="GoBackBtn" AutomationProperties.Name="Pie" Click="BackPage_Click"
-                    Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Voltar" FontSize="15" TextAlignment="Center"/>
-            <Button x:Name="ListaProcessosBtn" AutomationProperties.Name="Pie" Click="ListaProcessosPage_Click"
-                   Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Listar Processos" FontSize="15" TextAlignment="Center"/>
-            <Button x:Name="RegistrarProcessoBtn" AutomationProperties.Name="Pie" Click="RegistrarProcessoPage_Click"
-                    Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Registrar Processo" FontSize="15" TextAlignment="Center"/>
-        </StackPanel>
-    </Grid>
+    <NavigationView x:Name="nvSample"
+                    IsSettingsVisible="True"
+                    IsBackButtonVisible="Visible"
+                    IsBackEnabled="False"
+                    SelectionChanged="NavigationView_SelectionChanged"
+                    Header="Home"
+                    AlwaysShowHeader="True"
+                    PaneTitle="Pane Title"
+                    PaneDisplayMode="Left"
+                    ExpandedModeThresholdWidth="500"
+                    SelectionFollowsFocus="Disabled"
+                    IsTabStop="False"
+                    IsPaneOpen="False">
+
+        <!-- Itens de navegação (Parte superior) -->
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Home" Tag="SamplePage1" x:Name="SamplePage1Item">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Home" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Menu Item2" Tag="SamplePage2" x:Name="SamplePage2Item">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Save" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Login" Tag="SamplePage3" x:Name="FooterSamplePage3Item">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Refresh" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+
+        <!-- Rodapé com o item de Login -->
+        <!--<NavigationView.PaneFooter>
+            <StackPanel x:Name="FooterStackPanel" Orientation="Vertical" Visibility="Visible">
+                <NavigationViewItem Content="Login" Tag="SamplePage3" x:Name="FooterSamplePage3Item">
+                    <NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Refresh" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </StackPanel>
+        </NavigationView.PaneFooter>-->
+
+        <!-- Frame de conteúdo -->
+        <Frame x:Name="contentFrame" />
+    </NavigationView>
+
 </Page>
