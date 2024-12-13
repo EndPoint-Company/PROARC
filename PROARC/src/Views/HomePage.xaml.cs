@@ -28,19 +28,31 @@ namespace PROARC.src.Views
             this.InitializeComponent();
         }
 
-        private void BackPage_Click(object sender, RoutedEventArgs e)
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs e)
         {
-            Frame.Navigate(typeof(LoginPage));
+            var selectedItem = e.SelectedItem as NavigationViewItem;
+            if (selectedItem != null)
+            {
+                string tag = selectedItem.Tag as string;
+
+                // Lógica para a navegação do menu
+                if (tag == "SamplePage1")
+                {
+                    Frame.Navigate(typeof(HomePage));
+                }
+                else if (tag == "SamplePage2")
+                {
+                    Frame.Navigate(typeof(ProcessosListaPage));
+                }
+                // Lógica para o login (tanto no menu quanto no rodapé)
+                else if (tag == "SamplePage3")
+                {
+                    // Escondendo o NavigationView e exibindo o LoginPage
+                    nvSample.Visibility = Visibility.Collapsed; // Oculta o NavigationView
+                    Frame.Navigate(typeof(LoginPage)); // Navega para a página de Login
+                }
+            }
         }
 
-        private void ListaProcessosPage_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(ProcessosListaPage));
-        }
-
-        private void RegistrarProcessoPage_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
-        }
     }
 }

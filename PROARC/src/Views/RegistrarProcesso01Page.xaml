@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <!--<Grid>
         <StackPanel>
             <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
             <TextBlock Text="Registro de Processos 01" FontSize="36" Margin="180" TextAlignment="Center"/>
@@ -19,5 +19,6 @@
             </Button>
             <TextBlock Text="Voltar" FontSize="15" TextAlignment="Center"/>
         </StackPanel>
-    </Grid>
+    </Grid>-->
+    
 </Page>
