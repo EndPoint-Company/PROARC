@@ -28,31 +28,65 @@ namespace PROARC.src.Views
             this.InitializeComponent();
         }
 
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs e)
+        //private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs e)
+        //{
+        //    var selectedItem = e.SelectedItem as NavigationViewItem;
+
+        //    if (selectedItem != null)
+        //    {
+        //    string tag = selectedItem.Tag as string;
+
+        //    // Lógica para a navegação do menu
+        //    if (tag == "SamplePage1")
+        //    {
+        //        Frame.Navigate(typeof(HomePage));
+        //    }
+        //    else if (tag == "SamplePage2")
+        //    {
+        //        Frame.Navigate(typeof(ProcessosListaPage));
+        //    }
+        //    else if (tag == "SamplePage3")
+        //    {
+        //        //// Escondendo o NavigationView e exibindo o LoginPage
+        //        //nvSample.Visibility = Visibility.Collapsed; // Oculta o NavigationView
+        //        Frame.Navigate(typeof(RegistrarProcesso01Page)); // Navega para a página de Login
+        //    }
+        //    else if (tag == "SamplePage4")
+        //    {
+        //        //// Escondendo o NavigationView e exibindo o LoginPage
+        //        //nvSample.Visibility = Visibility.Collapsed; // Oculta o NavigationView
+        //        Frame.Navigate(typeof(LoginPage)); // Navega para a página de Login
+        //    }
+        //}
+        //}
+
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            var selectedItem = e.SelectedItem as NavigationViewItem;
+            var selectedItem = args.SelectedItem as NavigationViewItem;
+
             if (selectedItem != null)
             {
                 string tag = selectedItem.Tag as string;
 
-                // Lógica para a navegação do menu
-                if (tag == "SamplePage1")
+                // Navegar para a página correspondente
+                switch (tag)
                 {
-                    Frame.Navigate(typeof(HomePage));
-                }
-                else if (tag == "SamplePage2")
-                {
-                    Frame.Navigate(typeof(ProcessosListaPage));
-                }
-                // Lógica para o login (tanto no menu quanto no rodapé)
-                else if (tag == "SamplePage3")
-                {
-                    // Escondendo o NavigationView e exibindo o LoginPage
-                    nvSample.Visibility = Visibility.Collapsed; // Oculta o NavigationView
-                    Frame.Navigate(typeof(LoginPage)); // Navega para a página de Login
+                    case "SamplePage1":
+                        Frame.Navigate(typeof(HomePage));
+                        break;
+                    case "SamplePage2":
+                        contentFrame.Navigate(typeof(ProcessosListaPage));
+                        break;
+                    case "SamplePage3":
+                        contentFrame.Navigate(typeof(RegistrarProcesso01Page));
+                        break;
+                    case "SamplePage4":
+                        Frame.Navigate(typeof(LoginPage));
+                        break;
                 }
             }
         }
+
 
     }
 }

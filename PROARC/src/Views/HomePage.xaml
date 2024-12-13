@@ -9,12 +9,29 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <!--<NavigationView x:Name="nvSample"
+                            Header="This is Header Text"
+                            PaneDisplayMode="Left"
+                            SelectionChanged="NavigationView_SelectionChanged9"
+                            IsSettingsVisible="False">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Browse" Tag="SamplePage1" Icon="Library" />
+            <NavigationViewItem Content="Track an Order" Tag="SamplePage2" Icon="Map" />
+            <NavigationViewItem Content="Order History" Tag="SamplePage3" Icon="Tag" />
+        </NavigationView.MenuItems>
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
+            <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
+            <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
+        </NavigationView.FooterMenuItems>
+        <Frame x:Name="contentFrame9" />
+    </NavigationView>-->
+
     <NavigationView x:Name="nvSample"
                     IsSettingsVisible="True"
                     IsBackButtonVisible="Visible"
                     IsBackEnabled="False"
                     SelectionChanged="NavigationView_SelectionChanged"
-                    Header="Home"
                     AlwaysShowHeader="True"
                     PaneTitle="Pane Title"
                     PaneDisplayMode="Left"
@@ -25,36 +42,31 @@
 
         <!-- Itens de navegação (Parte superior) -->
         <NavigationView.MenuItems>
-            <NavigationViewItem Content="Home" Tag="SamplePage1" x:Name="SamplePage1Item">
+            <NavigationViewItem Content="Início" Tag="SamplePage1" x:Name="SamplePage1Item">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Home" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="Menu Item2" Tag="SamplePage2" x:Name="SamplePage2Item">
+            <NavigationViewItem Content="Lista de Processos" Tag="SamplePage2" x:Name="SamplePage2Item">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Save" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="Login" Tag="SamplePage3" x:Name="FooterSamplePage3Item">
+            <NavigationViewItem Content="Cadastrar Processo" Tag="SamplePage3">
                 <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Refresh" />
+                    <SymbolIcon Symbol="Add"/>
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
         </NavigationView.MenuItems>
 
-        <!-- Rodapé com o item de Login -->
-        <!--<NavigationView.PaneFooter>
-            <StackPanel x:Name="FooterStackPanel" Orientation="Vertical" Visibility="Visible">
-                <NavigationViewItem Content="Login" Tag="SamplePage3" x:Name="FooterSamplePage3Item">
-                    <NavigationViewItem.Icon>
-                        <SymbolIcon Symbol="Refresh" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-            </StackPanel>
-        </NavigationView.PaneFooter>-->
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem Content="Sair" Tag="SamplePage4" Icon="Back" />
+        </NavigationView.FooterMenuItems>
 
         <!-- Frame de conteúdo -->
         <Frame x:Name="contentFrame" />
     </NavigationView>
 
+    
+    
 </Page>
