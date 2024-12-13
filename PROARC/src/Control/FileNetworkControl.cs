@@ -10,5 +10,11 @@ namespace PROARC.src.Control
     {
         // Classe pra gerenciar a transferência de arquivos entre Windows (cliente) e Linux (server)
         // Possível utilização de Samba no server side.
+        public static void SetLocalDefaultFolder(string path)
+        {
+
+        }
+
+
     }
 }
