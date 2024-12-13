@@ -17,12 +17,6 @@ namespace PROARC.src.Control.Database
         private static string connectionString = new SqlConnectionStringBuilder
         {
  
-            Encrypt = false,
-            DataSource = "placeholder",
-            UserID = "placeholder",
-            Password = "placeholder",
-            InitialCatalog = "placeholder",
-
 
             // Otimizar isso aqui depois
             Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
