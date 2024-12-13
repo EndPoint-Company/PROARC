@@ -117,7 +117,7 @@ namespace PROARC.src.Control
             }
         }
 
-        public static void AtualizarUsuario(int id, string nome)
+        public static void AtualizarUsuario(int id, string novoNome)
         {
             Usuario? toBeUpdated = GetUsuario(id);
             if (toBeUpdated != null)
@@ -125,7 +125,7 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
-            string sql = $"UPDATE usuarios SET nome = '{nome}' WHERE id = {id}";
+            string sql = $"UPDATE usuarios SET nome = '{novoNome}' WHERE id = {id}";
             try
             {
                 using var reader = DatabaseOperations.QuerySqlCommand(sql);
@@ -140,7 +140,7 @@ namespace PROARC.src.Control
             }
         }
 
-        public static void AtualizarUsuario(int id, int nivelDePermissao)
+        public static void AtualizarUsuario(int id, int novoNivelDePermissao)
         {
             Usuario? toBeUpdated = GetUsuario(id);
             if (toBeUpdated != null)
@@ -148,7 +148,7 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
-            string sql = $"UPDATE usuarios SET nivel_permissao = '{nivelDePermissao}' WHERE id = {id}";
+            string sql = $"UPDATE usuarios SET nivel_permissao = '{novoNivelDePermissao}' WHERE id = {id}";
             try
             {
                 using var reader = DatabaseOperations.QuerySqlCommand(sql);
@@ -162,7 +162,7 @@ namespace PROARC.src.Control
                 Console.WriteLine($"Erro ao atualizar usuário {ex.Message}");
             }
         }
-        public static void AtualizarUsuario(int id, string nome, int nivelDePermissao)
+        public static void AtualizarUsuario(int id, string novoNome, int novoNivelDePermissao)
         {
             Usuario? toBeUpdated = GetUsuario(id);
             if (toBeUpdated != null)
@@ -170,7 +170,7 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
-            string sql = $"UPDATE usuarios Set nome = '{nome}', nivel_permissao = '{nivelDePermissao}' WHERE id = {id}";
+            string sql = $"UPDATE usuarios Set nome = '{novoNome}', nivel_permissao = '{novoNivelDePermissao}' WHERE id = {id}";
             try
             {
                 using var reader = DatabaseOperations.QuerySqlCommand(sql);
