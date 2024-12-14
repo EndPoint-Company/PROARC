@@ -19,9 +19,9 @@ namespace PROARC.src.Control.Database.Tests
         }
 
         [TestMethod()]
-        public void CreateProgramDatabaseTest()
+        public void CreateAllProgramTablesTest()
         {
-            DatabaseOperations.CreateProgramDatabase();
+            DatabaseOperations.CreateAllProgramTables();
         }
     }
 }

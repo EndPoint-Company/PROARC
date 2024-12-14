@@ -60,13 +60,25 @@ namespace PROARC.src.Control.Database
             return results;
         }
 
-        public static bool CreateProgramDatabase()
+        public static void QuerySqlCommandNoReturn(string sql)
         {
             using var cn = new SqlConnection(connectionString);
 
             cn.Open();
 
-            string sql = "CREATE DATABASE ProArcDB";
+            using var command = new SqlCommand(sql, cn);
+            using var reader = command.ExecuteReader();
+
+            cn.Close();
+        }
+
+        private static bool CreateProgramDatabase()
+        {
+            using var cn = new SqlConnection(connectionString);
+
+            cn.Open();
+
+            string sql = "CREATE DATABASE ProArc";
             using var command = new SqlCommand(sql, cn);
 
             try
@@ -75,44 +87,27 @@ namespace PROARC.src.Control.Database
             }
             catch (SqlException)
             {
+                cn.Close();
+
                 return false;
-            }           
+            }
+
+            cn.Close();
 
             return true;
         }
 
         public static bool CreateAllProgramTables()
         {
-            if (!CreateProgramDatabase())
-            {
-                return false;
-            }
+            CreateProgramDatabase();
 
+            TableFactory.CreateUsuarioTable();
             
 
+
             return true;
         }
 
-        private static bool CreateReclamadoTable()
-        {
-            return true;
-        }
-
-        private static bool CreateUsuarioTable()
-        {
-            return true;
-        }
-
-        private static bool CreateMotivoTable()
-        {
-            return true;
-        }
-
-        private static bool CreateUsuarioTable()
-        {
-
-        }
-
-        private static bool 
+        
     }
 }
