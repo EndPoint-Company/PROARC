@@ -13,7 +13,16 @@ namespace PROARC.src.Control.Database
         {
             try
             {
-                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;CREATE TABLE Usuarios(\r\n\tusuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1),\r\n\tnome NVARCHAR(100) NOT NULL,\r\n\tnivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4),\r\n\tchave_acesso NVARCHAR(10) NOT NULL UNIQUE,\r\n);");
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE Reclamados(" +
+                    "reclamado_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
+                    "nome NVARCHAR(100) NOT NULL," +
+                    "numero_rua SMALLINT NULL," +
+                    "email NVARCHAR(100) NULL CONSTRAINT check_email CHECK (email like '%_@__%.__%')," +
+                    "rua NVARCHAR(100) NULL," +
+                    "bairro NVARCHAR(100) NULL," +
+                    "cidade NVARCHAR(100) NULL," +
+                    "uf NVARCHAR(2) NULL,);");
             }
             catch (SqlException)
             {
