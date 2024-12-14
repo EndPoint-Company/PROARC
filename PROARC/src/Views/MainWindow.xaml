@@ -22,7 +22,7 @@
                 </Storyboard>
             </StackPanel.Resources>
 
-            <Image Name="mainWindowLogo" Width="200" Source="..\..\Assets\proarc-logo-white-256x256.png"/>
+            <Image Name="mainWindowLogo" Width="200" Source="..\..\Assets\proarc-logo-dark-256x256.png"/>
         </StackPanel>
     </Grid>
 </Window>
