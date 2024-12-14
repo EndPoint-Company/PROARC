@@ -13,13 +13,15 @@ namespace PROARC.src.Control.Database
 {
     public static class DatabaseOperations
     {
+        [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
         private static string connectionString = new SqlConnectionStringBuilder
         {
-            Encrypt = false,
-            DataSource = "DESKTOP-ARDPAO9\\SQLEXPRESS",
-            UserID = "marco",
-            Password = "admin",
-            InitialCatalog = "PROARC",
+            // Otimizar isso aqui depois
+            Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
+            DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
+            UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
+            Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
+            InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
 
         }.ConnectionString;
 
