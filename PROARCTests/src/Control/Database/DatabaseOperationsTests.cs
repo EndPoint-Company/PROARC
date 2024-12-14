@@ -8,19 +8,4 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Control.Database.Tests
 {
-    [TestClass()]
-    public class DatabaseOperationsTests
-    {
-        [TestMethod()]
-        public void QuerySqlCommandTest()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod()]
-        public void CreateProgramDatabaseTest()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

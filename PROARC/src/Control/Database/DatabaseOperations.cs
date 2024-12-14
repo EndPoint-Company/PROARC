@@ -16,10 +16,10 @@ namespace PROARC.src.Control.Database
         private static string connectionString = new SqlConnectionStringBuilder
         {
             Encrypt = false,
-            DataSource = "placeholder",
-            UserID = "placeholder",
-            Password = "placeholder",
-            InitialCatalog = "placeholder",
+            DataSource = "DESKTOP-ARDPAO9\\SQLEXPRESS",
+            UserID = "marco",
+            Password = "admin",
+            InitialCatalog = "PROARC",
 
         }.ConnectionString;
 
@@ -34,18 +34,28 @@ namespace PROARC.src.Control.Database
             cn.Close();
         }
 
-        public static SqlDataReader QuerySqlCommand(string sql)
+        public static List<string> QuerySqlCommand(string sql)
         {
-            using var cn = new SqlConnection(connectionString);
+            var results = new List<string>();
 
-            cn.Open();
+            using (var cn = new SqlConnection(connectionString))
+            {
+                cn.Open();
 
-            using var command = new SqlCommand(sql, cn);
-            using var reader = command.ExecuteReader();
+                using (var command = new SqlCommand(sql, cn))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            results.Add(reader.GetValue(i).ToString());
+                        }
+                    }
+                }
+            }
 
-            cn.Close();
-
-            return reader;
+            return results;
         }
 
         public static bool CreateProgramDatabase()
