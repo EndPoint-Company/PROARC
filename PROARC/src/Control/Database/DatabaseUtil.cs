@@ -55,6 +55,6 @@ namespace PROARC.src.Control.Database
         public string dataSource { get; set; }
         public string user { get; set; }
         public string password { get; set; }
-        public string initialCatalog { get; set; }
+        //public string initialCatalog { get; set; }
     }
 }

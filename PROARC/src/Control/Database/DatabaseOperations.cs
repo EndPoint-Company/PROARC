@@ -21,7 +21,7 @@ namespace PROARC.src.Control.Database
             DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
             UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
             Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
-            InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
+            //InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
 
         }.ConnectionString;
 
