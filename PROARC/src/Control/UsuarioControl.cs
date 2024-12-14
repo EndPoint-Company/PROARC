@@ -13,17 +13,17 @@ namespace PROARC.src.Control
     {
         public static Usuario? GetUsuario(int id)
         {
-            
+
             string sql = $"SELECT nome, nivel_permissao FROM usuarios WHERE id = {id}";
 
             try
             {
                 using var reader = DatabaseOperations.QuerySqlCommand(sql);
 
-                if (reader.Read()) 
+                if (reader.Read())
                 {
                     string nome = reader.GetString(0);
-                    int nivelDePermissao = reader.GetInt32(1); 
+                    int nivelDePermissao = reader.GetInt32(1);
 
                     return new Usuario(nome, nivelDePermissao);
                 }
@@ -47,14 +47,14 @@ namespace PROARC.src.Control
 
         public static LinkedList<Usuario>? GetAllUsuario()
         {
-            LinkedList<Usuario> usuarios = new LinkedList<Usuario>();   
+            LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
             string sql = "SELECT id, nome, nivel_permissao FROM usuarios";
 
             try
             {
                 using var reader = DatabaseOperations.QuerySqlCommand(sql);
-              
-                while(reader.Read())
+
+                while (reader.Read())
                 {
                     string nome = reader.GetString(0);
                     int nivelDePermissao = reader.GetInt32(1);

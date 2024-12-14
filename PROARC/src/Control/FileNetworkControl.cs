@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control
 {
@@ -32,19 +33,19 @@ namespace PROARC.src.Control
             return null;
         }
 
-        public static void Local_CriarFolderProcessoAdministrativo(ProcessoAdministrativo processo)
+        public static void Local_CriarProcessoAdministrativo(string numeroProcesso)
         {
-            Directory.CreateDirectory($"{local_DefaultPath}/{processo.NumeroProcesso}");
+            Directory.CreateDirectory($"{local_DefaultPath}/{numeroProcesso}");
         }
 
-        public static void Local_CriarDiretorio(Diretorio dir)
+        public static void Local_CriarDiretorio(ArquivoTipo tipo, string numeroProcesso)
         {
-
+            Directory.CreateDirectory($"{local_DefaultPath}/{numeroProcesso}/{tipo}");
         }
 
-        public static void Local_AdicionarAquivoToDiretorio(Diretorio dir, Arquivo arquivo)
+        public static void Local_AdicionarAquivoToDiretorio(string dirPath, string arquivoPath)
         {
-
+            File.Copy(arquivoPath, dirPath + Path.GetFileName(arquivoPath));
         }
     }
 }
