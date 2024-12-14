@@ -60,25 +60,58 @@ namespace PROARC.src.Control.Database
             return results;
         }
 
-        public static bool CreateProgramDatabase()
+        public static void QuerySqlCommandNoReturn(string sql)
         {
             using var cn = new SqlConnection(connectionString);
 
             cn.Open();
 
-            string sql = "CREATE DATABASE ProArcDB";
+            using var command = new SqlCommand(sql, cn);
+            using var reader = command.ExecuteReader();
+
+            cn.Close();
+        }
+
+        private static bool CreateProgramDatabase()
+        {
+            using var cn = new SqlConnection(connectionString);
+
+            cn.Open();
+
+            string sql = "CREATE DATABASE ProArc";
             using var command = new SqlCommand(sql, cn);
 
             try
             {
                 using var reader = command.ExecuteReader();
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
+                cn.Close();
+
                 return false;
-            }           
+            }
+
+            cn.Close();
 
             return true;
         }
+
+        public static bool CreateAllProgramTables()
+        {
+            CreateProgramDatabase();
+
+            TableFactory.CreateUsuarioTable();
+            TableFactory.CreateReclamadoTable();
+            TableFactory.CreateReclamanteTable();
+            TableFactory.CreateMotivoTable();
+            TableFactory.CreateProcessoAdministrativoTable();
+            TableFactory.CreateDiretorioTable();
+            TableFactory.CreateArquivoTable();
+
+            return true;
+        }
+
+        
     }
 }
