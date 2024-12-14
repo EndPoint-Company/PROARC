@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="PROARC.src.Views.RegistrarProcesso01Page"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -23,7 +22,6 @@
         </Style>
     </Page.Resources>
 
-
     <Grid Background="#FAFAFA">
         <ScrollViewer>
             <StackPanel Padding="20" Spacing="20">
@@ -38,19 +36,97 @@
                     <Grid Padding="40" CornerRadius="10" Background="#FFF">
                         <StackPanel Spacing="10">
                             <TextBlock Text="Reclamante" FontSize="18" FontWeight="Bold" />
-                            <Grid ColumnDefinitions="1*,1*,1*" RowDefinitions="Auto,Auto" Width="1000" HorizontalAlignment="Left">
+                            <Grid ColumnDefinitions="1*,1*,1*,1*" RowDefinitions="Auto,Auto" Width="1000" HorizontalAlignment="Left">
                                 <TextBox PlaceholderText="Insira o nome completo" Grid.Row="0" Grid.Column="0" Margin="10, 10, 20, 10" />
                                 <TextBox PlaceholderText="Insira o CPF" Grid.Row="0" Grid.Column="1" Margin="10, 10, 20, 10" />
                                 <TextBox PlaceholderText="Insira o RG" Grid.Row="0" Grid.Column="2" Margin="10" />
 
+                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
+                                    <!-- Botão para abrir o pop-up -->
+                                    <Button x:Name="PickFileButton1" Content="Selecionar Arquivo" Click="PickFileButton1_Click" VerticalAlignment="Center"/>
+
+                                    <!-- Resultado do arquivo -->
+                                    <TextBlock x:Name="PickAFileOutputTextBlock1" TextWrapping="Wrap" Padding="20,5,0,0" />
+
+                                    <!-- Dialog para seleção/arraste de arquivo -->
+                                    <ContentDialog x:Name="FilePickerDialog1" Title="Selecionar ou Arrastar Arquivo" 
+                                                   PrimaryButtonText="Fechar"
+                                                   PrimaryButtonClick="FilePickerDialog_Close">
+                                        <StackPanel>
+                                            <!-- Área para arrastar arquivos -->
+                                            <Border x:Name="DragDropArea1" 
+                                                    BorderBrush="Gray" 
+                                                    BorderThickness="2" 
+                                                    Background="#F0F0F0" 
+                                                    Padding="20" 
+                                                    CornerRadius="5"
+                                                    Height="150"
+                                                    AllowDrop="True"
+                                                    Drop="DragDropArea1_Drop"
+                                                    DragOver="DragDropArea1_DragOver">
+                                                <TextBlock Text="Arraste e solte um arquivo aqui" 
+                                                           HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center" 
+                                                           FontSize="16" 
+                                                           Foreground="Gray" />
+                                            </Border>
+
+                                            <!-- Botão para abrir o seletor de arquivos -->
+                                            <Button x:Name="OpenFilePickerButton1" Content="Abrir Seletor de Arquivos" Click="OpenFilePickerButton1_Click" Margin="0,20,0,0" />
+
+                                            <!-- Exibir nome do arquivo selecionado -->
+                                            <TextBlock x:Name="SelectedFileNameTextBlock1" HorizontalAlignment="Center" Foreground="Green" FontSize="14" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                    </ContentDialog>
+                                </StackPanel>
+
                                 <TextBox PlaceholderText="Insira a rua" Grid.Row="1" Grid.Column="0" Margin="10, 10, 20, 10" />
                                 <TextBox PlaceholderText="Insira o bairro" Grid.Row="1" Grid.Column="1" Margin="10, 10, 20, 10" />
                                 <TextBox PlaceholderText="Insira o número" Grid.Row="1" Grid.Column="2" Margin="10" Width="120" HorizontalAlignment="Left"/>
+
+                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
+                                    <!-- Botão para abrir o pop-up -->
+                                    <Button x:Name="PickFileButton2" Content="Selecionar Arquivo" Click="PickFileButton2_Click" VerticalAlignment="Center"/>
+
+                                    <!-- Resultado do arquivo -->
+                                    <TextBlock x:Name="PickAFileOutputTextBlock2" TextWrapping="Wrap" Padding="20,5,0,0" />
+
+                                    <!-- Dialog para seleção/arraste de arquivo -->
+                                    <ContentDialog x:Name="FilePickerDialog2" Title="Selecionar ou Arrastar Arquivo" 
+                                                   PrimaryButtonText="Fechar"
+                                                   PrimaryButtonClick="FilePickerDialog_Close">
+                                        <StackPanel>
+                                            <!-- Área para arrastar arquivos -->
+                                            <Border x:Name="DragDropArea2" 
+                                                    BorderBrush="Gray" 
+                                                    BorderThickness="2" 
+                                                    Background="#F0F0F0" 
+                                                    Padding="20" 
+                                                    CornerRadius="5"
+                                                    Height="150"
+                                                    AllowDrop="True"
+                                                    Drop="DragDropArea2_Drop"
+                                                    DragOver="DragDropArea2_DragOver">
+                                                <TextBlock Text="Arraste e solte um arquivo aqui" 
+                                                           HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center" 
+                                                           FontSize="16" 
+                                                           Foreground="Gray" />
+                                            </Border>
+
+                                            <!-- Botão para abrir o seletor de arquivos -->
+                                            <Button x:Name="OpenFilePickerButton2" Content="Abrir Seletor de Arquivos" Click="OpenFilePickerButton2_Click" Margin="0,20,0,0" />
+
+                                            <!-- Exibir nome do arquivo selecionado -->
+                                            <TextBlock x:Name="SelectedFileNameTextBlock2" HorizontalAlignment="Center" Foreground="Green" FontSize="14" Margin="0,10,0,0"/>
+                                        </StackPanel>
+                                    </ContentDialog>
+                                </StackPanel>
                             </Grid>
 
                             <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10"
-                              Checked="ProcuradorCheckBox_Checked"
-                              Unchecked="ProcuradorCheckBox_Unchecked" />           
+                                      Checked="ProcuradorCheckBox_Checked"
+                                      Unchecked="ProcuradorCheckBox_Unchecked" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -73,7 +149,6 @@
                     </Grid>
                 </Border>
 
-
                 <!-- Botão de Continuar -->
                 <Button 
                     Content="Continuar" 
@@ -83,7 +158,7 @@
                     Foreground="White" 
                     Margin="0,0,50,0" 
                     Click="ContinuarButton_Click"/>
-                
+
             </StackPanel>
 
         </ScrollViewer>
