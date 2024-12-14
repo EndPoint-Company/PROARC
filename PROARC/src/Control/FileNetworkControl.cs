@@ -43,9 +43,9 @@ namespace PROARC.src.Control
             Directory.CreateDirectory($"{local_DefaultPath}/{numeroProcesso}/{tipo}");
         }
 
-        public static void Local_AdicionarAquivoToDiretorio(string dirPath, string arquivoPath)
+        public static void Local_AdicionarAquivoToDiretorio(ArquivoTipo tipo, string numeroProcesso, string arquivoPath)
         {
-            File.Copy(arquivoPath, dirPath + Path.GetFileName(arquivoPath));
+            File.Copy(arquivoPath, $"{local_DefaultPath}/{numeroProcesso}/{tipo}/" + Path.GetFileName(arquivoPath));
         }
     }
 }
