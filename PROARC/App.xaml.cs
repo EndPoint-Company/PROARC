@@ -33,6 +33,8 @@ namespace PROARC
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
+
+
         public App()
         {
             this.InitializeComponent();
@@ -54,6 +56,8 @@ namespace PROARC
             await Task.Delay(1280);
 
             m_window.Content = rootFrame;
+
+
         }
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
@@ -62,5 +66,6 @@ namespace PROARC
         }
 
         private Window? m_window;
+        public Window MainWindow => m_window;
     }
 }
