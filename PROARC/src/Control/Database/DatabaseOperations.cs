@@ -73,12 +73,46 @@ namespace PROARC.src.Control.Database
             {
                 using var reader = command.ExecuteReader();
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
                 return false;
             }           
 
             return true;
         }
+
+        public static bool CreateAllProgramTables()
+        {
+            if (!CreateProgramDatabase())
+            {
+                return false;
+            }
+
+            
+
+            return true;
+        }
+
+        private static bool CreateReclamadoTable()
+        {
+            return true;
+        }
+
+        private static bool CreateUsuarioTable()
+        {
+            return true;
+        }
+
+        private static bool CreateMotivoTable()
+        {
+            return true;
+        }
+
+        private static bool CreateUsuarioTable()
+        {
+
+        }
+
+        private static bool 
     }
 }
