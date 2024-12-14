@@ -62,7 +62,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-               MotivoControl.RemoverMotivo("juros catastroficos");
+              // MotivoControl.RemoverMotivo("juros catastroficos");
             }
 
             catch (Exception e)

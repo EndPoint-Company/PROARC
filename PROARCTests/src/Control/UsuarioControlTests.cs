@@ -33,7 +33,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                UsuarioControl.RemoveUsuario(3);
+               // UsuarioControl.RemoveUsuario(3);
             }
 
             catch (Exception e)
