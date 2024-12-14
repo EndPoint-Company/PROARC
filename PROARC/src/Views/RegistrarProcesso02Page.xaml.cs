@@ -66,15 +66,15 @@ namespace PROARC.src.Views
         {
             // Criar os campos da primeira linha
             var primeiraLinha = CriarLinha(
-                CriarTextBox("Insira o nome da Instituição", 250),
+                CriarTextBox("Insira o nome da Instituição", 300),
                 CriarTextBox("Insira o CNPJ", 200)
             );
 
             // Criar os campos da segunda linha
             var segundaLinha = CriarLinha(
-                CriarTextBox("Insira a rua", 250),
+                CriarTextBox("Insira a rua", 300),
+                CriarTextBox("Insira o bairro", 280),
                 CriarTextBox("Insira o número", 120),
-                CriarTextBox("Insira o bairro", 200),
                 CriarTextBox("Insira a cidade", 200),
                 CriarTextBox("Insira a UF", 100),
                 CriarTextBox("Insira o CEP", 150)
