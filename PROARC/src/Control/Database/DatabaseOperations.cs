@@ -35,6 +35,17 @@ namespace PROARC.src.Control.Database
 
             cn.Close();
         }
+        public static void QuerySqlCommandNoReturn(string sql)
+        {
+            using var cn = new SqlConnection(connectionString);
+
+            cn.Open();
+
+            using var command = new SqlCommand(sql, cn);
+            using var reader = command.ExecuteReader();
+
+            cn.Close();
+        }
 
         public static List<string> QuerySqlCommand(string sql)
 
