@@ -22,7 +22,7 @@ namespace PROARC.src.Control.Database
             UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
             Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
             InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
- 
+
         }.ConnectionString;
 
         public static void ValidateUserLogin(SecureString acessKey) // TODO
@@ -37,6 +37,7 @@ namespace PROARC.src.Control.Database
         }
 
         public static List<string> QuerySqlCommand(string sql)
+
         {
             var results = new List<string>();
 
@@ -59,18 +60,7 @@ namespace PROARC.src.Control.Database
 
             return results;
         }
-
-        public static void QuerySqlCommandNoReturn(string sql)
-        {
-            using var cn = new SqlConnection(connectionString);
-
-            cn.Open();
-
-            using var command = new SqlCommand(sql, cn);
-            using var reader = command.ExecuteReader();
-
-            cn.Close();
-        }
+    
 
         private static bool CreateProgramDatabase()
         {

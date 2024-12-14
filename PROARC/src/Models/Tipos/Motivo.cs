@@ -19,6 +19,11 @@ namespace PROARC.src.Models.Tipos
             this.dataDeCriacao = DateTime.Now;
         }
 
+        public override string ToString()
+        {
+            return $"Nome: {motivoNome} \nDescricao: {descricao}";
+        }
+
         public string MotivoNome { get => this.motivoNome; set { this.motivoNome = value; } }
         public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
 
