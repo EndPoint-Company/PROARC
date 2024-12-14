@@ -37,6 +37,7 @@ namespace PROARC.src.Control.Database
         }
 
         public static List<string> QuerySqlCommand(string sql)
+
         {
             var results = new List<string>();
 
@@ -59,26 +60,48 @@ namespace PROARC.src.Control.Database
 
             return results;
         }
+    
 
-        public static bool CreateProgramDatabase()
+        private static bool CreateProgramDatabase()
         {
             using var cn = new SqlConnection(connectionString);
 
             cn.Open();
 
-            string sql = "CREATE DATABASE ProArcDB";
+            string sql = "CREATE DATABASE ProArc";
             using var command = new SqlCommand(sql, cn);
 
             try
             {
                 using var reader = command.ExecuteReader();
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
+                cn.Close();
+
                 return false;
-            }           
+            }
+
+            cn.Close();
 
             return true;
         }
+
+        public static bool CreateAllProgramTables()
+        {
+            CreateProgramDatabase();
+
+            TableFactory.CreateUsuarioTable();
+            TableFactory.CreateReclamadoTable();
+            TableFactory.CreateReclamanteTable();
+            TableFactory.CreateMotivoTable();
+            TableFactory.CreateProcessoAdministrativoTable();
+            TableFactory.CreateDiretorioTable();
+            TableFactory.CreateArquivoTable();
+
+            return true;
+        }
+
+        
     }
 }

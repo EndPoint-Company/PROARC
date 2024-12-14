@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using System.Numerics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,11 +27,26 @@ namespace PROARC.src.Views
         public RegistrarProcesso01Page()
         {
             this.InitializeComponent();
+
         }
 
-        private void BackPage_Click(object sender, RoutedEventArgs e)
+        private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HomePage));
+            // Torna a seção "Procurador" visível quando o checkbox está marcado
+            ProcuradorSection.Visibility = Visibility.Visible;
         }
+
+        private void ProcuradorCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // Oculta a seção "Procurador" quando o checkbox está desmarcado
+            ProcuradorSection.Visibility = Visibility.Collapsed;
+        }
+
+        private void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(RegistrarProcesso02Page));
+        }
+
+
     }
 }

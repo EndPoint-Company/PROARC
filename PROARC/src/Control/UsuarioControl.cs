@@ -11,6 +11,7 @@ namespace PROARC.src.Control
 {
     public static class UsuarioControl
     {
+
         public static Usuario? GetUsuario(int id)
         {
             string sql = $"SELECT nome, nivel_permissao FROM usuarios WHERE id = {id}";
@@ -42,8 +43,6 @@ namespace PROARC.src.Control
                 Console.WriteLine($"Erro ao buscar usuário com ID {id}: {ex.Message}");
             }
 
-            return null;
-        }
 
 
         public static LinkedList<Usuario>? GetAllUsuario()
@@ -91,9 +90,6 @@ namespace PROARC.src.Control
             }
         }
 
-        public static void RemoveUsuario(int id)
-        {
-            Usuario? toBeRemoved = GetUsuario(id);
 
             if (toBeRemoved == null)
             {

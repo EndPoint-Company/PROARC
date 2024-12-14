@@ -8,16 +8,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
 
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-            <TextBlock Text="Lista de Processos" FontSize="36" Margin="180" TextAlignment="Center"/>
-            <Button x:Name="GoBackBtn" AutomationProperties.Name="Pie" Click="BackPage_Click"
-            Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Voltar" FontSize="15" TextAlignment="Center"/>
-        </StackPanel>
-    </Grid>
+    <Border CornerRadius="10" Margin="50, 0">
+        <Grid Padding="40" CornerRadius="10">
+            <StackPanel Spacing="20">
+                <!-- Cabeçalhos -->
+                <TextBlock Text="Reclamante" FontSize="18" FontWeight="Bold" />
+                <Grid ColumnDefinitions="1*,1*,1.5*,1*,1*,1*,1*,1*" Width="1500" HorizontalAlignment="Left">
+                    <TextBlock Text="Nº Processo" Grid.Column="0" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Reclamante" Grid.Column="1" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="CPF do Reclamante" Grid.Column="2" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Reclamado" Grid.Column="3" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Criado" Grid.Column="4" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Audiência" Grid.Column="5" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Motivo" Grid.Column="6" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Status" Grid.Column="7" Margin="5" FontSize="24" FontWeight="SemiBold" />
+                </Grid>
+
+                <!-- Dados -->
+                <ItemsControl ItemsSource="{Binding Processos}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="0" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="1*,1*,1.5*,1*,1*,1*,1*,1*" Width="1500" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding NumeroProcesso}" Grid.Column="0" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding Reclamante}" Grid.Column="1" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding CPFReclamante}" Grid.Column="2" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding Reclamado}" Grid.Column="3" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding Criado}" Grid.Column="4" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding Audiencia}" Grid.Column="5" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding Motivo}" Grid.Column="6" Margin="5" FontSize="16" />
+                                <TextBlock Text="{Binding Status}" Grid.Column="7" Margin="5" FontSize="16" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Page>
+

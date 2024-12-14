@@ -9,8 +9,58 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-        <TextBlock Text="Registro de Processos 02" FontSize="36" Margin="180" TextAlignment="Center"/>
+    <Grid Background="#FAFAFA">
+        <Grid.Resources>
+            <!-- Estilo para TextBox -->
+            <Style TargetType="TextBox">
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="Margin" Value="0,10,0,10" />
+                <Setter Property="CornerRadius" Value="5" />
+            </Style>
+        </Grid.Resources>
+        
+        <ScrollViewer>
+            <StackPanel Padding="20" Spacing="20">
+                <!-- Título -->
+                <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Margin="20,20,0,20" />
+
+                <!-- Lista de Reclamados -->
+                <StackPanel x:Name="ReclamadosContainer" Spacing="20">
+                    <!-- Primeira seção de Reclamado -->
+                    <Border BorderThickness="1" BorderBrush="#e5e5e5" CornerRadius="10" Margin="50,0" Background="#FFF">
+                        <StackPanel Padding="40" Spacing="10">
+                            <!-- Título -->
+                            <TextBlock Text="Reclamado" FontSize="18" FontWeight="Bold" />
+
+                            <!-- Primeira Linha -->
+                            <StackPanel Orientation="Horizontal" Spacing="20">
+                                <TextBox PlaceholderText="Insira o nome da Instituição" Width="250" />
+                                <TextBox PlaceholderText="Insira o CNPJ" Width="200" />
+                            </StackPanel>
+
+                            <!-- Segunda Linha -->
+                            <StackPanel Orientation="Horizontal" Spacing="20">
+                                <TextBox PlaceholderText="Insira a rua" Width="250" />
+                                <TextBox PlaceholderText="Insira o número" Width="120" />
+                                <TextBox PlaceholderText="Insira o bairro" Width="200" />
+                                <TextBox PlaceholderText="Insira a cidade" Width="200" />
+                                <TextBox PlaceholderText="Insira a UF" Width="100" />
+                                <TextBox PlaceholderText="Insira o CEP" Width="150" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+
+                <!-- Botões -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0, 0, 50, 0">
+                    <Button Content="Adicionar reclamado" Padding="20,10" Margin="0,0,10,0" Click="AdicionarReclamado_Click" />
+                    <Button Content="Continuar" Padding="20,10" Background="#003366" Foreground="White" Click="ContinuarButton_Click" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
