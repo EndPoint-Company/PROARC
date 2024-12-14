@@ -42,8 +42,8 @@ namespace PROARC.src.Control
                 Console.WriteLine($"Erro ao buscar usuário com ID {id}: {ex.Message}");
             }
 
-            return null;
-        }
+        //    return null;
+        //}
 
 
         public static LinkedList<Usuario>? GetAllUsuario()
@@ -91,9 +91,9 @@ namespace PROARC.src.Control
             }
         }
 
-        public static void RemoveUsuario(int id)
-        {
-            Usuario? toBeRemoved = GetUsuario(id);
+        //public static void RemoveUsuario(int id)
+        //{
+        //    Usuario? toBeRemoved = GetUsuario(id);
 
             if (toBeRemoved == null)
             {

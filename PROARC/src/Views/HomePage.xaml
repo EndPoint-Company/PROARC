@@ -9,25 +9,64 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-            <TextBlock Text="Home" FontSize="36" Margin="180" TextAlignment="Center"/>
-            <Button x:Name="GoBackBtn" AutomationProperties.Name="Pie" Click="BackPage_Click"
-                    Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Voltar" FontSize="15" TextAlignment="Center"/>
-            <Button x:Name="ListaProcessosBtn" AutomationProperties.Name="Pie" Click="ListaProcessosPage_Click"
-                   Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Listar Processos" FontSize="15" TextAlignment="Center"/>
-            <Button x:Name="RegistrarProcessoBtn" AutomationProperties.Name="Pie" Click="RegistrarProcessoPage_Click"
-                    Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
-            </Button>
-            <TextBlock Text="Registrar Processo" FontSize="15" TextAlignment="Center"/>
-        </StackPanel>
-    </Grid>
+    <!--<NavigationView x:Name="nvSample"
+                            Header="This is Header Text"
+                            PaneDisplayMode="Left"
+                            SelectionChanged="NavigationView_SelectionChanged9"
+                            IsSettingsVisible="False">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Browse" Tag="SamplePage1" Icon="Library" />
+            <NavigationViewItem Content="Track an Order" Tag="SamplePage2" Icon="Map" />
+            <NavigationViewItem Content="Order History" Tag="SamplePage3" Icon="Tag" />
+        </NavigationView.MenuItems>
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
+            <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
+            <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
+        </NavigationView.FooterMenuItems>
+        <Frame x:Name="contentFrame9" />
+    </NavigationView>-->
+
+    <NavigationView x:Name="nvSample"
+                    IsSettingsVisible="True"
+                    IsBackButtonVisible="Visible"
+                    IsBackEnabled="False"
+                    SelectionChanged="NavigationView_SelectionChanged"
+                    AlwaysShowHeader="True"
+                    PaneTitle="Pane Title"
+                    PaneDisplayMode="Left"
+                    ExpandedModeThresholdWidth="500"
+                    SelectionFollowsFocus="Disabled"
+                    IsTabStop="False"
+                    IsPaneOpen="False">
+
+        <!-- Itens de navegação (Parte superior) -->
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Início" Tag="SamplePage1" x:Name="SamplePage1Item">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Home" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Lista de Processos" Tag="SamplePage2" x:Name="SamplePage2Item">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Save" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Cadastrar Processo" Tag="SamplePage3">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Add"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem Content="Sair" Tag="SamplePage4" Icon="Back" />
+        </NavigationView.FooterMenuItems>
+
+        <!-- Frame de conteúdo -->
+        <Frame x:Name="contentFrame" />
+    </NavigationView>
+
+    
+    
 </Page>

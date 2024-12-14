@@ -10,6 +10,7 @@ namespace PROARC.src.Models.Arquivos
 {
     public class ProcessoAdministrativo
     {
+        private string caminhoDoProcesso;
         private string numeroProcesso;
         private int ano;
         private Motivo? motivo;
@@ -17,8 +18,11 @@ namespace PROARC.src.Models.Arquivos
         private Reclamante? reclamante;
         private Dictionary<ArquivoTipo, Diretorio> diretorios;
 
-        public ProcessoAdministrativo(string numeroProcesso, int ano, Motivo? motivo = null, Reclamado? reclamado = null, Reclamante? reclamante = null)
+        public ProcessoAdministrativo(
+            string caminhoDoProcesso, string numeroProcesso, int ano, Motivo? motivo = null, 
+            Reclamado? reclamado = null, Reclamante? reclamante = null)
         {
+            this.caminhoDoProcesso = caminhoDoProcesso;
             this.numeroProcesso = numeroProcesso;
             this.ano = ano;
             this.motivo = motivo;
@@ -61,5 +65,6 @@ namespace PROARC.src.Models.Arquivos
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
         public Reclamado? Reclamado { get => this.reclamado; set { this.reclamado = value; } }
         public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
+        public string CaminhoDoProcesso { get => this.caminhoDoProcesso; set { this.caminhoDoProcesso = value; } }
     }
 }

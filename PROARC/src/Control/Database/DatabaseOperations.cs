@@ -13,14 +13,16 @@ namespace PROARC.src.Control.Database
 {
     public static class DatabaseOperations
     {
+        [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
         private static string connectionString = new SqlConnectionStringBuilder
         {
-            Encrypt = false,
-            DataSource = "DESKTOP-ARDPAO9\\SQLEXPRESS",
-            UserID = "marco",
-            Password = "admin",
-            InitialCatalog = "PROARC",
-
+            // Otimizar isso aqui depois
+            Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
+            DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
+            UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
+            Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
+            InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
+ 
         }.ConnectionString;
 
         public static void ValidateUserLogin(SecureString acessKey) // TODO
@@ -58,25 +60,60 @@ namespace PROARC.src.Control.Database
             return results;
         }
 
-        public static bool CreateProgramDatabase()
+        public static void QuerySqlCommandNoReturn(string sql)
+        {
+            var results = new List<string>();
+
+            using (var cn = new SqlConnection(connectionString))
+            {
+                cn.Open();
+
+            using var command = new SqlCommand(sql, cn);
+            using var reader = command.ExecuteReader();
+
+            cn.Close();
+        }
+
+        private static bool CreateProgramDatabase()
         {
             using var cn = new SqlConnection(connectionString);
 
             cn.Open();
 
-            string sql = "CREATE DATABASE ProArcDB";
+            string sql = "CREATE DATABASE ProArc";
             using var command = new SqlCommand(sql, cn);
 
             try
             {
                 using var reader = command.ExecuteReader();
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
+                cn.Close();
+
                 return false;
-            }           
+            }
+
+            cn.Close();
 
             return true;
         }
+
+        public static bool CreateAllProgramTables()
+        {
+            CreateProgramDatabase();
+
+            TableFactory.CreateUsuarioTable();
+            TableFactory.CreateReclamadoTable();
+            TableFactory.CreateReclamanteTable();
+            TableFactory.CreateMotivoTable();
+            TableFactory.CreateProcessoAdministrativoTable();
+            TableFactory.CreateDiretorioTable();
+            TableFactory.CreateArquivoTable();
+
+            return true;
+        }
+
+        
     }
 }

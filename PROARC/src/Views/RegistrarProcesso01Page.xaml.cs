@@ -28,9 +28,6 @@ namespace PROARC.src.Views
             this.InitializeComponent();
         }
 
-        private void BackPage_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(HomePage));
-        }
+
     }
 }
