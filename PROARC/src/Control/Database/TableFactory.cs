@@ -17,18 +17,20 @@ namespace PROARC.src.Control.Database
                     "CREATE TABLE Reclamados(" +
                     "reclamado_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
                     "nome NVARCHAR(100) NOT NULL," +
+                    "cpf NVARCHAR(11) NULL," +
+                    "cnpj NVARCHAR(14) NULL," +
                     "numero_rua SMALLINT NULL," +
-                    "email NVARCHAR(100) NULL CONSTRAINT check_email CHECK (email like '%_@__%.__%')," +
+                    "email NVARCHAR(100) NULL CONSTRAINT chk_email CHECK (email like '%_@__%.__%')," +
                     "rua NVARCHAR(100) NULL," +
                     "bairro NVARCHAR(100) NULL," +
                     "cidade NVARCHAR(100) NULL," +
-                    "uf NVARCHAR(2) NULL,);");
+                    "uf NVARCHAR(2) NULL," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }
@@ -42,13 +44,13 @@ namespace PROARC.src.Control.Database
                     "usuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
                     "nome NVARCHAR(100) NOT NULL," +
                     "nivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4)," +
-                    "chave_acesso NVARCHAR(10) NOT NULL UNIQUE,);");
+                    "chave_acesso NVARCHAR(10) NOT NULL UNIQUE," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }
@@ -57,13 +59,18 @@ namespace PROARC.src.Control.Database
         {
             try
             {
-                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;CREATE TABLE Usuarios(\r\n\tusuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1),\r\n\tnome NVARCHAR(100) NOT NULL,\r\n\tnivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4),\r\n\tchave_acesso NVARCHAR(10) NOT NULL UNIQUE,\r\n);");
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE Motivos(" +
+                    "motivo_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
+                    "nome NVARCHAR(100) NOT NULL," +
+                    "descricao NVARCHAR(600) NULL," +
+                    "data_criacao DATETIME NOT NULL," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }
@@ -72,13 +79,18 @@ namespace PROARC.src.Control.Database
         {
             try
             {
-                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;CREATE TABLE Usuarios(\r\n\tusuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1),\r\n\tnome NVARCHAR(100) NOT NULL,\r\n\tnivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4),\r\n\tchave_acesso NVARCHAR(10) NOT NULL UNIQUE,\r\n);");
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE Reclamantes(" +
+                    "reclamante_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
+                    "nome NVARCHAR(100) NOT NULL," +
+                    "rg NVARCHAR(20) NOT NULL," +
+                    "cpf NVARCHAR(11) NULL," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }
@@ -87,13 +99,32 @@ namespace PROARC.src.Control.Database
         {
             try
             {
-                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;CREATE TABLE Usuarios(\r\n\tusuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1),\r\n\tnome NVARCHAR(100) NOT NULL,\r\n\tnivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4),\r\n\tchave_acesso NVARCHAR(10) NOT NULL UNIQUE,\r\n);");
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE ProcessosAdministrativos(" +
+                    "processo_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
+                    "motivo_id INT," +
+                    "reclamante_id INT," +
+                    "reclamado_id INT," +
+                    "numero_processo NVARCHAR(10) NOT NULL," +
+                    "caminho_processo NVARCHAR(200) NULL," +
+                    "ano SMALLINT NOT NULL," +
+                    "data_audiencia DATE NULL," +
+                    "" +
+                    "FOREIGN KEY (reclamante_id) REFERENCES Reclamantes(reclamante_id)" +
+                    "ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
+                    "FOREIGN KEY (motivo_id) REFERENCES Motivos(motivo_id)" +
+                    "ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
+                    "FOREIGN KEY (reclamado_id) REFERENCES Reclamados(reclamado_id)" +
+                    "ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }
@@ -102,13 +133,22 @@ namespace PROARC.src.Control.Database
         {
             try
             {
-                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;CREATE TABLE Usuarios(\r\n\tusuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1),\r\n\tnome NVARCHAR(100) NOT NULL,\r\n\tnivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4),\r\n\tchave_acesso NVARCHAR(10) NOT NULL UNIQUE,\r\n);");
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE Diretorios(" +
+                    "processo_id INT," +
+                    "tipo NVARCHAR(17) NOT NULL," +
+                    "data_criacao DATETIME NOT NULL," +
+                    "data_modificacao DATETIME NOT NULL," +
+                    "" +
+                    "FOREIGN KEY (processo_id) REFERENCES ProcessosAdministrativos(processo_id)" +
+                    "ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }
@@ -117,13 +157,23 @@ namespace PROARC.src.Control.Database
         {
             try
             {
-                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;CREATE TABLE Usuarios(\r\n\tusuario_id INT PRIMARY KEY NOT NULL IDENTITY(1,1),\r\n\tnome NVARCHAR(100) NOT NULL,\r\n\tnivel_permissao SMALLINT NOT NULL CONSTRAINT digito_unico CHECK (nivel_permissao BETWEEN 0 and 4),\r\n\tchave_acesso NVARCHAR(10) NOT NULL UNIQUE,\r\n);");
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE Arquivos(" +
+                    "processo_id INT," +
+                    "tnome NVARCHAR(100) NOT NULL," +
+                    "tipo NVARCHAR(17) NOT NULL," +
+                    "data_criacao DATETIME NOT NULL," +
+                    "data_modificacao DATETIME NOT NULL," +
+                    "" +
+                    "FOREIGN KEY (processo_id) REFERENCES ProcessosAdministrativos(processo_id)" +
+                    "ON DELETE CASCADE" +
+                    "    ON UPDATE CASCADE," +
+                    ");");
             }
             catch (SqlException)
             {
                 return false;
             }
-
 
             return true;
         }

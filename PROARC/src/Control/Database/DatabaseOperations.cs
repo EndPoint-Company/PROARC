@@ -102,8 +102,12 @@ namespace PROARC.src.Control.Database
             CreateProgramDatabase();
 
             TableFactory.CreateUsuarioTable();
-            
-
+            TableFactory.CreateReclamadoTable();
+            TableFactory.CreateReclamanteTable();
+            TableFactory.CreateMotivoTable();
+            TableFactory.CreateProcessoAdministrativoTable();
+            TableFactory.CreateDiretorioTable();
+            TableFactory.CreateArquivoTable();
 
             return true;
         }

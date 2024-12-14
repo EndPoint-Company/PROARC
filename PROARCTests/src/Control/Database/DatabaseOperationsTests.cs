@@ -23,5 +23,11 @@ namespace PROARC.src.Control.Database.Tests
         {
             DatabaseOperations.CreateAllProgramTables();
         }
+
+        [TestMethod()]
+        public void PopulateUsuariosDatabase()
+        {
+
+        }
     }
 }
