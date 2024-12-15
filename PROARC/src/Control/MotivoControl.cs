@@ -40,7 +40,35 @@ namespace PROARC.src.Control
 
             return null;
         }
-        
+
+        public static int? GetMotivoId(string nome)
+        {
+            string sql = $"use ProArc; SELECT motivo_id FROM Motivos WHERE nome = '{nome}'";
+
+            try
+            {
+                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+
+                if (reader.Count >= 1)
+                {
+                    int idMotivo = int.Parse(reader[0]);
+                  
+                    return idMotivo ;
+
+                }
+                else
+                {
+                    Console.WriteLine($"Motivo com nome {nome} não encontrado ou dados insuficientes.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar motivo {nome}: {ex.Message}");
+            }
+
+            return null;
+        }
+
         public static Motivo? GetMotivo(int id)
         {
 

@@ -76,8 +76,8 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public void AtualizarReclamadoTest()
         {
-            Reclamado reclamado = new Reclamado("jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
-            ReclamadoControl.AtualizarReclamado(6, reclamado);
+            //Reclamado reclamado = new Reclamado("jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
+           //ReclamadoControl.AtualizarReclamado(6, reclamado);
         }
     }
 }

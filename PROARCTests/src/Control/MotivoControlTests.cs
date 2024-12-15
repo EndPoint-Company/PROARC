@@ -51,8 +51,13 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
+<<<<<<< HEAD
+                //Motivo motivo = new Motivo("juros abismaticos", "exemplo exemplo exemplo");
+                // MotivoControl.AddMotivo(motivo);
+=======
                  Motivo motivo = new Motivo("juros abusivos", "exemplo exemplo exemplo");
                  MotivoControl.AddMotivo(motivo);
+>>>>>>> e105763787699e39528816da8fadbb22dfaa28c6
             }
             catch (Exception e)
             {
@@ -65,9 +70,13 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
+<<<<<<< HEAD
+                //MotivoControl.RemoverMotivo("juros abusivos");
+=======
 
                MotivoControl.RemoverMotivo("juros catastroficos");
 
+>>>>>>> e105763787699e39528816da8fadbb22dfaa28c6
             }
 
             catch (Exception e)
@@ -119,6 +128,12 @@ namespace PROARC.src.Control.Tests
             {
                 throw new Exception("Erro ao buscar usuário com ID {id}: {e.Message}");
             }
+        }
+
+        [TestMethod()]
+        public void GetMotivoIdTest()
+        {
+           Console.WriteLine(MotivoControl.GetMotivoId("juros abismaticos"));
         }
     }
 }

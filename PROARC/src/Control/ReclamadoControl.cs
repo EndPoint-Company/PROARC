@@ -22,7 +22,6 @@ namespace PROARC.src.Control
 
                 if (reader.Count >= 9)
                 {
-
                     string nome = reader[0];
                     string cpf = reader[1];
                     string cnpj = reader[2];
@@ -159,6 +158,5 @@ namespace PROARC.src.Control
                 Console.WriteLine($"Erro ao atualizar o reclamado: {ex.Message}");
             }
         }
-
     }
 }
