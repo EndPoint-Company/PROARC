@@ -22,7 +22,7 @@
         </Grid.Resources>
         
         <ScrollViewer>
-            <StackPanel Padding="20" Spacing="20">
+            <StackPanel Padding="20" Spacing="40">
                 <!-- Título -->
                 <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO" 
                FontSize="32" 
@@ -35,7 +35,7 @@
                         <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
                         <!-- Primeira seção de Reclamado -->
-                        <StackPanel Padding="40" Spacing="10" Background="#FFF" x:Name="ReclamadoSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Width="1200">
+                        <StackPanel Padding="40" Spacing="10" Background="#FFF" x:Name="ReclamadoSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Width="1710">
                             <!-- Título -->
                             <TextBlock Text="Reclamado" FontSize="18" FontWeight="Bold" />
 
@@ -54,7 +54,7 @@
 
                             <!-- Terceira Linha -->
                             <StackPanel Orientation="Horizontal" Spacing="20">
-                                <TextBox PlaceholderText="Insira a cidade" Width="200" />
+                                <TextBox PlaceholderText="Insira a cidade" Width="180" />
                                 <TextBox PlaceholderText="Insira a UF" Width="100" />
                                 <TextBox PlaceholderText="Insira o CEP" Width="150" />
                             </StackPanel>
@@ -62,9 +62,8 @@
                     </StackPanel>
                 </StackPanel>
 
-
                 <!-- Botões -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0, 20, 50, 0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0, 20, 56, 0">
                     <Button Content="Adicionar reclamado" Padding="20,10" Margin="0,0,10,0" Click="AdicionarReclamado_Click" />
                     <Button Content="Continuar" Padding="20,10" Background="#003366" Foreground="White" Click="ContinuarButton_Click"/>
                 </StackPanel>

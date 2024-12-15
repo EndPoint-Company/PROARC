@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-  
+
     <Grid Background="#FAFAFA">
         <!-- Estilos Comuns -->
         <Grid.Resources>
@@ -33,7 +33,7 @@
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
                     <!-- Seção Reclamante -->
-                    <StackPanel x:Name="ReclamanteSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Padding="40" Background="#FFF" Spacing="10" Width="1200">
+                    <StackPanel x:Name="ReclamanteSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Padding="40" Background="#FFF" Spacing="10" Width="1710">
                         <TextBlock Text="Reclamante" FontSize="18" FontWeight="Bold" />
 
                         <!-- Primeira Linha -->
@@ -50,26 +50,25 @@
                                 <TextBlock x:Name="PickAFileOutputTextBlock1" TextWrapping="Wrap" Padding="20,5,0,0" />
 
                                 <!-- Dialog para seleção/arraste de arquivo -->
-                                <ContentDialog x:Name="FilePickerDialog1" Title="Selecionar ou Arrastar Arquivo" 
-                               PrimaryButtonText="Fechar"
-                               PrimaryButtonClick="FilePickerDialog_Close">
+                                <ContentDialog x:Name="FilePickerDialog1" Title="Selecionar ou Arrastar Arquivo" PrimaryButtonText="Fechar" PrimaryButtonClick="FilePickerDialog_Close">
                                     <StackPanel>
                                         <!-- Área para arrastar arquivos -->
                                         <Border x:Name="DragDropArea1" 
-                                BorderBrush="Gray" 
-                                BorderThickness="2" 
-                                Background="#F0F0F0" 
-                                Padding="20" 
-                                CornerRadius="5"
-                                Height="150"
-                                AllowDrop="True"
-                                Drop="DragDropArea1_Drop"
-                                DragOver="DragDropArea1_DragOver">
+                                                BorderBrush="Gray" 
+                                                BorderThickness="2" 
+                                                Background="#F0F0F0" 
+                                                Padding="20" 
+                                                CornerRadius="5"
+                                                Height="150"
+                                                AllowDrop="True"
+                                                Drop="DragDropArea1_Drop"
+                                                DragOver="DragDropArea1_DragOver">
+
                                             <TextBlock Text="Arraste e solte um arquivo aqui" 
-                                       HorizontalAlignment="Center" 
-                                       VerticalAlignment="Center" 
-                                       FontSize="16" 
-                                       Foreground="Gray" />
+                                                   HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center" 
+                                                   FontSize="16" 
+                                                   Foreground="Gray" />
                                         </Border>
 
                                         <!-- Botão para abrir o seletor de arquivos -->
@@ -101,21 +100,24 @@
                                PrimaryButtonClick="FilePickerDialog_Close">
                                     <StackPanel>
                                         <!-- Área para arrastar arquivos -->
-                                        <Border x:Name="DragDropArea2" 
-                                BorderBrush="Gray" 
-                                BorderThickness="2" 
-                                Background="#F0F0F0" 
-                                Padding="20" 
-                                CornerRadius="5"
-                                Height="150"
-                                AllowDrop="True"
-                                Drop="DragDropArea2_Drop"
-                                DragOver="DragDropArea2_DragOver">
-                                            <TextBlock Text="Arraste e solte um arquivo aqui" 
-                                       HorizontalAlignment="Center" 
-                                       VerticalAlignment="Center" 
-                                       FontSize="16" 
-                                       Foreground="Gray" />
+                                        <Border 
+                                            x:Name="DragDropArea2" 
+                                            BorderBrush="Gray" 
+                                            BorderThickness="2" 
+                                            Background="#F0F0F0" 
+                                            Padding="20" 
+                                            CornerRadius="5"
+                                            Height="150"
+                                            AllowDrop="True"
+                                            Drop="DragDropArea2_Drop"
+                                            DragOver="DragDropArea2_DragOver">
+
+                                            <TextBlock 
+                                                Text="Arraste e solte um arquivo aqui" 
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center" 
+                                                FontSize="16" 
+                                                Foreground="Gray" />
                                         </Border>
 
                                         <!-- Botão para abrir o seletor de arquivos -->
@@ -128,20 +130,16 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10"
-                  Checked="ProcuradorCheckBox_Checked"
-                  Unchecked="ProcuradorCheckBox_Unchecked" />
+                        <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10" Checked="ProcuradorCheckBox_Checked" Unchecked="ProcuradorCheckBox_Unchecked" />
                     </StackPanel>
                 </StackPanel>
-
-
 
                 <!-- Contêiner principal para o StackPanel Procurador -->
                 <StackPanel Orientation="Horizontal" Margin="50,0" Width="auto" >
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
                     <!-- Seção Procurador -->
-                    <StackPanel CornerRadius="10" Padding="40" Background="#FFF" Spacing="10" Visibility="Collapsed" x:Name="ProcuradorSection" Shadow="{StaticResource SharedShadow}" Width="1200">
+                    <StackPanel CornerRadius="10" Padding="40" Background="#FFF" Spacing="10" Visibility="Collapsed" x:Name="ProcuradorSection" Shadow="{StaticResource SharedShadow}" Width="1710">
                         <TextBlock Text="Procurador" FontSize="18" FontWeight="Bold" />
 
                         <!-- Primeira Linha -->
@@ -160,9 +158,6 @@
                     </StackPanel>
                 </StackPanel>
 
-
-
-
                 <!-- Botão de Continuar -->
                 <Button 
                     Content="Continuar" 
@@ -170,9 +165,8 @@
                     Padding="20,10" 
                     Background="#003366" 
                     Foreground="White" 
-                    Margin="0,0,50,0" 
+                    Margin="0,0,56,0" 
                     Click="ContinuarButton_Click"/>
-
             </StackPanel>
         </ScrollViewer>
     </Grid>

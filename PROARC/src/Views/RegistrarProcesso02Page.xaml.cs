@@ -81,7 +81,7 @@ namespace PROARC.src.Views
                 Spacing = 10,
                 Background = new SolidColorBrush(Colors.White),
                 CornerRadius = new CornerRadius(0, 10, 10, 0),
-                Width = 1200
+                Width = 1710
             };
 
             // Aplicar sombra à seção usando ThemeShadow
@@ -99,7 +99,7 @@ namespace PROARC.src.Views
             // Adicionar linhas de TextBoxes
             reclamadoSecao.Children.Add(CriarLinha(("Insira o nome da Instituição", 300), ("Insira o CNPJ", 200)));
             reclamadoSecao.Children.Add(CriarLinha(("Insira a rua", 300), ("Insira o bairro", 280), ("Insira o número", 120)));
-            reclamadoSecao.Children.Add(CriarLinha(("Insira a cidade", 200), ("Insira a UF", 100), ("Insira o CEP", 150)));
+            reclamadoSecao.Children.Add(CriarLinha(("Insira a cidade", 180), ("Insira a UF", 100), ("Insira o CEP", 150)));
 
             // Container principal horizontal
             var container = new StackPanel
@@ -113,7 +113,6 @@ namespace PROARC.src.Views
 
             return container;
         }
-
 
         private void AdicionarReclamado_Click(object sender, RoutedEventArgs e)
         {
