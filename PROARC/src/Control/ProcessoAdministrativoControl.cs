@@ -46,10 +46,10 @@ namespace PROARC.src.Control
             return new(
                 reader[4],
                 numeroDoProcesso,
-                int.Parse(reader[5]),
+                short.Parse(reader[5]),
                 MotivoControl.GetMotivo(reader[0]),
-                ReclamanteControl.GetReclamante(int.Parse(reader[1])),
                 ReclamadoControl.GetReclamado(int.Parse(reader[2])),
+                ReclamanteControl.GetReclamante(int.Parse(reader[1])),
                 DateTime.Parse(reader[3])
             );
         }

@@ -16,8 +16,10 @@ using Microsoft.UI.Xaml.Shapes;
 using PROARC.src.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -50,14 +52,12 @@ namespace PROARC
             Frame rootFrame = new Frame();
             rootFrame.NavigationFailed += OnNavigationFailed;
             rootFrame.Navigate(typeof(LoginPage), args.Arguments);
-            
+
             m_window.Activate();
 
             await Task.Delay(1280);
 
             m_window.Content = rootFrame;
-
-
         }
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
