@@ -9,64 +9,16 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <!--<NavigationView x:Name="nvSample"
-                            Header="This is Header Text"
-                            PaneDisplayMode="Left"
-                            SelectionChanged="NavigationView_SelectionChanged9"
-                            IsSettingsVisible="False">
-        <NavigationView.MenuItems>
-            <NavigationViewItem Content="Browse" Tag="SamplePage1" Icon="Library" />
-            <NavigationViewItem Content="Track an Order" Tag="SamplePage2" Icon="Map" />
-            <NavigationViewItem Content="Order History" Tag="SamplePage3" Icon="Tag" />
-        </NavigationView.MenuItems>
-        <NavigationView.FooterMenuItems>
-            <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
-            <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
-            <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
-        </NavigationView.FooterMenuItems>
-        <Frame x:Name="contentFrame9" />
-    </NavigationView>-->
+    <StackPanel>
+        <!-- Banner com imagem -->
+        <Image Source="Assets/banner.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="200"/>
 
-    <NavigationView x:Name="nvSample"
-                    IsSettingsVisible="True"
-                    IsBackButtonVisible="Visible"
-                    IsBackEnabled="False"
-                    SelectionChanged="NavigationView_SelectionChanged"
-                    AlwaysShowHeader="True"
-                    PaneTitle="Pane Title"
-                    PaneDisplayMode="Left"
-                    ExpandedModeThresholdWidth="500"
-                    SelectionFollowsFocus="Disabled"
-                    IsTabStop="False"
-                    IsPaneOpen="False">
+        <!-- Texto ou Botão abaixo da imagem do banner (opcional) -->
+        <TextBlock Text="Bem-vindo ao Processo de Registro!" FontSize="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Content="Clique para Registrar Processo" Background="Transparent" BorderBrush="White" Foreground="White" Click="BannerButton_Click"/>
 
-        <!-- Itens de navegação (Parte superior) -->
-        <NavigationView.MenuItems>
-            <NavigationViewItem Content="Início" Tag="SamplePage1" x:Name="SamplePage1Item">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Home" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Lista de Processos" Tag="SamplePage2" x:Name="SamplePage2Item">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Save" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Cadastrar Processo" Tag="SamplePage3">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Add"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-        </NavigationView.MenuItems>
+        <!-- Frame para o conteúdo abaixo do banner -->
+        <Frame x:Name="contentFrame" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,10,0,0"/>
+    </StackPanel>
 
-        <NavigationView.FooterMenuItems>
-            <NavigationViewItem Content="Sair" Tag="SamplePage4" Icon="Back" />
-        </NavigationView.FooterMenuItems>
-
-        <!-- Frame de conteúdo -->
-        <Frame x:Name="contentFrame" />
-    </NavigationView>
-
-    
-    
 </Page>
