@@ -14,10 +14,10 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public void Local_CriarFolderProcessoAdministrativoTest()
         {
-            //FileNetworkControl.Local_SetDefaultFolder(@"D:/ProarcFiles/Teste1");
-            //FileNetworkControl.Local_CriarProcessoAdministrativo("0001-2024");
-           // FileNetworkControl.Local_CriarDiretorio(Models.Tipos.ArquivoTipo.AtaDeAudiencia, "0001-2024");
-            //FileNetworkControl.Local_AdicionarAquivoToDiretorio(Models.Tipos.ArquivoTipo.AtaDeAudiencia, "0001-2024", "C:\\Users\\Mykael\\Documents\\anexo b.pdf");
+            FileNetworkControl.Local_SetDefaultFolder(@"D:/ProarcFiles/Teste1");
+            FileNetworkControl.Local_CriarProcessoAdministrativo("0001-2024");
+            FileNetworkControl.Local_CriarDiretorio(Models.Tipos.ArquivoTipo.AtaDeAudiencia, "0001-2024");
+            FileNetworkControl.Local_AdicionarAquivoToDiretorio(Models.Tipos.ArquivoTipo.AtaDeAudiencia, "0001-2024", "C:\\Users\\Mykael\\Documents\\anexo b.pdf");
         }
     }
 }
