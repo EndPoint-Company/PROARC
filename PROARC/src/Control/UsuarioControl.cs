@@ -11,10 +11,11 @@ namespace PROARC.src.Control
 {
     public static class UsuarioControl
     {
+
         public static Usuario? GetUsuario(int id)
         {
             string sql = $"use ProArc; SELECT nome, nivel_permissao FROM Usuarios WHERE usuario_id = {id}";
- 
+          
             try
             {
                 List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
@@ -22,8 +23,9 @@ namespace PROARC.src.Control
                 if (reader.Count >= 2)
                 {
                     string nome = reader[0];
-
+                  
                     if (short.TryParse(reader[1], out short nivelPermissao))
+                      
                     {
                         return new Usuario(nome, nivelPermissao);
                     }
@@ -41,9 +43,9 @@ namespace PROARC.src.Control
             {
                 Console.WriteLine($"Erro ao buscar usuário com ID {id}: {ex.Message}");
             }
-
             return null;
         }
+
 
 
         public static LinkedList<Usuario>? GetAllUsuario()
@@ -56,6 +58,7 @@ namespace PROARC.src.Control
                 List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
 
                 string nome = string.Empty;
+
                 short nivelPermissao = 0;
 
                 bool isNome = true;
@@ -69,6 +72,7 @@ namespace PROARC.src.Control
                     }
                     else
                     {
+
                         if (short.TryParse(linha, out nivelPermissao))
                         {
 
@@ -100,6 +104,7 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
+
             string sql = $"use ProArc; DELETE FROM usuarios WHERE usuario_id = {id}";
 
             try
@@ -122,6 +127,7 @@ namespace PROARC.src.Control
             {
                 throw new Exception("Insira um usuario valido.");
             }
+
 
             Random random = new Random();
             int chaveAcesso = random.Next(100000, 999999);
@@ -151,6 +157,7 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
+
             string sql = $"use ProArc; UPDATE Usuarios SET nome = '{novoNome}' WHERE usuario_id = {id}";
             try
             {
@@ -175,7 +182,9 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
+
             string sql = $"use ProArc; UPDATE Usuarios SET nivel_permissao = '{novoNivelDePermissao}' WHERE usuario_id = {id}";
+
             try
             {
                 List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
@@ -199,7 +208,9 @@ namespace PROARC.src.Control
                 throw new Exception("Usuario não encontrado no banco de dados.");
             }
 
+
             string sql = $"use ProArc; UPDATE Usuarios Set nome = '{novoNome}', nivel_permissao = '{novoNivelDePermissao}' WHERE usuario_id = {id}";
+
             try
             {
                 List<string> reader = DatabaseOperations.QuerySqlCommand(sql);

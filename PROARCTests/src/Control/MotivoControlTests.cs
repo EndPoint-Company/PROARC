@@ -20,7 +20,8 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                //Console.WriteLine(MotivoControl.GetMotivo("juros catastroficos"));
+
+                Console.WriteLine(MotivoControl.GetMotivo("juros abusivos"));
             }
 
             catch (Exception e)
@@ -29,14 +30,14 @@ namespace PROARC.src.Control.Tests
             }
         }
 
-
-
         [TestMethod("teste de metodo getMotivo por id")]
         public void GetMotivoTest1()
         {
             try
             {
-                //Console.WriteLine(MotivoControl.GetMotivo(2));
+
+                Console.WriteLine(MotivoControl.GetMotivo(1));
+
             }
 
             catch (Exception e)
@@ -50,8 +51,8 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-               //Motivo motivo = new Motivo("juros abismaticos", "exemplo exemplo exemplo");
-              // MotivoControl.AddMotivo(motivo);
+                 Motivo motivo = new Motivo("juros abusivos", "exemplo exemplo exemplo");
+                 MotivoControl.AddMotivo(motivo);
             }
             catch (Exception e)
             {
@@ -64,7 +65,9 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                 //MotivoControl.RemoverMotivo("juros abusivos");
+
+               MotivoControl.RemoverMotivo("juros catastroficos");
+
             }
 
             catch (Exception e)
@@ -78,7 +81,9 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                MotivoControl.AtualizarMotivo("juros catastroficos", "juros cataclimaticos", "deu certo");
+
+               //MotivoControl.AtualizarMotivo("Motivo Exemplo", "juros catastroficos", "deu certo");
+
             }
 
             catch (Exception e)
@@ -86,6 +91,7 @@ namespace PROARC.src.Control.Tests
                 throw new Exception("Erro ao buscar Motivo com nome {nome}: {e.Message}");
             }
         }
+
 
         [TestMethod()]
         public void GetAllMotivosTest()
