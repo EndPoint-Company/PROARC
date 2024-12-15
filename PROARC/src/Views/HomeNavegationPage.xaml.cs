@@ -42,7 +42,7 @@ namespace PROARC.src.Views
                 switch (tag)
                 {
                     case "SamplePage1":
-                        Frame.Navigate(typeof(HomePage));
+                        contentFrame.Navigate(typeof(HomePage));
                         break;
                     case "SamplePage2":
                         contentFrame.Navigate(typeof(ProcessosListaPage));

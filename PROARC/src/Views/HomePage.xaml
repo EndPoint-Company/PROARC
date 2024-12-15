@@ -9,16 +9,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
+    <Border BorderBrush="Blue" BorderThickness="3" CornerRadius="5" 
+        Background="Black"  Height="600" VerticalAlignment="Top">
+        <StackPanel>
         <!-- Banner com imagem -->
-        <Image Source="Assets/banner.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="Auto" Height="200"/>
+            <Image Source="/Assets/bannerHome.png" HorizontalAlignment="Stretch" 
+       VerticalAlignment="Top" Height="600"/>
 
-        <!-- Texto ou Botão abaixo da imagem do banner (opcional) -->
-        <TextBlock Text="Bem-vindo ao Processo de Registro!" FontSize="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button Content="Clique para Registrar Processo" Background="Transparent" BorderBrush="White" Foreground="White" Click="BannerButton_Click"/>
-
-        <!-- Frame para o conteúdo abaixo do banner -->
-        <Frame x:Name="contentFrame" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,10,0,0"/>
-    </StackPanel>
+        </StackPanel>
+    </Border>
 
 </Page>
