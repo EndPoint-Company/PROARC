@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAppSDK.Runtime.Packages;
+﻿using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.WindowsAppSDK.Runtime.Packages;
 using PROARC.src.Control.Database;
 using PROARC.src.Models;
 using System;
@@ -49,6 +50,34 @@ namespace PROARC.src.Control
             {
                 Console.WriteLine($"Erro ao buscar reclamado com ID {id}: {ex.Message}");
             }
+            return null;
+        }
+
+        public static int? GetReclamadoId(string cpf, string nome)
+        {
+            string sql = $"USE ProArc; SELECT reclamado_id FROM Reclamados WHERE cpf = '{cpf}' AND nome = '{nome}'";
+
+            try
+            {
+                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+
+                if (reader.Count >= 1)
+                {
+                    int idReclamado = int.Parse(reader[0]);
+
+                    return idReclamado;
+
+                }
+                else
+                {
+                    Console.WriteLine($"Reclamado com nome {cpf} não encontrado ou dados insuficientes.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar reclamado {cpf}: {ex.Message}");
+            }
+
             return null;
         }
 

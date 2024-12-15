@@ -48,8 +48,8 @@ namespace PROARC.src.Control
                 numeroDoProcesso,
                 int.Parse(reader[5]),
                 MotivoControl.GetMotivo(reader[0]),
-                ReclamanteControl.GetReclamante(reader[1]),
-                ReclamadoControl.GetReclamado(reader[2]),
+                ReclamanteControl.GetReclamante(int.Parse(reader[1])),
+                ReclamadoControl.GetReclamado(int.Parse(reader[2])),
                 DateTime.Parse(reader[3])
             );
         }
