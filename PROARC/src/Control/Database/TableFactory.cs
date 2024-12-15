@@ -83,7 +83,7 @@ namespace PROARC.src.Control.Database
                     "CREATE TABLE Reclamantes(" +
                     "reclamante_id INT PRIMARY KEY NOT NULL IDENTITY(1,1)," +
                     "nome NVARCHAR(100) NOT NULL," +
-                    "rg NVARCHAR(20) NOT NULL," +
+                    "rg NVARCHAR(20) NOT NULL UNIQUE," +
                     "cpf NVARCHAR(11) NULL," +
                     ");");
             }

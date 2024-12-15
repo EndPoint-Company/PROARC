@@ -47,9 +47,9 @@ namespace PROARC.src.Control
                 reader[4],
                 numeroDoProcesso,
                 int.Parse(reader[5]),
-                MotivoControl.GetMotivoId(reader[0]),
-                ReclamanteControl.GetReclamanteId(reader[1]),
-                ReclamadoControl.GetReclamadoId(reader[2]),
+                MotivoControl.GetMotivo(reader[0]),
+                ReclamanteControl.GetReclamante(reader[1]),
+                ReclamadoControl.GetReclamado(reader[2]),
                 DateTime.Parse(reader[3])
             );
         }
