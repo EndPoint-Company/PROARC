@@ -106,6 +106,7 @@ namespace PROARC.src.Control.Database
             TableFactory.CreateProcessoAdministrativoTable();
             TableFactory.CreateDiretorioTable();
             TableFactory.CreateArquivoTable();
+            TableFactory.CreateDefaultPathTable();
 
             return true;
         }

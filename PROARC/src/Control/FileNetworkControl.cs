@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PROARC.src.Control.Database;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Models.Tipos;
 
@@ -20,17 +18,19 @@ namespace PROARC.src.Control
 
         public static void Local_SetDefaultFolder(string path)
         {
-            // TODO: colocar path na database
-            // Tabela -> local_path varchar
-            //           remote_path varchar
+            string sql = $"USE ProArc; INSERT INTO DefaultPath (remote, local) VALUES (NULL, '{path}');";
+            DatabaseOperations.QuerySqlCommandNoReturn(sql);
 
             local_DefaultPath = path;
         }
 
         public static string? Local_GetDefaultFolder()
         {
-            // Pegar caminho na database
-            return null;
+            // Revisar
+            string sql = $"USE ProArc; SELECT local FROM DefaultPath;";
+            List<string> local = DatabaseOperations.QuerySqlCommand(sql);
+
+            return local[0];
         }
 
         public static void Local_CriarProcessoAdministrativo(string numeroProcesso)
@@ -45,7 +45,16 @@ namespace PROARC.src.Control
 
         public static void Local_AdicionarAquivoToDiretorio(ArquivoTipo tipo, string numeroProcesso, string arquivoPath)
         {
-            File.Copy(arquivoPath, $"{local_DefaultPath}/{numeroProcesso}/{tipo}/" + Path.GetFileName(arquivoPath));
+            File.Copy(arquivoPath, $"{local_DefaultPath}/{numeroProcesso}/{tipo}/" + System.IO.Path.GetFileName(arquivoPath));
+        }
+
+        public static void Local_CriarAllDiretorios(string numero_processo)
+        {
+            Local_CriarDiretorio(ArquivoTipo.TermoDeReclamação, numero_processo);
+            Local_CriarDiretorio(ArquivoTipo.Notificacao, numero_processo);
+            Local_CriarDiretorio(ArquivoTipo.Procuracao, numero_processo);
+            Local_CriarDiretorio(ArquivoTipo.AtaDeAudiencia, numero_processo);
+            Local_CriarDiretorio(ArquivoTipo.OutrosAnexos, numero_processo);
         }
     }
 }

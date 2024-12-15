@@ -106,7 +106,7 @@ namespace PROARC.src.Control.Database
                     "reclamante_id INT," +
                     "reclamado_id INT," +
                     "numero_processo NVARCHAR(10) NOT NULL," +
-                    "caminho_processo NVARCHAR(200) NULL," +
+                    "caminho_processo NVARCHAR(200) NOT NULL," +
                     "ano SMALLINT NOT NULL," +
                     "data_audiencia DATE NULL," +
                     "" +
@@ -160,7 +160,7 @@ namespace PROARC.src.Control.Database
                 DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
                     "CREATE TABLE Arquivos(" +
                     "processo_id INT," +
-                    "tnome NVARCHAR(100) NOT NULL," +
+                    "nome NVARCHAR(100) NOT NULL," +
                     "tipo NVARCHAR(17) NOT NULL," +
                     "data_criacao DATETIME NOT NULL," +
                     "data_modificacao DATETIME NOT NULL," +
@@ -168,6 +168,24 @@ namespace PROARC.src.Control.Database
                     "FOREIGN KEY (processo_id) REFERENCES ProcessosAdministrativos(processo_id)" +
                     "ON DELETE CASCADE" +
                     "    ON UPDATE CASCADE," +
+                    ");");
+            }
+            catch (SqlException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool CreateDefaultPathTable()
+        {
+            try
+            {
+                DatabaseOperations.QuerySqlCommandNoReturn("USE ProArc;" +
+                    "CREATE TABLE DefaultPath(" +
+                    "remote NVARCHAR(200) NULL," +
+                    "local NVARCHAR(200) NULL," +
                     ");");
             }
             catch (SqlException)
