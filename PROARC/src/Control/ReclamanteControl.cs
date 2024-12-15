@@ -68,6 +68,55 @@ namespace PROARC.src.Control
             return null;
         }
 
+        public static LinkedList<Reclamante>? GetAllReclamante()
+        {
+            LinkedList<Reclamante> reclamantes = new LinkedList<Reclamante>();
+            string sql = "use ProArc; SELECT reclamante_id FROM Reclamantes";
+
+            try
+            {
+                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+
+                if (reader.Count == 0)
+                {
+                    Console.WriteLine("Nenhum reclamado encontrado.");
+                    return null;
+                }
+
+                string nome = string.Empty;
+                string rg = string.Empty;
+                string cpf = string.Empty;
+
+                bool isNome = true;
+
+                foreach (string idStr in reader)
+                {
+                    if (int.TryParse(idStr, out int id))
+                    {
+                        Reclamante? reclamante = GetReclamante(id);
+                        if (reclamante != null)
+                        {
+                            reclamantes.AddLast(reclamante);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Erro ao obter os dados do reclamante com ID {id}.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Erro ao converter o ID {idStr} para inteiro.");
+                    }
+                }
+                return reclamantes;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar usuários: {ex.Message}");
+                return null;
+            }
+        }
+
         public static void AddReclamante(Reclamante reclamante)
         {
             if (reclamante == null)

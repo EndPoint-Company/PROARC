@@ -46,7 +46,6 @@ namespace PROARC.src.Control
         }
 
 
-
         public static LinkedList<Usuario>? GetAllUsuario()
         {
             LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
