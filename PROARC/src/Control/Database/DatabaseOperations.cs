@@ -16,12 +16,10 @@ namespace PROARC.src.Control.Database
         [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
         private static string connectionString = new SqlConnectionStringBuilder
         {
-            // Otimizar isso aqui depois
             Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
             DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
             UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
             Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
-            //InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
 
         }.ConnectionString;
 
@@ -71,7 +69,21 @@ namespace PROARC.src.Control.Database
 
             return results;
         }
-    
+
+        public static void QuerySqlCommandNoReturn(string sql)
+        {
+            var results = new List<string>();
+
+            using (var cn = new SqlConnection(connectionString))
+            {
+                cn.Open();
+
+                using var command = new SqlCommand(sql, cn);
+                using var reader = command.ExecuteReader();
+
+                cn.Close();
+            }
+        }
 
         private static bool CreateProgramDatabase()
         {
