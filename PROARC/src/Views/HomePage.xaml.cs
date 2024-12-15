@@ -28,11 +28,5 @@ namespace PROARC.src.Views
             this.InitializeComponent();
         }
 
-        private void BannerButton_Click(object sender, RoutedEventArgs e)
-        {
-            contentFrame.Navigate(typeof(RegistrarProcesso01Page));
-        }
-
-
     }
 }
