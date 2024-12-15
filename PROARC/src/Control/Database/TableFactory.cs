@@ -105,7 +105,7 @@ namespace PROARC.src.Control.Database
                     "motivo_id INT," +
                     "reclamante_id INT," +
                     "reclamado_id INT," +
-                    "numero_processo NVARCHAR(10) NOT NULL," +
+                    "numero_processo NVARCHAR(10) NOT NULL UNIQUE," +
                     "caminho_processo NVARCHAR(200) NOT NULL," +
                     "ano SMALLINT NOT NULL," +
                     "data_audiencia DATE NULL," +

@@ -14,7 +14,7 @@ namespace PROARC.src.Control
 
         // Usei snake_case em alguns lugares, mas depois a gente ajeita isso.
 
-        public static void RegistrarProcesso(ProcessoAdministrativo processo)
+        public static void RegistrarProcessoAdministrativo(ProcessoAdministrativo processo)
         {
             // Fazer GetMotivoId(String nome)
             int? motivo_id = MotivoControl.GetMotivoId(processo.Motivo.MotivoNome);
@@ -34,6 +34,24 @@ namespace PROARC.src.Control
 
             AdicionarProcessoAdministrativo(processo.NumeroProcesso, processo.Ano, motivo_id, reclamante_id,
                 reclamado_id, processo.CaminhoDoProcesso, processo.DataDaAudiencia);
+        }
+
+        public static ProcessoAdministrativo? GetProcessoAdministrativo(string numeroDoProcesso)
+        {
+            string sql = "USE ProArc; SELECT motivo_id, reclamante_id, reclamado_id, numero_processo," +
+                $" caminho_processo, ano, data_audiencia FROM ProcessosAdministrativos WHERE numero_processo = {numeroDoProcesso}";
+
+            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+
+            return new(
+                reader[4],
+                numeroDoProcesso,
+                int.Parse(reader[5]),
+                MotivoControl.GetMotivoId(reader[0]),
+                ReclamanteControl.GetReclamanteId(reader[1]),
+                ReclamadoControl.GetReclamadoId(reader[2]),
+                DateTime.Parse(reader[3])
+            );
         }
 
         // Baixo nível, deve ser usada no RegistrarProcessoAdministrativo()
