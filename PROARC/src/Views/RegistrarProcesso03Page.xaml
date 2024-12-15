@@ -21,6 +21,8 @@
             <Style TargetType="RadioButton">
                 <Setter Property="Margin" Value="5,2"/>
             </Style>
+
+            <ThemeShadow x:Name="SharedShadow" />
         </Grid.Resources>
 
         <!-- Layout Principal -->
@@ -32,58 +34,67 @@
                        FontWeight="Bold" 
                        Margin="50,20,0,20" />
 
-                <!-- Seções Motivo e Status Lado a Lado -->
-                <Grid Margin="50,0">
+                <Grid Margin="50,0" ColumnSpacing="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Seção Motivo -->
-                    <Border Grid.Column="0" BorderThickness="1" BorderBrush="#e5e5e5" CornerRadius="10" Margin="0,0,20,0">
-                        <StackPanel Padding="40" Background="#FFF" Spacing="10">
-                            <TextBlock Text="Motivo" FontSize="18" FontWeight="Bold" />
-                            <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo"/>
+                    <!-- Seção Motivo e Audiência -->
+                    <StackPanel Grid.Column="0" Spacing="30">
+                        <!-- Seção Motivo -->
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                            <StackPanel Padding="40" Background="#FFF" Spacing="10" Width="400" Height="200" 
+                        CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}">
+                                <TextBlock Text="Motivo" FontSize="18" FontWeight="Bold" />
+                                <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" />
+                            </StackPanel>
                         </StackPanel>
-                    </Border>
+
+                        <!-- Seção Audiência -->
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                            <StackPanel Padding="40" Width="400" Height="200" Background="#FFF" Spacing="10" 
+                        CornerRadius="0, 10, 10, 0" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
+                                <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
+                                <CalendarDatePicker PlaceholderText="Escolha a data" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
 
                     <!-- Seção Status -->
-                    <Border Grid.Column="1" BorderThickness="1" BorderBrush="#e5e5e5" CornerRadius="10" Width="700" HorizontalAlignment="Left">
-                        <StackPanel Padding="40" Background="#FFF" Spacing="10">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="-10, 0, 0, 0">
+                        <!-- Barra lateral azul -->
+                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+
+                        <!-- Conteúdo da seção Status -->
+                        <StackPanel Padding="40" Background="#FFF" Width="620" Spacing="20" 
+                    CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}">
+                            <!-- Título -->
                             <TextBlock Text="Status" FontSize="18" FontWeight="Bold" />
 
-                            <TextBlock Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
+                            <!-- Status: Em tramitação -->
                             <StackPanel>
-                                <RadioButton Content="Aguardando realização da audiência" GroupName="StatusGroup" IsChecked="True"/>
-                                <RadioButton Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
-                                <RadioButton Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
-                                <RadioButton Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
+                                <TextBlock Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
+                                <StackPanel>
+                                    <RadioButton Content="Aguardando realização da audiência" GroupName="StatusGroup" IsChecked="True"/>
+                                    <RadioButton Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
+                                    <RadioButton Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
+                                    <RadioButton Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
+                                </StackPanel>
                             </StackPanel>
 
-                            <TextBlock Text="Arquivado" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
+                            <!-- Status: Arquivado -->
                             <StackPanel>
-                                <RadioButton Content="Atendido" GroupName="StatusGroup"/>
-                                <RadioButton Content="Não Atendido" GroupName="StatusGroup"/>
+                                <TextBlock Text="Arquivado" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
+                                <StackPanel>
+                                    <RadioButton Content="Atendido" GroupName="StatusGroup"/>
+                                    <RadioButton Content="Não Atendido" GroupName="StatusGroup"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                    </Border>
-                </Grid>
-
-                <!-- Seção Audiência -->
-                <Grid Margin="50,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0" BorderThickness="1" BorderBrush="#e5e5e5" CornerRadius="10" Margin="0,0,20,0">
-                        <StackPanel Padding="40" Background="#FFF" Spacing="10">
-                            <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
-                            <CalendarDatePicker PlaceholderText="Escolha a data"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Grid.Column="1" Visibility="Collapsed" />
+                    </StackPanel>
                 </Grid>
 
                 <!-- Botão de Continuar -->
@@ -92,7 +103,7 @@
                     Padding="20,10" 
                     Background="#003366" 
                     Foreground="White" 
-                    Margin="0,0,50,20" />
+                    Margin="0,20,50,20" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

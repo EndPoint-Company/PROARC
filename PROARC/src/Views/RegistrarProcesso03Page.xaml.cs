@@ -27,6 +27,9 @@ namespace PROARC.src.Views
         {
             InitializeComponent();
             CarregarMotivos();
+            MotivoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+            AudienciaSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+            StatusSection.Translation = new System.Numerics.Vector3(1, 1, 20);
         }
 
         private void CarregarMotivos()

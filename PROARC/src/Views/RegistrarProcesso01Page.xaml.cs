@@ -26,6 +26,10 @@ namespace PROARC.src.Views
         public RegistrarProcesso01Page()
         {
             this.InitializeComponent();
+
+            // Elevar o StackPanel para que a sombra seja exibida
+            ProcuradorSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+            ReclamanteSection.Translation = new System.Numerics.Vector3(1, 1, 20);
         }
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
