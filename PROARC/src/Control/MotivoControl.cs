@@ -13,6 +13,7 @@ namespace PROARC.src.Control
     {        
         public static Motivo? GetMotivo(string nome)
         {
+
             string sql = $"use ProArc; SELECT nome, descricao FROM Motivos WHERE nome = '{nome}'";
 
             try
@@ -70,6 +71,7 @@ namespace PROARC.src.Control
 
         public static Motivo? GetMotivo(int id)
         {
+
             string sql = $"use ProArc; SELECT nome, descricao FROM Motivos WHERE motivo_id = {id}";
 
             try
@@ -96,6 +98,7 @@ namespace PROARC.src.Control
 
             return null;
         }
+
 
         public static LinkedList<Motivo>? GetAllMotivos()
         {
@@ -139,7 +142,6 @@ namespace PROARC.src.Control
             }
         }
 
-
         public static void AddMotivo(Motivo motivo)
         {
             if (motivo == null)
@@ -147,9 +149,8 @@ namespace PROARC.src.Control
                 throw new Exception("Insira um motivo válido.");
             }
 
-            DateTime dataCriacao = DateTime.Now;
 
-            
+            DateTime dataCriacao = DateTime.Now;     
             string checkSql = $"use ProArc; SELECT COUNT(*) FROM Motivos WHERE nome = '{motivo.MotivoNome}'";
 
             try
@@ -163,6 +164,7 @@ namespace PROARC.src.Control
                     return;
                 }
                
+
                 string insertSql = $"use ProArc; INSERT INTO Motivos (nome, descricao, data_criacao) VALUES ('{motivo.MotivoNome}', '{motivo.Descricao}', '{dataCriacao}')";
                 List<string> insertReader = DatabaseOperations.QuerySqlCommand(insertSql);
 
@@ -182,6 +184,7 @@ namespace PROARC.src.Control
             {
                 throw new Exception("Motivo não encontrado no banco de dados.");
             }
+
 
             string sql = $"use ProArc; DELETE FROM Motivos WHERE nome = '{nome}'";
             List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
@@ -212,6 +215,7 @@ namespace PROARC.src.Control
             {
                 throw new Exception("Motivo não encontrado no banco de dados.");
             }
+
 
             string sql = $"use ProArc; UPDATE Motivos SET nome = '{novoNome}', descricao = '{novaDescricao}' WHERE nome = '{nome}'";
 
