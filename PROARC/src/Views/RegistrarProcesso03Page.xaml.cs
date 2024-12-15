@@ -25,12 +25,20 @@ namespace PROARC.src.Views
     {
         public RegistrarProcesso03Page()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            CarregarMotivos();
+            MotivoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+            AudienciaSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+            StatusSection.Translation = new System.Numerics.Vector3(1, 1, 20);
         }
 
-        private void BackPage_Click(object sender, RoutedEventArgs e)
+        private void CarregarMotivos()
         {
-            Frame.Navigate(typeof(RegistrarProcesso02Page));
+            // Simula busca no banco de dados
+            List<string> motivos = new List<string> { "JUROS ABUSIVOS", "COBRANÇA INDEVIDA", "E AFINS" };
+            cbMotivo.ItemsSource = motivos;
         }
+
+
     }
 }

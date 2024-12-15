@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI;
+using Windows.UI;                 // Color
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,6 +29,7 @@ namespace PROARC.src.Views
         public RegistrarProcesso02Page()
         {
             this.InitializeComponent();
+            ReclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
         }
 
         private void BackPage_Click(object sender, RoutedEventArgs e)
@@ -42,11 +44,11 @@ namespace PROARC.src.Views
                 PlaceholderText = placeholder,
                 Width = width,
                 Padding = new Thickness(10),
-                Margin = new Thickness(0, 10, 0, 10)
+                Margin = new Thickness(0, 5, 0, 5)
             };
         }
 
-        private StackPanel CriarLinha(params TextBox[] textBoxes)
+        private StackPanel CriarLinha(params (string placeholder, double width)[] caixas)
         {
             var linha = new StackPanel
             {
@@ -54,60 +56,68 @@ namespace PROARC.src.Views
                 Spacing = 20
             };
 
-            foreach (var textBox in textBoxes)
+            foreach (var (placeholder, width) in caixas)
             {
-                linha.Children.Add(textBox);
+                linha.Children.Add(CriarTextBox(placeholder, width));
             }
 
             return linha;
         }
 
-        private void AdicionarReclamado_Click(object sender, RoutedEventArgs e)
+        private StackPanel CriarReclamadoSecao()
         {
-            // Criar os campos da primeira linha
-            var primeiraLinha = CriarLinha(
-                CriarTextBox("Insira o nome da Instituição", 300),
-                CriarTextBox("Insira o CNPJ", 200)
-            );
-
-            // Criar os campos da segunda linha
-            var segundaLinha = CriarLinha(
-                CriarTextBox("Insira a rua", 300),
-                CriarTextBox("Insira o bairro", 280),
-                CriarTextBox("Insira o número", 120),
-                CriarTextBox("Insira a cidade", 200),
-                CriarTextBox("Insira a UF", 100),
-                CriarTextBox("Insira o CEP", 150)
-            );
-
-            // Criar uma nova seção de reclamado com os StackPanels dentro
-            var novaSecao = new Border
+            // Barra azul
+            var barraAzul = new StackPanel
             {
-                BorderThickness = new Thickness(1),
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 229, 229, 229)),
-                CornerRadius = new CornerRadius(10),
-                Background = new SolidColorBrush(Colors.White),
-                Margin = new Thickness(50, 0, 50, 0),
-                Child = new StackPanel
-                {
-                    Padding = new Thickness(40),
-                    Spacing = 10,
-                    Children =
-            {
-                new TextBlock
-                {
-                    Text = "Reclamado",
-                    FontSize = 18,
-                    FontWeight = FontWeights.Bold
-                },
-                primeiraLinha,
-                segundaLinha
-            }
-                }
+                Background = new SolidColorBrush(Color.FromArgb(255, 0, 51, 102)),
+                Width = 10,
+                CornerRadius = new CornerRadius(10, 0, 0, 10)
             };
 
-            // Adicionar ao container de reclamados
-            ReclamadosContainer.Children.Add(novaSecao);
+            // StackPanel da seção branca
+            var reclamadoSecao = new StackPanel
+            {
+                Padding = new Thickness(40),
+                Spacing = 10,
+                Background = new SolidColorBrush(Colors.White),
+                CornerRadius = new CornerRadius(0, 10, 10, 0),
+                Width = 1200
+            };
+
+            // Aplicar sombra à seção usando ThemeShadow
+            reclamadoSecao.Shadow = new ThemeShadow();
+            reclamadoSecao.Translation = new System.Numerics.Vector3(0, 0, 32); // Distância da sombra
+
+            // Adicionar título
+            reclamadoSecao.Children.Add(new TextBlock
+            {
+                Text = "Reclamado",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold
+            });
+
+            // Adicionar linhas de TextBoxes
+            reclamadoSecao.Children.Add(CriarLinha(("Insira o nome da Instituição", 300), ("Insira o CNPJ", 200)));
+            reclamadoSecao.Children.Add(CriarLinha(("Insira a rua", 300), ("Insira o bairro", 280), ("Insira o número", 120)));
+            reclamadoSecao.Children.Add(CriarLinha(("Insira a cidade", 200), ("Insira a UF", 100), ("Insira o CEP", 150)));
+
+            // Container principal horizontal
+            var container = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(50, 0, 50, 0)
+            };
+
+            container.Children.Add(barraAzul);
+            container.Children.Add(reclamadoSecao);
+
+            return container;
+        }
+
+
+        private void AdicionarReclamado_Click(object sender, RoutedEventArgs e)
+        {
+            ReclamadosContainer.Children.Add(CriarReclamadoSecao());
         }
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
