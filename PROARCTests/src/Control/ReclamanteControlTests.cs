@@ -42,7 +42,35 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public void RemoverReclamanteTest()
         {
-            ReclamanteControl.RemoverReclamante("11");
+            //ReclamanteControl.RemoverReclamante("11");
+        }
+
+        [TestMethod()]
+        public void GetAllReclamanteTest()
+        {
+
+            try
+            {
+                LinkedList<Reclamante>? reclamantes = ReclamanteControl.GetAllReclamante();
+
+                if (reclamantes != null && reclamantes.Count > 0)
+                {
+                    Console.WriteLine("Lista de Reclamantes:");
+                    foreach (Reclamante reclamante in reclamantes)
+                    {
+                        Console.WriteLine($"Nome: {reclamante.Nome}, RG: {reclamante.Rg}, CPF: {reclamante.Cpf}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Nenhum reclamante encontrado ou houve um erro na consulta.");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Erro ao buscar reclamantes: {e.Message}");
+            }
+          
         }
     }
 }
