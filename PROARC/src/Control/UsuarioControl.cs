@@ -11,7 +11,6 @@ namespace PROARC.src.Control
 {
     public static class UsuarioControl
     {
-
         public static Usuario? GetUsuario(int id)
         {
             string sql = $"use ProArc; SELECT nome, nivel_permissao FROM Usuarios WHERE usuario_id = {id}";

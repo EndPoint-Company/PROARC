@@ -20,6 +20,11 @@ namespace PROARC.src.Models
             this.rg = rg;
         }
 
+        public override string ToString()
+        {
+            return $"Nome: {Nome}, rg: {Rg}, cpf: {Cpf}";
+        }
+
         public string Nome { get => this.nome; set { this.nome = value; } }
         public string? Cpf { get => this.cpf; set { this.cpf = value; } }
         public string? Rg { get => this.rg; set { this.rg = value; } }

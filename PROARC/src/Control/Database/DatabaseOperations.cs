@@ -70,21 +70,6 @@ namespace PROARC.src.Control.Database
             return results;
         }
 
-        public static void QuerySqlCommandNoReturn(string sql)
-        {
-            var results = new List<string>();
-
-            using (var cn = new SqlConnection(connectionString))
-            {
-                cn.Open();
-
-                using var command = new SqlCommand(sql, cn);
-                using var reader = command.ExecuteReader();
-
-                cn.Close();
-            }
-        }
-
         private static bool CreateProgramDatabase()
         {
             using var cn = new SqlConnection(connectionString);
