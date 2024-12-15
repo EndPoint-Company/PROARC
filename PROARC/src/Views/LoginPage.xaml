@@ -134,7 +134,7 @@
 
                 <PasswordBox
                     Grid.Row="1"
-                    
+                    Padding="10"
                     Width="269" 
                     PlaceholderText="Chave de acesso"
                     Background="White"
@@ -147,7 +147,6 @@
                     PasswordChar="*"
                     Margin="0, 50, 0, 0">
                 </PasswordBox>
-
 
                 <CheckBox 
                     Grid.Row="2" 

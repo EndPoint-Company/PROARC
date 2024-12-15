@@ -27,26 +27,26 @@
 
         <!-- Layout Principal -->
         <ScrollViewer>
-            <StackPanel Padding="20" Spacing="20">
+            <StackPanel Padding="20" Spacing="40">
                 <!-- Título -->
                 <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO" 
                        FontSize="32" 
                        FontWeight="Bold" 
                        Margin="50,20,0,20" />
 
-                <Grid Margin="50,0" ColumnSpacing="20">
+                <Grid Margin="50,0" ColumnSpacing="30">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="400" />
+                        <ColumnDefinition Width="1200" />
                     </Grid.ColumnDefinitions>
 
                     <!-- Seção Motivo e Audiência -->
                     <StackPanel Grid.Column="0" Spacing="30">
+                        
                         <!-- Seção Motivo -->
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-                            <StackPanel Padding="40" Background="#FFF" Spacing="10" Width="400" Height="200" 
-                        CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}">
+                            <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="200" CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}" Width="390">
                                 <TextBlock Text="Motivo" FontSize="18" FontWeight="Bold" />
                                 <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" />
                             </StackPanel>
@@ -55,8 +55,7 @@
                         <!-- Seção Audiência -->
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-                            <StackPanel Padding="40" Width="400" Height="200" Background="#FFF" Spacing="10" 
-                        CornerRadius="0, 10, 10, 0" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
+                            <StackPanel Padding="40" Height="200" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="390" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
                                 <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
                                 <CalendarDatePicker PlaceholderText="Escolha a data" />
                             </StackPanel>
@@ -64,13 +63,12 @@
                     </StackPanel>
 
                     <!-- Seção Status -->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="-10, 0, 0, 0">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <!-- Barra lateral azul -->
                         <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
                         <!-- Conteúdo da seção Status -->
-                        <StackPanel Padding="40" Background="#FFF" Width="620" Spacing="20" 
-                    CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}">
+                        <StackPanel Padding="40" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="1000">
                             <!-- Título -->
                             <TextBlock Text="Status" FontSize="18" FontWeight="Bold" />
 
