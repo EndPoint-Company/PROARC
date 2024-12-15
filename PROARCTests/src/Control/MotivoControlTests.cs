@@ -20,7 +20,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                Console.WriteLine(MotivoControl.GetMotivo("juros abusivos"));
+                //Console.WriteLine(MotivoControl.GetMotivo("juros catastroficos"));
             }
 
             catch (Exception e)
@@ -29,12 +29,14 @@ namespace PROARC.src.Control.Tests
             }
         }
 
+
+
         [TestMethod("teste de metodo getMotivo por id")]
         public void GetMotivoTest1()
         {
             try
             {
-                Console.WriteLine(MotivoControl.GetMotivo(1));
+                //Console.WriteLine(MotivoControl.GetMotivo(2));
             }
 
             catch (Exception e)
@@ -48,8 +50,8 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                 Motivo motivo = new Motivo("juros abusivos", "exemplo exemplo exemplo");
-                 MotivoControl.AddMotivo(motivo);
+               //Motivo motivo = new Motivo("juros abismaticos", "exemplo exemplo exemplo");
+              // MotivoControl.AddMotivo(motivo);
             }
             catch (Exception e)
             {
@@ -62,7 +64,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-              // MotivoControl.RemoverMotivo("juros catastroficos");
+                 //MotivoControl.RemoverMotivo("juros abusivos");
             }
 
             catch (Exception e)
@@ -76,12 +78,40 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-               //MotivoControl.AtualizarMotivo("Motivo Exemplo", "juros catastroficos", "deu certo");
+                MotivoControl.AtualizarMotivo("juros catastroficos", "juros cataclimaticos", "deu certo");
             }
 
             catch (Exception e)
             {
                 throw new Exception("Erro ao buscar Motivo com nome {nome}: {e.Message}");
+            }
+        }
+
+        [TestMethod()]
+        public void GetAllMotivosTest()
+        {
+            try
+            {
+                LinkedList<Motivo>? motivos = MotivoControl.GetAllMotivos();
+
+                if (motivos != null && motivos.Count > 0)
+                {
+                    Console.WriteLine("Lista de Motivos:");
+                    foreach (Motivo motivo in motivos)
+                    {
+                        Console.WriteLine($"Nome: {motivo.MotivoNome}, Nível de Permissão: {motivo.Descricao}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Nenhum usuário encontrado ou houve um erro na consulta.");
+                }
+
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao buscar usuário com ID {id}: {e.Message}");
             }
         }
     }

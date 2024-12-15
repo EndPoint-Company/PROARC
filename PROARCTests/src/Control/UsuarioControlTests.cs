@@ -19,7 +19,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-               Console.WriteLine (UsuarioControl.GetUsuario(6));
+               //Console.WriteLine (UsuarioControl.GetUsuario(1));
             }
 
             catch (Exception e)
@@ -33,7 +33,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-               // UsuarioControl.RemoveUsuario(3);
+                UsuarioControl.RemoveUsuario(3);
             }
 
             catch (Exception e)
@@ -47,7 +47,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                //Usuario user = new Usuario("pedro", 2);
+               // Usuario user = new Usuario("pedro", 2);
                // UsuarioControl.AddUsuario(user);
             }
 
@@ -76,6 +76,7 @@ namespace PROARC.src.Control.Tests
                 {
                     Console.WriteLine("Nenhum usuário encontrado ou houve um erro na consulta.");
                 }
+               
             }
 
             catch (Exception e)
@@ -89,7 +90,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {              
-                UsuarioControl.AtualizarUsuario(12, "JONATHAN");
+                UsuarioControl.AtualizarUsuario(1, "Galatas");
             }
 
             catch (Exception e)
@@ -103,7 +104,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                UsuarioControl.AtualizarUsuario(11, 3);
+                UsuarioControl.AtualizarUsuario(1, 3);
             }
 
             catch (Exception e)
@@ -117,7 +118,7 @@ namespace PROARC.src.Control.Tests
         {
             try
             {
-                UsuarioControl.AtualizarUsuario(6, "carlos vitor",3);
+                UsuarioControl.AtualizarUsuario(4, "carlos vitor",4);
             }
 
             catch (Exception e)
