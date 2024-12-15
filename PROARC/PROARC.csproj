@@ -19,37 +19,17 @@
 		<AppxPackage>false</AppxPackage>
 	</PropertyGroup>
   <ItemGroup>
-    <Compile Remove="src\Controllers\**" />
-    <Compile Remove="src\Core\**" />
-    <Compile Remove="src\Helpers\**" />
-    <Compile Remove="src\Services\**" />
-    <Compile Remove="src\ViewModels\**" />
-    <EmbeddedResource Remove="src\Controllers\**" />
-    <EmbeddedResource Remove="src\Core\**" />
-    <EmbeddedResource Remove="src\Helpers\**" />
-    <EmbeddedResource Remove="src\Services\**" />
-    <EmbeddedResource Remove="src\ViewModels\**" />
-    <None Remove="src\Controllers\**" />
-    <None Remove="src\Core\**" />
-    <None Remove="src\Helpers\**" />
-    <None Remove="src\Services\**" />
-    <None Remove="src\ViewModels\**" />
-    <Page Remove="src\Controllers\**" />
-    <Page Remove="src\Core\**" />
-    <Page Remove="src\Helpers\**" />
-    <Page Remove="src\Services\**" />
-    <Page Remove="src\ViewModels\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Remove="src\Empresa.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Assets\credentials.json" />
     <Content Remove="Assets\PROARC-logo.svg" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="RegistrarProcessoAdministrativoJanela.xaml" />
     <None Remove="src\CadastroJanela.xaml" />
     <None Remove="src\Views\CadastroPage.xaml" />
+    <None Remove="src\Views\HomeNavegationPage.xaml" />
     <None Remove="src\Views\HomePage.xaml" />
     <None Remove="src\Views\LoginPage.xaml" />
     <None Remove="src\Views\ProcessosListaPage.xaml" />
@@ -59,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Content Include="Assets\credentials.json"/>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -136,6 +117,9 @@
     <PRIResource Remove="src\Services\**" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="src\Views\HomePage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="src\Views\ProcessosListaPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,7 +145,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="src\Views\HomePage.xaml">
+    <Page Update="src\Views\HomeNavegationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

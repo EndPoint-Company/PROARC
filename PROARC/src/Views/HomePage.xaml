@@ -9,43 +9,54 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <NavigationView x:Name="nvSample"
-                    IsSettingsVisible="True"
-                    IsBackButtonVisible="Collapsed"
-                    IsBackEnabled="False"
-                    SelectionChanged="NavigationView_SelectionChanged"
-                    AlwaysShowHeader="True"
-                    PaneTitle=""
-                    PaneDisplayMode="Left"
-                    ExpandedModeThresholdWidth="500"
-                    SelectionFollowsFocus="Disabled"
-                    IsTabStop="False"
-                    IsPaneOpen="False">
+    <StackPanel HorizontalAlignment="Left">
+        <!-- Banner com imagem -->
+        <Image Source="/Assets/bannerHome.png" VerticalAlignment="Top" />
 
-        <!-- Itens de navegação (Parte superior) -->
-        <NavigationView.MenuItems>
-            <NavigationViewItem Content="Início" Tag="SamplePage1" x:Name="SamplePage1Item">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Home" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Lista de Processos" Tag="SamplePage2" x:Name="SamplePage2Item">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Save" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Cadastrar Processo" Tag="SamplePage3">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Add"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-        </NavigationView.MenuItems>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="80" Padding="50">
+            <!-- Button Cadastrar Processo -->
+            <Button Click="CadastrarProcessoButton_Click" Width="260" Height="270" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <!-- Ícone e Título lado a lado -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                        <FontIcon Glyph="&#xE710;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Cadastrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                            <TextBlock Text="Processos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Com apenas alguns cliques, tudo estará pronto!" FontSize="16" FontWeight="Light" Foreground="Gray" TextAlignment="Left" TextWrapping="Wrap" Margin="5,10,5,0"/>
+                </StackPanel>
+            </Button>
 
-        <NavigationView.FooterMenuItems>
-            <NavigationViewItem Content="Sair" Tag="SamplePage4" Icon="Back" />
-        </NavigationView.FooterMenuItems>
+            <!-- Button Cadastrar Processo Antigo -->
+            <Button Click="CadastrarProcessoAntigoButton_Click" Width="270" Height="270" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                        <FontIcon Glyph="&#xE895;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Cadastrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                            <TextBlock Text="Processos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                            <TextBlock Text="Antigos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="O passado não pode ser deixado para trás" FontSize="16" FontWeight="Light" Foreground="Gray" TextAlignment="Left" TextWrapping="Wrap" Margin="5,10,5,0"/>
+                </StackPanel>
+            </Button>
 
-        <!-- Frame de conteúdo -->
-        <Frame x:Name="contentFrame" />
-    </NavigationView>
+            <!-- Button Listar Processos -->
+            <Button Click="ListarProcessosButton_Click" Width="270" Height="270" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                        <FontIcon Glyph="&#xE105;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Listar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                            <TextBlock Text="Processos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Vamos dar uma olhada no que já temos por aqui" FontSize="16" FontWeight="Light" Foreground="Gray" TextAlignment="Left" TextWrapping="Wrap" Margin="5,10,5,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </Page>

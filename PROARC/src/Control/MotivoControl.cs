@@ -13,7 +13,8 @@ namespace PROARC.src.Control
     {        
         public static Motivo? GetMotivo(string nome)
         {
-            string sql = $"SELECT nome, descricao FROM motivos WHERE nome = '{nome}'";
+
+            string sql = $"use ProArc; SELECT nome, descricao FROM Motivos WHERE nome = '{nome}'";
 
             try
             {
@@ -39,10 +40,39 @@ namespace PROARC.src.Control
 
             return null;
         }
-        
+
+        public static int? GetMotivoId(string nome)
+        {
+            string sql = $"use ProArc; SELECT motivo_id FROM Motivos WHERE nome = '{nome}'";
+
+            try
+            {
+                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+
+                if (reader.Count >= 1)
+                {
+                    int idMotivo = int.Parse(reader[0]);
+                  
+                    return idMotivo ;
+
+                }
+                else
+                {
+                    Console.WriteLine($"Motivo com nome {nome} não encontrado ou dados insuficientes.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar motivo {nome}: {ex.Message}");
+            }
+
+            return null;
+        }
+
         public static Motivo? GetMotivo(int id)
         {
-            string sql = $"SELECT nome, descricao FROM motivos WHERE id = {id}";
+
+            string sql = $"use ProArc; SELECT nome, descricao FROM Motivos WHERE motivo_id = {id}";
 
             try
             {
@@ -70,6 +100,48 @@ namespace PROARC.src.Control
         }
 
 
+        public static LinkedList<Motivo>? GetAllMotivos()
+        {
+            LinkedList<Motivo> motivos = new LinkedList<Motivo>();
+            string sql = "USE ProArc; SELECT nome, descricao FROM Motivos";
+
+            try
+            {
+                
+                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+
+                string nome = string.Empty;
+                string descricao = string.Empty;
+
+                bool isNome = true; 
+
+                foreach (string linha in reader)
+                {
+                    if (isNome)
+                    {
+                        nome = linha;
+                        isNome = false; 
+                    }
+                    else
+                    {
+                        descricao = linha;
+                      
+                        Motivo motivo = new Motivo(nome, descricao);
+                      
+                        motivos.AddLast(motivo);
+                       
+                        isNome = true;
+                    }
+                }
+                return motivos;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar motivos: {ex.Message}");
+                return null;
+            }
+        }
+
         public static void AddMotivo(Motivo motivo)
         {
             if (motivo == null)
@@ -77,10 +149,9 @@ namespace PROARC.src.Control
                 throw new Exception("Insira um motivo válido.");
             }
 
-            string dataCriacao = DateTime.Now.ToString("yyyy-MM-dd");
 
-            
-            string checkSql = $"SELECT COUNT(*) FROM motivos WHERE nome = '{motivo.MotivoNome}'";
+            DateTime dataCriacao = DateTime.Now;     
+            string checkSql = $"use ProArc; SELECT COUNT(*) FROM Motivos WHERE nome = '{motivo.MotivoNome}'";
 
             try
             {
@@ -93,7 +164,8 @@ namespace PROARC.src.Control
                     return;
                 }
                
-                string insertSql = $"INSERT INTO motivos (nome, descricao, data_criacao) VALUES ('{motivo.MotivoNome}', '{motivo.Descricao}', '{dataCriacao}')";
+
+                string insertSql = $"use ProArc; INSERT INTO Motivos (nome, descricao, data_criacao) VALUES ('{motivo.MotivoNome}', '{motivo.Descricao}', '{dataCriacao}')";
                 List<string> insertReader = DatabaseOperations.QuerySqlCommand(insertSql);
 
                 Console.WriteLine("Motivo adicionado com sucesso.");
@@ -113,7 +185,8 @@ namespace PROARC.src.Control
                 throw new Exception("Motivo não encontrado no banco de dados.");
             }
 
-            string sql = $"DELETE FROM motivos WHERE nome = '{nome}'";
+
+            string sql = $"use ProArc; DELETE FROM Motivos WHERE nome = '{nome}'";
             List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
 
             try
@@ -143,7 +216,8 @@ namespace PROARC.src.Control
                 throw new Exception("Motivo não encontrado no banco de dados.");
             }
 
-            string sql = $"UPDATE motivos SET nome = '{novoNome}', descricao = '{novaDescricao}' WHERE nome = '{nome}'";
+
+            string sql = $"use ProArc; UPDATE Motivos SET nome = '{novoNome}', descricao = '{novaDescricao}' WHERE nome = '{nome}'";
 
             try
             {

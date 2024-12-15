@@ -10,9 +10,9 @@ namespace PROARC.src.Models
     public class Usuario
     {
         private string nome;
-        private int nivelDePermissao; // 0 1 2 3 4
+        private short nivelDePermissao; // 0 1 2 3 4
 
-        public Usuario(string nome, int nivelDePermissao)
+        public Usuario(string nome, short nivelDePermissao)
         {
             this.nome = nome;
 
@@ -55,7 +55,7 @@ namespace PROARC.src.Models
                 this.nome = value;
             }
         }
-        public int NivelDePermissao 
+        public short NivelDePermissao 
         {
             get => this.nivelDePermissao;
         }
