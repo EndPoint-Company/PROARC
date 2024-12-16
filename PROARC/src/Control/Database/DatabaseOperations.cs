@@ -13,14 +13,17 @@ namespace PROARC.src.Control.Database
 {
     public static class DatabaseOperations
     {
-        [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+        //[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
         private static string connectionString = new SqlConnectionStringBuilder
         {
-            Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
-            DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
-            UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
-            Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
-
+            //Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
+            //DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
+            //UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
+            //Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
+            Encrypt = false,
+            DataSource = "DESKTOP-BK83OOJ\\SQLEXPRESS",
+            UserID = "usert",
+            Password = "1234",
         }.ConnectionString;
 
         public static void ValidateUserLogin(SecureString acessKey) // TODO
@@ -109,8 +112,6 @@ namespace PROARC.src.Control.Database
             TableFactory.CreateDefaultPathTable();
 
             return true;
-        }
-
-        
+        }  
     }
 }

@@ -41,22 +41,22 @@
 
                             <!-- Primeira Linha -->
                             <StackPanel Orientation="Horizontal" Spacing="20">
-                                <TextBox PlaceholderText="Insira o nome da Instituição" Width="300" />
-                                <TextBox PlaceholderText="Insira o CNPJ" Width="200" />
+                                <TextBox x:Name="inputNome" PlaceholderText="Insira o nome da Instituição" Width="300" />
+                                <TextBox x:Name="inputIdentificador" PlaceholderText="Insira o CNPJ/CPF" Width="200" />
                             </StackPanel>
 
                             <!-- Segunda Linha -->
                             <StackPanel Orientation="Horizontal" Spacing="20">
-                                <TextBox PlaceholderText="Insira a rua" Width="300" />
-                                <TextBox PlaceholderText="Insira o bairro" Width="280" />
-                                <TextBox PlaceholderText="Insira o número" Width="120" />
+                                <TextBox x:Name="inputRua" PlaceholderText="Insira a rua" Width="300" />
+                                <TextBox x:Name="inputBairro" PlaceholderText="Insira o bairro" Width="280" />
+                                <TextBox x:Name="inputNumeroRua" PlaceholderText="Insira o número" Width="120" />
                             </StackPanel>
 
                             <!-- Terceira Linha -->
                             <StackPanel Orientation="Horizontal" Spacing="20">
-                                <TextBox PlaceholderText="Insira a cidade" Width="180" />
-                                <TextBox PlaceholderText="Insira a UF" Width="100" />
-                                <TextBox PlaceholderText="Insira o CEP" Width="150" />
+                                <TextBox x:Name="inputCidade" PlaceholderText="Insira a cidade" Width="180" />
+                                <TextBox x:Name="inputUf" PlaceholderText="Insira a UF" Width="100" />
+                                <TextBox x:Name="inputCep" PlaceholderText="Insira o CEP" Width="150" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>

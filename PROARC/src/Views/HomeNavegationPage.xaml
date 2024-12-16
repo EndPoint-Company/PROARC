@@ -29,11 +29,11 @@
 
     <NavigationView x:Name="nvSample"
                     IsSettingsVisible="True"
-                    IsBackButtonVisible="Visible"
+                    IsBackButtonVisible="Collapsed"
                     IsBackEnabled="False"
                     SelectionChanged="NavigationView_SelectionChanged"
                     AlwaysShowHeader="True"
-                    PaneTitle="Pane Title"
+                    PaneTitle=""
                     PaneDisplayMode="Left"
                     ExpandedModeThresholdWidth="500"
                     SelectionFollowsFocus="Disabled"

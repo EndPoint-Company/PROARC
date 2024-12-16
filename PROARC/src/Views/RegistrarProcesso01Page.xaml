@@ -38,9 +38,9 @@
 
                         <!-- Primeira Linha -->
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <TextBox PlaceholderText="Insira o nome completo" Width="300"/>
-                            <TextBox PlaceholderText="Insira o CPF" Width="200"/>
-                            <TextBox PlaceholderText="Insira o RG" Width="200"/>
+                            <TextBox x:Name="inputNome" PlaceholderText="Insira o nome completo" Width="300"/>
+                            <TextBox x:Name="inputCpfReclamante" PlaceholderText="Insira o CPF" Width="200"/>
+                            <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="200"/>
 
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                                 <!-- Botão para abrir o pop-up -->

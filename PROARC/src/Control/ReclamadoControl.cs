@@ -136,18 +136,10 @@ namespace PROARC.src.Control
 
             string sql = $"use ProArc; INSERT INTO Reclamados(nome, cpf, cnpj, numero_rua, email, rua, bairro, cidade, uf) VALUES('{reclamado.Nome}', '{reclamado.Cpf}', '{reclamado.Cnpj}', {reclamado.NumeroDaRua}, '{reclamado.Email}', '{reclamado.Rua}', '{reclamado.Bairro}', '{reclamado.Cidade}', '{reclamado.Estado}')";
 
-            try
+            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            foreach (string str in reader)
             {
-                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-                foreach (string str in reader)
-                {
-                    Console.WriteLine("Reclamado adicionado com sucesso");
-                }
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao adicionar usuário {ex.Message}");
+                Console.WriteLine("Reclamado adicionado com sucesso");
             }
         }
 

@@ -85,5 +85,20 @@ namespace PROARC.src.Control.Tests
         {
             ReclamadoControl.GetReclamadoId("12345678900", "João da Silva");
         }
+
+        [TestMethod()]
+        public void AddReclamadoTest1()
+        {
+            try
+            {
+                Reclamado reclamado = new Reclamado("Jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
+                ReclamadoControl.AddReclamado(reclamado);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao adicionar Reclamado: {e.Message}");
+            }
+        }
     }
 }

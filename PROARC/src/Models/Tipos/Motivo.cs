@@ -10,9 +10,9 @@ namespace PROARC.src.Models.Tipos
     {
         private string motivoNome;
         private DateTime? dataDeCriacao;
-        private string descricao;
+        private string? descricao;
 
-        public Motivo(string motivoNome, string descricao)
+        public Motivo(string motivoNome, string? descricao = null)
         {
             this.motivoNome = motivoNome;
             this.descricao = descricao;
@@ -27,6 +27,6 @@ namespace PROARC.src.Models.Tipos
         public string MotivoNome { get => this.motivoNome; set { this.motivoNome = value; } }
         public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
 
-        public string Descricao { get => this.descricao; set { this.descricao = value; } }
+        public string? Descricao { get => this.descricao; set { this.descricao = value; } }
     }
 }

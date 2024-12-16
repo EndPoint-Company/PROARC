@@ -14,18 +14,21 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI;
-using Windows.UI;                 // Color
+using Windows.UI;
+using PROARC.src.Models;
+using PROARC.src.Models.Arquivos;
+using PROARC.src.Control;                 // Color
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace PROARC.src.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class RegistrarProcesso02Page : Page
     {
+        private Reclamante reclamante;
+        private Dictionary<string, object> dicionarioObjetos = new();
+
         public RegistrarProcesso02Page()
         {
             this.InitializeComponent();
@@ -121,7 +124,45 @@ namespace PROARC.src.Views
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(RegistrarProcesso03Page));
+            string cpf = null;
+            string cnpj = null;
+
+            if (inputIdentificador.Text.Length == 11)
+            {
+                cpf = inputIdentificador.Text;
+            }
+            else if (inputIdentificador.Text.Length == 14)
+            {
+                cnpj = inputIdentificador.Text;
+            }
+            else
+            {
+                return;
+            }
+
+            Reclamado reclamado = new(inputNome.Text,
+                                      short.Parse(inputNumeroRua.Text),
+                                      inputRua.Text,
+                                      inputBairro.Text,
+                                      "example@example.com",
+                                      inputCidade.Text,
+                                      inputUf.Text,
+                                      cnpj,
+                                      cpf);
+
+            //Reclamado reclamado = new Reclamado("Jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
+
+            ReclamadoControl.AddReclamado(reclamado);
+            dicionarioObjetos.Add("Reclamado", reclamado);
+
+            Frame.Navigate(typeof(RegistrarProcesso03Page), dicionarioObjetos);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            dicionarioObjetos = (Dictionary<string, object>)e.Parameter;
+            reclamante = (Reclamante)dicionarioObjetos["Reclamante"];
         }
     }
 }

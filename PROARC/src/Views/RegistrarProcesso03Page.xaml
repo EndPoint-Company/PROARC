@@ -57,7 +57,7 @@
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                             <StackPanel Padding="40" Height="200" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="390" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
                                 <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
-                                <CalendarDatePicker PlaceholderText="Escolha a data" />
+                                <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -76,10 +76,10 @@
                             <StackPanel>
                                 <TextBlock Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
-                                    <RadioButton Content="Aguardando realização da audiência" GroupName="StatusGroup" IsChecked="True"/>
-                                    <RadioButton Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
-                                    <RadioButton Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
-                                    <RadioButton Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agRealizacaoAudiencia" Content="Aguardando realização da audiência" GroupName="StatusGroup" IsChecked="True"/>
+                                    <RadioButton x:Name="radio_agResposta" Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agEnvioNotificacao" Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agDocumentacao" Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
                                 </StackPanel>
                             </StackPanel>
 
@@ -87,8 +87,8 @@
                             <StackPanel>
                                 <TextBlock Text="Arquivado" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
-                                    <RadioButton Content="Atendido" GroupName="StatusGroup"/>
-                                    <RadioButton Content="Não Atendido" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_atendido" Content="Atendido" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_naoAtendido" Content="Não Atendido" GroupName="StatusGroup"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -101,7 +101,8 @@
                     Padding="20,10" 
                     Background="#003366" 
                     Foreground="White" 
-                    Margin="0,20,50,20" />
+                    Margin="0,20,50,20" 
+                    Click="ContinuarButton_Click"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -59,9 +59,11 @@ namespace PROARC.src.Control
             (string numero_processo, short ano, int? motivo_id = null, int? reclamante_id = null,
             int? reclamado_id = null, string? caminho_processo = null, DateTime? data_audiencia = null)
         {
+            string sqlFormattedDate = data_audiencia?.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
             string sql = "USE ProArc; INSERT INTO ProcessosAdministrativos " +
                 "(motivo_id, reclamante_id, reclamado_id, numero_processo, caminho_processo, ano, data_audiencia)" +
-                $"VALUES ({motivo_id}, {reclamante_id}, {reclamado_id}, '{numero_processo}', '{caminho_processo}', {ano})";
+                $"VALUES ({motivo_id}, {reclamante_id}, {reclamado_id}, '{numero_processo}', '{caminho_processo}', {ano}, '{sqlFormattedDate}')";
 
             DatabaseOperations.QuerySqlCommandNoReturn(sql);
 

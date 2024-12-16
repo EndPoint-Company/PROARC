@@ -16,6 +16,10 @@ using System.Numerics;
 using Windows.Storage.Pickers;
 using Windows.ApplicationModel.DataTransfer;
 
+using PROARC.src.Models;
+using PROARC.src.Control;
+using PROARC.src.Models.Arquivos;
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -46,7 +50,21 @@ namespace PROARC.src.Views
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(RegistrarProcesso02Page));
+            if (inputNome.Text == "" || inputRgReclamante.Text == "")
+            {
+                return;
+            }
+
+            Dictionary<string, object> dicionarioObjetos = new(); 
+            Reclamante reclamante = new(inputNome.Text,
+                                        inputCpfReclamante.Text,
+                                        inputRgReclamante.Text);
+
+            ReclamanteControl.AddReclamante(reclamante);
+
+            dicionarioObjetos.Add("Reclamante", reclamante);
+
+            Frame.Navigate(typeof(RegistrarProcesso02Page), dicionarioObjetos);
         }
 
         private void DragDropArea1_DragOver(object sender, DragEventArgs e)

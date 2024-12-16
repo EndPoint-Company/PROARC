@@ -30,7 +30,7 @@ namespace PROARC
             string assetsFolder = AppDomain.CurrentDomain.BaseDirectory + @"Assets\";
 
             this.InitializeComponent();
-            this.AppWindow.SetIcon(assetsFolder + @"proarc-dark-logo.ico");
+            this.AppWindow.SetIcon(assetsFolder + @"proarc-white-logo.ico");
 
             mainWindowStoryboard.Begin();
             
