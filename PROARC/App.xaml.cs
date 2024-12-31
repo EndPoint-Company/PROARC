@@ -16,8 +16,10 @@ using Microsoft.UI.Xaml.Shapes;
 using PROARC.src.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,6 +35,8 @@ namespace PROARC
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
+
+
         public App()
         {
             this.InitializeComponent();
@@ -48,7 +52,7 @@ namespace PROARC
             Frame rootFrame = new Frame();
             rootFrame.NavigationFailed += OnNavigationFailed;
             rootFrame.Navigate(typeof(LoginPage), args.Arguments);
-            
+
             m_window.Activate();
 
             await Task.Delay(1280);
@@ -62,5 +66,6 @@ namespace PROARC
         }
 
         private Window? m_window;
+        public Window MainWindow => m_window;
     }
 }

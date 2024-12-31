@@ -10,18 +10,23 @@ namespace PROARC.src.Models.Tipos
     {
         private string motivoNome;
         private DateTime? dataDeCriacao;
-        private string descricao;
+        private string? descricao;
 
-        public Motivo(string motivoNome, string descricao)
+        public Motivo(string motivoNome, string? descricao = null)
         {
             this.motivoNome = motivoNome;
             this.descricao = descricao;
             this.dataDeCriacao = DateTime.Now;
         }
 
+        public override string ToString()
+        {
+            return $"Nome: {motivoNome} \nDescricao: {descricao}";
+        }
+
         public string MotivoNome { get => this.motivoNome; set { this.motivoNome = value; } }
         public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
 
-        public string Descricao { get => this.descricao; set { this.descricao = value; } }
+        public string? Descricao { get => this.descricao; set { this.descricao = value; } }
     }
 }

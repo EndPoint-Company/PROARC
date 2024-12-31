@@ -9,25 +9,54 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Placeholder" FontSize="40" Margin="4" TextAlignment="Center"/>
-            <TextBlock Text="Home" FontSize="36" Margin="180" TextAlignment="Center"/>
-            <Button x:Name="GoBackBtn" AutomationProperties.Name="Pie" Click="BackPage_Click"
-                    Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
+    <StackPanel HorizontalAlignment="Left">
+        <!-- Banner com imagem -->
+        <Image Source="/Assets/bannerHome.png" VerticalAlignment="Top" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="80" Padding="50">
+            <!-- Button Cadastrar Processo -->
+            <Button Click="CadastrarProcessoButton_Click" Width="260" Height="270" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <!-- Ícone e Título lado a lado -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                        <FontIcon Glyph="&#xE710;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Cadastrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                            <TextBlock Text="Processos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Com apenas alguns cliques, tudo estará pronto!" FontSize="16" FontWeight="Light" Foreground="Gray" TextAlignment="Left" TextWrapping="Wrap" Margin="5,10,5,0"/>
+                </StackPanel>
             </Button>
-            <TextBlock Text="Voltar" FontSize="15" TextAlignment="Center"/>
-            <Button x:Name="ListaProcessosBtn" AutomationProperties.Name="Pie" Click="ListaProcessosPage_Click"
-                   Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
+
+            <!-- Button Cadastrar Processo Antigo -->
+            <Button Click="CadastrarProcessoAntigoButton_Click" Width="270" Height="270" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                        <FontIcon Glyph="&#xE895;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Cadastrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                            <TextBlock Text="Processos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                            <TextBlock Text="Antigos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="O passado não pode ser deixado para trás" FontSize="16" FontWeight="Light" Foreground="Gray" TextAlignment="Left" TextWrapping="Wrap" Margin="5,10,5,0"/>
+                </StackPanel>
             </Button>
-            <TextBlock Text="Listar Processos" FontSize="15" TextAlignment="Center"/>
-            <Button x:Name="RegistrarProcessoBtn" AutomationProperties.Name="Pie" Click="RegistrarProcessoPage_Click"
-                    Width="50" Height="50" HorizontalAlignment="Center">
-                <Image Source="/Assets/proarc-logo-white-256x256.png" AutomationProperties.Name="Slice"/>
+
+            <!-- Button Listar Processos -->
+            <Button Click="ListarProcessosButton_Click" Width="270" Height="270" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                        <FontIcon Glyph="&#xE105;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                            <TextBlock Text="Listar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                            <TextBlock Text="Processos" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Vamos dar uma olhada no que já temos por aqui" FontSize="16" FontWeight="Light" Foreground="Gray" TextAlignment="Left" TextWrapping="Wrap" Margin="5,10,5,0"/>
+                </StackPanel>
             </Button>
-            <TextBlock Text="Registrar Processo" FontSize="15" TextAlignment="Center"/>
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </Page>

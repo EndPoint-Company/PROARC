@@ -10,20 +10,26 @@ namespace PROARC.src.Models.Arquivos
 {
     public class ProcessoAdministrativo
     {
+        private string caminhoDoProcesso;
         private string numeroProcesso;
-        private int ano;
+        private short ano;
         private Motivo? motivo;
         private Reclamado? reclamado;
         private Reclamante? reclamante;
+        private DateTime? dataDaAudiencia;
         private Dictionary<ArquivoTipo, Diretorio> diretorios;
 
-        public ProcessoAdministrativo(string numeroProcesso, int ano, Motivo? motivo = null, Reclamado? reclamado = null, Reclamante? reclamante = null)
+        public ProcessoAdministrativo(
+            string caminhoDoProcesso, string numeroProcesso, short ano, Motivo? motivo = null, 
+            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null)
         {
+            this.caminhoDoProcesso = caminhoDoProcesso;
             this.numeroProcesso = numeroProcesso;
             this.ano = ano;
             this.motivo = motivo;
             this.reclamante = reclamante;
             this.reclamado = reclamado;
+            this.dataDaAudiencia = dataDaAudiencia;
             this.diretorios = new Dictionary<ArquivoTipo, Diretorio>();
         }
 
@@ -57,9 +63,11 @@ namespace PROARC.src.Models.Arquivos
         }
 
         public string NumeroProcesso { get => this.numeroProcesso; set { this.numeroProcesso = value; }  }
-        public int Ano { get => this.ano; set { this.ano = value; } }
+        public short Ano { get => this.ano; set { this.ano = value; } }
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
         public Reclamado? Reclamado { get => this.reclamado; set { this.reclamado = value; } }
         public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
+        public string CaminhoDoProcesso { get => this.caminhoDoProcesso; set { this.caminhoDoProcesso = value; } }
+        public DateTime? DataDaAudiencia {  get => this.dataDaAudiencia; set { this.dataDaAudiencia = value; } }
     }
 }

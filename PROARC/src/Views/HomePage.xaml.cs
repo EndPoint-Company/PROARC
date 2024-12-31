@@ -28,19 +28,26 @@ namespace PROARC.src.Views
             this.InitializeComponent();
         }
 
-        private void BackPage_Click(object sender, RoutedEventArgs e)
+        private void CadastrarProcessoButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(LoginPage));
+            // Navega para outra página (por exemplo, uma página de cadastro de processos)
+            // Exemplo de navegação, caso você tenha uma página chamada 'CadastroProcessoPage':
+            Frame.Navigate(typeof(RegistrarProcesso01Page));
         }
 
-        private void ListaProcessosPage_Click(object sender, RoutedEventArgs e)
+        // Manipulador de clique para o botão "Cadastrar Processo Antigo"
+        private void CadastrarProcessoAntigoButton_Click(object sender, RoutedEventArgs e)
         {
+            // Similar ao anterior, navegar para outra página
+            Frame.Navigate(typeof(RegistrarProcesso01Page));
+        }
+
+        // Manipulador de clique para o botão "Listar Processos"
+        private void ListarProcessosButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Navegar para uma página que liste os processos cadastrados
             Frame.Navigate(typeof(ProcessosListaPage));
         }
 
-        private void RegistrarProcessoPage_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
-        }
     }
 }

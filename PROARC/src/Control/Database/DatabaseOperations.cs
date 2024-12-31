@@ -13,15 +13,17 @@ namespace PROARC.src.Control.Database
 {
     public static class DatabaseOperations
     {
-        [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+        //[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
         private static string connectionString = new SqlConnectionStringBuilder
         {
-            // Otimizar isso aqui depois
-            Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
-            DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
-            UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
-            Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
-            InitialCatalog = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").initialCatalog ?? "undefined",
+            //Encrypt = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").encrypt,
+            //DataSource = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").dataSource ?? "undefined",
+            //UserID = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").user ?? "undefined",
+            //Password = DatabaseUtil.ReadJson<SQLBuilder>(@"Assets/credentials.json").password ?? "undefined",
+            Encrypt = false,
+            DataSource = "DESKTOP-BK83OOJ\\SQLEXPRESS",
+            UserID = "usert",
+            Password = "1234",
         }.ConnectionString;
 
         public static void ValidateUserLogin(SecureString acessKey) // TODO
@@ -34,8 +36,7 @@ namespace PROARC.src.Control.Database
 
             cn.Close();
         }
-
-        public static SqlDataReader QuerySqlCommand(string sql)
+        public static void QuerySqlCommandNoReturn(string sql)
         {
             using var cn = new SqlConnection(connectionString);
 
@@ -45,29 +46,72 @@ namespace PROARC.src.Control.Database
             using var reader = command.ExecuteReader();
 
             cn.Close();
-
-            return reader;
         }
 
-        public static bool CreateProgramDatabase()
+        public static List<string> QuerySqlCommand(string sql)
+
+        {
+            var results = new List<string>();
+
+            using (var cn = new SqlConnection(connectionString))
+            {
+                cn.Open();
+
+                using (var command = new SqlCommand(sql, cn))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            results.Add(reader.GetValue(i).ToString());
+                        }
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        private static bool CreateProgramDatabase()
         {
             using var cn = new SqlConnection(connectionString);
 
             cn.Open();
 
-            string sql = "CREATE DATABASE ProArcDB";
+            string sql = "CREATE DATABASE ProArc";
             using var command = new SqlCommand(sql, cn);
 
             try
             {
                 using var reader = command.ExecuteReader();
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
+                cn.Close();
+
                 return false;
-            }           
+            }
+
+            cn.Close();
 
             return true;
         }
+
+        public static bool CreateAllProgramTables()
+        {
+            CreateProgramDatabase();
+
+            TableFactory.CreateUsuarioTable();
+            TableFactory.CreateReclamadoTable();
+            TableFactory.CreateReclamanteTable();
+            TableFactory.CreateMotivoTable();
+            TableFactory.CreateProcessoAdministrativoTable();
+            TableFactory.CreateDiretorioTable();
+            TableFactory.CreateArquivoTable();
+            TableFactory.CreateDefaultPathTable();
+
+            return true;
+        }  
     }
 }

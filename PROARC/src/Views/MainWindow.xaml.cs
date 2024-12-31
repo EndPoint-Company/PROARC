@@ -15,8 +15,10 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using WinRT.Interop;
 
 namespace PROARC
@@ -28,7 +30,7 @@ namespace PROARC
             string assetsFolder = AppDomain.CurrentDomain.BaseDirectory + @"Assets\";
 
             this.InitializeComponent();
-            this.AppWindow.SetIcon(assetsFolder + @"proarc-dark-logo.ico");
+            this.AppWindow.SetIcon(assetsFolder + @"proarc-white-logo.ico");
 
             mainWindowStoryboard.Begin();
             
