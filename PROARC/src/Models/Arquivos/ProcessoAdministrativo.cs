@@ -13,6 +13,7 @@ namespace PROARC.src.Models.Arquivos
         private string caminhoDoProcesso;
         private string numeroProcesso;
         private short ano;
+        private Status status;
         private Motivo? motivo;
         private Reclamado? reclamado;
         private Reclamante? reclamante;
@@ -21,7 +22,8 @@ namespace PROARC.src.Models.Arquivos
 
         public ProcessoAdministrativo(
             string caminhoDoProcesso, string numeroProcesso, short ano, Motivo? motivo = null, 
-            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null)
+            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null,
+            Status status = Status.EmTramitacaoAguardandoEnvioDaNotificacao)
         {
             this.caminhoDoProcesso = caminhoDoProcesso;
             this.numeroProcesso = numeroProcesso;
@@ -69,5 +71,6 @@ namespace PROARC.src.Models.Arquivos
         public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
         public string CaminhoDoProcesso { get => this.caminhoDoProcesso; set { this.caminhoDoProcesso = value; } }
         public DateTime? DataDaAudiencia {  get => this.dataDaAudiencia; set { this.dataDaAudiencia = value; } }
+        public Status Status { get => this.Status; set { this.Status = value; } }
     }
 }

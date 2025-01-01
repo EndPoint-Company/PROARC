@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PROARC.src.Control.Database;
 using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control
 {
@@ -57,13 +58,14 @@ namespace PROARC.src.Control
         // Baixo nível, deve ser usada no RegistrarProcessoAdministrativo()
         private static void AdicionarProcessoAdministrativo
             (string numero_processo, short ano, int? motivo_id = null, int? reclamante_id = null,
-            int? reclamado_id = null, string? caminho_processo = null, DateTime? data_audiencia = null)
+            int? reclamado_id = null, string? caminho_processo = null, DateTime? data_audiencia = null,
+            Status status = Status.EmTramitacaoAguardandoEnvioDaNotificacao) // Transformar em objeto depois
         {
             string sqlFormattedDate = data_audiencia?.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             string sql = "USE ProArc; INSERT INTO ProcessosAdministrativos " +
-                "(motivo_id, reclamante_id, reclamado_id, numero_processo, caminho_processo, ano, data_audiencia)" +
-                $"VALUES ({motivo_id}, {reclamante_id}, {reclamado_id}, '{numero_processo}', '{caminho_processo}', {ano}, '{sqlFormattedDate}')";
+                "(motivo_id, reclamante_id, reclamado_id, numero_processo, status_processo, caminho_processo, ano, data_audiencia)" +
+                $"VALUES ({motivo_id}, {reclamante_id}, {reclamado_id}, '{numero_processo}', '{status}', '{caminho_processo}', {ano}, '{sqlFormattedDate}')";
 
             DatabaseOperations.QuerySqlCommandNoReturn(sql);
 
