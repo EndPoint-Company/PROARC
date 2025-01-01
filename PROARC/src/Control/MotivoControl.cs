@@ -142,6 +142,26 @@ namespace PROARC.src.Control
             }
         }
 
+        public static LinkedList<string>? GetAllMotivosToString()
+        {
+            LinkedList<string> motivos = new LinkedList<string>();
+            string sql = "USE ProArc; SELECT nome FROM Motivos";
+            try
+            {
+                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+                foreach (string linha in reader)
+                {
+                    motivos.AddLast(linha);
+                }
+                return motivos;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar motivos: {ex.Message}");
+                return null;
+            }
+        }
+
         public static void AddMotivo(Motivo motivo)
         {
             if (motivo == null)

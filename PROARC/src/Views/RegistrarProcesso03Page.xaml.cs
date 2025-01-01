@@ -44,7 +44,8 @@ namespace PROARC.src.Views
         private void CarregarMotivos()
         {
             // Simula busca no banco de dados
-            List<string> motivos = new List<string> { "JUROS ABUSIVOS", "COBRANÇA INDEVIDA", "E AFINS" };
+            LinkedList<string>? motivos = MotivoControl.GetAllMotivosToString();
+      
             cbMotivo.ItemsSource = motivos;
         }
 
@@ -52,6 +53,8 @@ namespace PROARC.src.Views
         {
             DateTime dataAudiencia = calendario.Date.Value.DateTime;
             Motivo motivo = new(cbMotivo.SelectedItem.ToString());
+            MotivoControl.AddMotivo(motivo);
+            FileNetworkControl.Local_SetDefaultFolder(@"D:/ProarcFiles/Teste1");
             ProcessoAdministrativo processo = new(@"D:/ProarcFiles/Teste1", "0003o2024", short.Parse(DateTime.Now.Year.ToString()), motivo, reclamado, reclamante, dataAudiencia);
             ProcessoAdministrativoControl.RegistrarProcessoAdministrativo(processo);
         }
