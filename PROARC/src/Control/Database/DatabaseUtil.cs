@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Automation.Peers;
+using Newtonsoft.Json;
 
 namespace PROARC.src.Control.Database
 {
@@ -39,13 +40,10 @@ namespace PROARC.src.Control.Database
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
-
-        [RequiresUnreferencedCode("Chama JsonSerializer.Deserialize")]
-        public static T ReadJson<T>(string filePath)
+        public static T? ReadJson<T>(string filePath)
         {
             string text = File.ReadAllText(filePath);
-
-            return JsonSerializer.Deserialize<T>(json: text);
+            return JsonConvert.DeserializeObject<T>(text);
         }
     }
 

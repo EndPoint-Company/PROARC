@@ -12,7 +12,6 @@ namespace PROARC.src.Control
 {
     public static class ReclamadoControl
     {
-
         public static Reclamado? GetReclamado(int id)
         {
             string sql = $"use ProArc; SELECT nome, cpf, cnpj, numero_rua, email, rua, bairro, cidade, uf FROM Reclamados WHERE reclamado_id = {id}";
