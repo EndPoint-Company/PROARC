@@ -32,7 +32,7 @@ namespace PROARC.src.Views
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HomeNavegationPage));
+            Frame.Navigate(typeof(HomeNavigationPage));
         }
 
         //private void LoginButton_Click(object sender, RoutedEventArgs e)

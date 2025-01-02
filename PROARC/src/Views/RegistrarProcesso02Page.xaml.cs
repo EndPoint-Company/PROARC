@@ -124,8 +124,8 @@ namespace PROARC.src.Views
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            string cpf = null;
-            string cnpj = null;
+            string? cpf = null;
+            string? cnpj = null;
 
             if (inputIdentificador.Text.Length == 11)
             {

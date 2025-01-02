@@ -14,6 +14,8 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,50 +28,18 @@ namespace PROARC.src.Views
     public sealed partial class ProcessosListaPage : Page
     {
         // Propriedade pública para a lista de processos
-        public ObservableCollection<Processo> Processos { get; set; }
+        public ObservableCollection<ProcessoAdministrativo> Processos { get; set; }
 
         public ProcessosListaPage()
         {
             this.InitializeComponent();
 
             // Inicializando a coleção de processos para testes
-            Processos = new ObservableCollection<Processo>
+            Processos = new ObservableCollection<ProcessoAdministrativo>
             {
-                new Processo
-                {
-                    NumeroProcesso = "N0001 / 2014",
-                    Reclamante = "Yasmin da Silva",
-                    CPFReclamante = "123.456.789-00",
-                    Reclamado = "UFC - Quixada",
-                    Criado = "01/01/2024",
-                    Audiencia = "01/01/2024",
-                    Motivo = "Juros Abusibos",
-                    Status = "Em andamento"
-                },
-                new Processo
-                {
-                    NumeroProcesso = "N0002 / 2014",
-                    Reclamante = "Yasmin da Silva",
-                    CPFReclamante = "987.654.321-00",
-                    Reclamado = "UFC - Quixada",
-                    Criado = "01/01/2024",
-                    Audiencia = "01/01/2024",
-                    Motivo = "Juros Abusibos",
-                    Status = "Concluído"
-                },
-
-                new Processo
-                {
-                    NumeroProcesso = "0N0003 / 2014",
-                    Reclamante = "Yasmin da Silva",
-                    CPFReclamante = "987.654.321-00",
-                    Reclamado = "UFC - Quixada",
-                    Criado = "02/01/2024",
-                    Audiencia = "15/01/2024",
-                    Motivo = "Pagamento atrasado",
-                    Status = "Concluído"
-                },
-                // Adicione mais objetos conforme necessário
+                new ProcessoAdministrativo("Caminho/Para/Processo1", "0001/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.EmTramitacaoAguardandoEnvioDaNotificacao, DateTime.Now, DateTime.Now),
+                new ProcessoAdministrativo("Caminho/Para/Processo2", "0002/2024", 2023, new Motivo("Cobrança indevida"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.ArquivadoAtendido, DateTime.Now, DateTime.Now),
+                new ProcessoAdministrativo("Caminho/Para/Processo3", "0003/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.ArquivadoNaoAtendido, DateTime.Now, DateTime.Now),
             };
 
             // Definir o contexto de dados para vincular à interface
@@ -81,19 +51,6 @@ namespace PROARC.src.Views
         {
             Frame.Navigate(typeof(HomePage));
         }
-    }
-
-    // Modelo de dados representando um processo
-    public class Processo
-    {
-        public string NumeroProcesso { get; set; }
-        public string Reclamante { get; set; }
-        public string CPFReclamante { get; set; }
-        public string Reclamado { get; set; }
-        public string Criado { get; set; }
-        public string Audiencia { get; set; }
-        public string Motivo { get; set; }
-        public string Status { get; set; }
     }
 }
 

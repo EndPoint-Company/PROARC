@@ -17,36 +17,31 @@ namespace PROARC.src.Control
 
         public static void RegistrarProcessoAdministrativo(ProcessoAdministrativo processo)
         {
-            // Fazer GetMotivoId(String nome)
-            int? motivo_id = MotivoControl.GetMotivoId(processo.Motivo.MotivoNome);
+            // Resolver questões de nulidade
+            int? motivo_id = MotivoControl.GetMotivoId(processo.Motivo.Nome);
 
-            // Fazer GetReclamanteId(String rg)
             int? reclamante_id = ReclamanteControl.GetReclamanteId(processo.Reclamante.Rg);
-
-            // Fazer GetReclamadoId(String cpfOuCnpj, string nome)
-            // Basicamente, vai procurar por chaves candidatas, nunca que vai existir uma empresa no mesmo CPF com o mesmo nome (espero).
-
-            int? reclamado_id = null;
+            int? reclamado_id = null; // TODO
 
             if (processo.Reclamado.Cpf != null)
                 reclamado_id = ReclamadoControl.GetReclamadoId(processo.Reclamado.Cpf, processo.Reclamado.Nome);
             if (processo.Reclamado.Cnpj != null)
                 reclamado_id = ReclamadoControl.GetReclamadoId(processo.Reclamado.Cnpj, processo.Reclamado.Nome);
 
-            AdicionarProcessoAdministrativo(processo.NumeroProcesso, processo.Ano, motivo_id, reclamante_id,
+            AdicionarProcessoAdministrativo(processo.Titulo, processo.Ano, motivo_id, reclamante_id,
                 reclamado_id, processo.CaminhoDoProcesso, processo.DataDaAudiencia);
         }
 
-        public static ProcessoAdministrativo? GetProcessoAdministrativo(string numeroDoProcesso)
+        public static ProcessoAdministrativo? GetProcessoAdministrativo(string tituloDoProcesso)
         {
             string sql = "USE ProArc; SELECT motivo_id, reclamante_id, reclamado_id, numero_processo," +
-                $" caminho_processo, ano, data_audiencia FROM ProcessosAdministrativos WHERE numero_processo = {numeroDoProcesso}";
+                $" caminho_processo, ano, data_audiencia FROM ProcessosAdministrativos WHERE titulo_processo = {tituloDoProcesso}";
 
             List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
 
             return new(
                 reader[4],
-                numeroDoProcesso,
+                tituloDoProcesso,
                 short.Parse(reader[5]),
                 MotivoControl.GetMotivo(reader[0]),
                 ReclamadoControl.GetReclamado(int.Parse(reader[2])),
@@ -61,7 +56,7 @@ namespace PROARC.src.Control
             int? reclamado_id = null, string? caminho_processo = null, DateTime? data_audiencia = null,
             Status status = Status.EmTramitacaoAguardandoEnvioDaNotificacao) // Transformar em objeto depois
         {
-            string sqlFormattedDate = data_audiencia?.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string? sqlFormattedDate = data_audiencia?.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             string sql = "USE ProArc; INSERT INTO ProcessosAdministrativos " +
                 "(motivo_id, reclamante_id, reclamado_id, numero_processo, status_processo, caminho_processo, ano, data_audiencia)" +

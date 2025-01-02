@@ -106,7 +106,7 @@ namespace PROARC.src.Control.Tests
                     Console.WriteLine("Lista de Motivos:");
                     foreach (Motivo motivo in motivos)
                     {
-                        Console.WriteLine($"Nome: {motivo.MotivoNome}, Nível de Permissão: {motivo.Descricao}");
+                        Console.WriteLine($"Nome: {motivo.Nome}, Nível de Permissão: {motivo.Descricao}");
                     }
                 }
                 else

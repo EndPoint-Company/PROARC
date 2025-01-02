@@ -31,7 +31,7 @@ namespace PROARC.src.Control
         {
             string sql = $"use ProArc; SELECT nome, rg, cpf FROM Reclamantes WHERE reclamante_id = {id}";
 
-                List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
 
             if (reader.Count >= 3)
             {
@@ -54,33 +54,19 @@ namespace PROARC.src.Control
 
             if (reader.Count == 0)
             {
-                Console.WriteLine("Nenhum reclamado encontrado.");
                 return null;
             }
-
-            string nome = string.Empty;
-            string rg = string.Empty;
-            string cpf = string.Empty;
-
-            bool isNome = true;
 
             foreach (string idStr in reader)
             {
                 if (int.TryParse(idStr, out int id))
                 {
                     Reclamante? reclamante = GetReclamante(id);
+
                     if (reclamante != null)
                     {
                         reclamantes.AddLast(reclamante);
                     }
-                    else
-                    {
-                        Console.WriteLine($"Erro ao obter os dados do reclamante com ID {id}.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Erro ao converter o ID {idStr} para inteiro.");
                 }
             }
 

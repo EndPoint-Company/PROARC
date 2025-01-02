@@ -21,9 +21,9 @@ namespace PROARC.src.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class HomeNavegationPage : Page
+    public sealed partial class HomeNavigationPage : Page
     {
-        public HomeNavegationPage()
+        public HomeNavigationPage()
         {
             this.InitializeComponent();
 

@@ -50,9 +50,9 @@ namespace PROARC.src.Control.Database
     public class SQLBuilder
     {
         public bool encrypt { get; set; }
-        public string dataSource { get; set; }
-        public string user { get; set; }
-        public string password { get; set; }     
+        public string? dataSource { get; set; }
+        public string? user { get; set; }
+        public string? password { get; set; }     
       
     }
 }

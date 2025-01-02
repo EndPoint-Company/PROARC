@@ -4,52 +4,37 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PROARC.src.Views"
+    xmlns:models="using:PROARC.src.Models.Arquivos"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
 
     <Border CornerRadius="10" Margin="50, 0">
         <Grid Padding="40" CornerRadius="10">
             <StackPanel Spacing="20">
-                <!-- Cabeçalhos -->
-                <TextBlock Text="Reclamante" FontSize="18" FontWeight="Bold" />
-                <Grid ColumnDefinitions="1*,1*,1.5*,1*,1*,1*,1*,1*" Width="1500" HorizontalAlignment="Left">
-                    <TextBlock Text="Nº Processo" Grid.Column="0" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Reclamante" Grid.Column="1" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="CPF do Reclamante" Grid.Column="2" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Reclamado" Grid.Column="3" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Criado" Grid.Column="4" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Audiência" Grid.Column="5" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Motivo" Grid.Column="6" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Status" Grid.Column="7" Margin="5" FontSize="24" FontWeight="SemiBold" />
-                </Grid>
+                <!-- Cabeçalho -->
+                <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
 
-                <!-- Dados -->
-                <ItemsControl ItemsSource="{Binding Processos}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="0" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="1*,1*,1.5*,1*,1*,1*,1*,1*" Width="1500" HorizontalAlignment="Left">
-                                <TextBlock Text="{Binding NumeroProcesso}" Grid.Column="0" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding Reclamante}" Grid.Column="1" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding CPFReclamante}" Grid.Column="2" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding Reclamado}" Grid.Column="3" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding Criado}" Grid.Column="4" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding Audiencia}" Grid.Column="5" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding Motivo}" Grid.Column="6" Margin="5" FontSize="16" />
-                                <TextBlock Text="{Binding Status}" Grid.Column="7" Margin="5" FontSize="16" />
-                            </Grid>
+                <!-- TODO -->
+                <!-- TreeView -->
+                <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
+                    <TreeView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ProcessoAdministrativo">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Bind Titulo}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Reclamante.Nome}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Reclamante.Cpf}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Reclamado.Nome}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind DataDeCriacao}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind DataDaAudiencia}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Motivo.Nome}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Status}" FontSize="16" Margin="5,0,10,0" />
+                            </StackPanel>
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </StackPanel>
         </Grid>
     </Border>
 </Page>
-

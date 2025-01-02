@@ -108,7 +108,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="src\Views\HomeNavegationPage.xaml">
+    <Page Update="src\Views\HomeNavigationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

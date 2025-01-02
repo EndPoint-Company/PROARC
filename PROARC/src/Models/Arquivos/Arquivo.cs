@@ -12,25 +12,16 @@ namespace PROARC.src.Models.Arquivos
     {
         private string caminhoDoArquivo;
         private ArquivoTipo tipo;
-        private DateTime dataDeCriacao;
-        private DateTime dataDeModificacao;
         private long tamanhoEmBytes;
 
         public Arquivo(string caminhoDoArquivo, ArquivoTipo tipo, long tamanhoEmBytes)
         {
             this.caminhoDoArquivo = caminhoDoArquivo;
             this.tipo = tipo;
-            this.dataDeCriacao = DateTime.Now;
-            this.dataDeModificacao = this.dataDeCriacao;
             this.tamanhoEmBytes = tamanhoEmBytes;
         }
 
-        private void AtualizarDataDeModificacao()
-        {
-            this.dataDeModificacao = DateTime.Now;
-        }
-
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null) return false;
 
@@ -40,14 +31,18 @@ namespace PROARC.src.Models.Arquivos
             return other.caminhoDoArquivo == this.caminhoDoArquivo;
         }
 
-        public string CaminhoDoArquivo 
+        public override int GetHashCode()
+        {
+            return this.caminhoDoArquivo.GetHashCode();
+        }
+
+        public string CaminhoDoArquivo
         {
             get => this.caminhoDoArquivo;
-                
+
             set
             {
                 this.caminhoDoArquivo = value;
-                AtualizarDataDeModificacao();
             }
         }
 
@@ -58,11 +53,7 @@ namespace PROARC.src.Models.Arquivos
             set
             {
                 this.tipo = value;
-                AtualizarDataDeModificacao();
             }
         }
-
-        public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
-        public DateTime? DataDeModificacao { get => this.dataDeModificacao; }
     }
 }
