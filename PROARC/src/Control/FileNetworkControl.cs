@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using PROARC.src.Control.Database;
-using PROARC.src.Models.Arquivos;
 using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control

@@ -1,11 +1,7 @@
 ﻿using PROARC.src.Control.Database;
 using PROARC.src.Models;
-using PROARC.src.Models.Tipos;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROARC.src.Control
 {

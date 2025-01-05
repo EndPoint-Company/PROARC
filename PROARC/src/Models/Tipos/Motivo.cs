@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROARC.src.Models.Tipos
 {
@@ -26,7 +22,6 @@ namespace PROARC.src.Models.Tipos
 
         public string Nome { get => this.nome; set { this.nome = value; } }
         public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
-
         public string? Descricao { get => this.descricao; set { this.descricao = value; } }
     }
 }

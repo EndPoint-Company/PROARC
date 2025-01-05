@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
-using Windows.Storage.Streams;
 
 namespace PROARC.src.Control.Database
 {

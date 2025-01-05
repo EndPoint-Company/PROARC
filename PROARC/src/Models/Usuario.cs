@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
@@ -48,17 +43,7 @@ namespace PROARC.src.Models
             return $"Nome: {Nome}, Nível de Permissão: {NivelDePermissao}";
         }
 
-        public string Nome {
-            get => this.nome;
-            set
-            {
-                this.nome = value;
-            }
-        }
-        public short NivelDePermissao 
-        {
-            get => this.nivelDePermissao;
-        }
+        public string Nome { get => this.nome; set { this.nome = value; } }
+        public short NivelDePermissao { get => this.nivelDePermissao; }
     }
 }
-

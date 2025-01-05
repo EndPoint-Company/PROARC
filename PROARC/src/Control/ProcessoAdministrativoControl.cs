@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PROARC.src.Control.Database;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Models.Tipos;
