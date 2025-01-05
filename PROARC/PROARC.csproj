@@ -18,23 +18,12 @@
 	<PropertyGroup Label="Globals">
 		<AppxPackage>false</AppxPackage>
 	</PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="src\Empresa.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Assets\proarc-white-logo.ico" />
-  </ItemGroup>
 
   <ItemGroup>
 	<Content Include="Assets\credentials.json" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
 	  <Content Include="Assets\proarc-white-logo.ico" />
+	  <Content Include="Assets\bannerHome.png" />
+	  
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +42,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
   </ItemGroup>
@@ -118,7 +108,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="src\Views\HomeNavegationPage.xaml">
+    <Page Update="src\Views\HomeNavigationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

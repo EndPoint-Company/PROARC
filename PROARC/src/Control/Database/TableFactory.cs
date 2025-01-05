@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 namespace PROARC.src.Control.Database
 {
@@ -105,7 +100,8 @@ namespace PROARC.src.Control.Database
                     "motivo_id INT," +
                     "reclamante_id INT," +
                     "reclamado_id INT," +
-                    "numero_processo NVARCHAR(10) NOT NULL UNIQUE," +
+                    "titulo_processo NVARCHAR(10) NOT NULL UNIQUE," +
+                    "status_processo NVARCHAR(50) NOT NULL," +
                     "caminho_processo NVARCHAR(200) NOT NULL," +
                     "ano SMALLINT NOT NULL," +
                     "data_audiencia DATE NULL," +

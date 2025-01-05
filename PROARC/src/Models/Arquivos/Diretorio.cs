@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using PROARC.src.Models.Tipos;
 
@@ -12,16 +10,12 @@ namespace PROARC.src.Models.Arquivos
     {
         private string caminhoDoDiretorio;
         private ArquivoTipo tipo;
-        private DateTime dataDeCriacao;
-        private DateTime dataDeModificacao;
         private LinkedList<Arquivo> arquivos;
 
         public Diretorio(string caminhoDoDiretorio, ArquivoTipo tipo)
         {
             this.caminhoDoDiretorio = caminhoDoDiretorio;
             this.tipo = tipo;
-            this.dataDeCriacao = DateTime.Now;
-            this.dataDeModificacao = this.dataDeCriacao;
             arquivos = new LinkedList<Arquivo>();
         }
 
@@ -33,11 +27,6 @@ namespace PROARC.src.Models.Arquivos
         public void RemoverArquivo(Arquivo arquivo)
         {
             this.arquivos.Remove(arquivo);
-        }
-
-        private void AtualizarDataDeModificacao()
-        {
-            this.dataDeModificacao = DateTime.Now;
         }
 
         public Arquivo getLastArquivo()
@@ -52,7 +41,6 @@ namespace PROARC.src.Models.Arquivos
             set
             {
                 this.caminhoDoDiretorio = value;
-                AtualizarDataDeModificacao();
             }
         }
 
@@ -63,11 +51,12 @@ namespace PROARC.src.Models.Arquivos
             set
             {
                 this.tipo = value;
-                AtualizarDataDeModificacao();
             }
         }
 
-        public DateTime? DataDeCriacao { get => this.dataDeCriacao; }
-        public DateTime? DataDeModificacao { get => this.dataDeModificacao; }
+        public ObservableCollection<Arquivo> GetObservableArquivos()
+        {
+            return new ObservableCollection<Arquivo>(this.arquivos);
+        }
     }
 }

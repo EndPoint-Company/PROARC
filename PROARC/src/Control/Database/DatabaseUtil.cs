@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.UI.Xaml.Automation.Peers;
+using Newtonsoft.Json;
 
 namespace PROARC.src.Control.Database
 {
@@ -39,22 +33,19 @@ namespace PROARC.src.Control.Database
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
-
-        [RequiresUnreferencedCode("Chama JsonSerializer.Deserialize")]
-        public static T ReadJson<T>(string filePath)
+        public static T? ReadJson<T>(string filePath)
         {
             string text = File.ReadAllText(filePath);
-
-            return JsonSerializer.Deserialize<T>(json: text);
+            return JsonConvert.DeserializeObject<T>(text);
         }
     }
 
     public class SQLBuilder
     {
         public bool encrypt { get; set; }
-        public string dataSource { get; set; }
-        public string user { get; set; }
-        public string password { get; set; }     
+        public string? dataSource { get; set; }
+        public string? user { get; set; }
+        public string? password { get; set; }     
       
     }
 }

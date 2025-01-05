@@ -83,9 +83,7 @@
 
                         <!-- Segunda Linha -->
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <TextBox PlaceholderText="Insira a rua" Width="300"/>
-                            <TextBox PlaceholderText="Insira o bairro" Width="280"/>
-                            <TextBox PlaceholderText="Insira o número" Width="120"/>
+                            
 
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
                                 <!-- Botão para abrir o pop-up -->
@@ -147,13 +145,6 @@
                             <TextBox PlaceholderText="Insira o nome completo" Width="300" />
                             <TextBox PlaceholderText="Insira o CPF" Width="200" />
                             <TextBox PlaceholderText="Insira o RG" Width="200" />
-                        </StackPanel>
-
-                        <!-- Segunda Linha -->
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <TextBox PlaceholderText="Insira a rua" Width="300" />
-                            <TextBox PlaceholderText="Insira o bairro" Width="280" />
-                            <TextBox PlaceholderText="Insira o número" Width="120" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

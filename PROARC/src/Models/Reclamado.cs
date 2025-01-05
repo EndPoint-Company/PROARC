@@ -18,7 +18,6 @@ namespace PROARC.src.Models
         private string? estado;
         private string? cnpj;
         private string? cpf;
-        
 
         public Reclamado
             (string nome, short? numeroDaRua = null, string? rua = null, string? bairro = null, string? email = null, string? cidade = null, 
