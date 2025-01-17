@@ -7,19 +7,95 @@ using Windows.Storage.Pickers;
 using Windows.ApplicationModel.DataTransfer;
 using PROARC.src.Models;
 using PROARC.src.Control;
+using System.ComponentModel;
+using Microsoft.UI.Xaml.Media;
+using System.Drawing;
 
 namespace PROARC.src.Views
 {
-    public sealed partial class RegistrarProcesso01Page : Page
+    public sealed partial class RegistrarProcesso01Page : Page, INotifyPropertyChanged
     {
+        private string numeroProcesso;
+        public string NumeroProcesso
+        {
+            get => numeroProcesso;
+            set
+            {
+                numeroProcesso = value;
+                OnPropertyChanged(nameof(NumeroProcesso));
+            }
+        }
+
+        private string anoProcesso;
+        public string AnoProcesso
+        {
+            get => anoProcesso;
+            set
+            {
+                anoProcesso = value;
+                OnPropertyChanged(nameof(AnoProcesso));
+            }
+        }
+
         public RegistrarProcesso01Page()
         {
             this.InitializeComponent();
+            DataContext = this;
 
             // Elevar o StackPanel para que a sombra seja exibida
             ProcuradorSection.Translation = new System.Numerics.Vector3(1, 1, 20);
             ReclamanteSection.Translation = new System.Numerics.Vector3(1, 1, 20);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
+        {
+
+            // Alterar estilo do botão "Processo Novo" para selecionado
+            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
+            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+
+            // Alterar estilo do botão "Processo Antigo" para não selecionado
+            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
+            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
+            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue); // Cor "#005BC1"
+
+            // Permitir edição dos campos
+            inputNProcesso.IsReadOnly = false;
+            inputAnoProcesso.IsReadOnly = false;
+
+            MainStackPanel.Opacity = 1; // Torna o painel totalmente visível
+            NumeroProcesso = ""; // Limpa os campos
+            AnoProcesso = "";
+        }
+
+        private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
+        {
+
+            // Alterar estilo do botão "Processo Antigo" para selecionado
+            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
+            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+
+            // Alterar estilo do botão "Processo Novo" para não selecionado
+            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
+            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
+            btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue); // Cor "#005BC1"
+
+            // Tornar os campos somente leitura
+            inputNProcesso.IsReadOnly = true;
+            inputAnoProcesso.IsReadOnly = true;
+
+            MainStackPanel.Opacity = 0.4; // Define opacidade de 40%
+            NumeroProcesso = "12345"; // Preenche os campos com valores
+            AnoProcesso = "2023";
+        }
+
+
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -40,7 +116,7 @@ namespace PROARC.src.Views
                 return;
             }
 
-            Dictionary<string, object> dicionarioObjetos = new(); 
+            Dictionary<string, object> dicionarioObjetos = new();
             Reclamante reclamante = new(inputNome.Text,
                                         inputCpfReclamante.Text,
                                         inputRgReclamante.Text);
@@ -64,116 +140,11 @@ namespace PROARC.src.Views
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
         }
 
-        private async void PickFileButton1_Click(object sender, RoutedEventArgs e)
-        {
-            // Abre o diálogo para seleção de arquivo para a primeira seção
-            await FilePickerDialog1.ShowAsync();
-        }
-
-        private async void PickFileButton2_Click(object sender, RoutedEventArgs e)
-        {
-            // Abre o diálogo para seleção de arquivo para a segunda seção
-            await FilePickerDialog2.ShowAsync();
-        }
-
         private void FilePickerDialog_Close(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             // Evento disparado ao clicar no botão "Fechar" do ContentDialog
         }
 
-        private async void DragDropArea1_Drop(object sender, DragEventArgs e)
-        {
-            // Verifica se o conteúdo solto é um arquivo
-            if (e.DataView.Contains(StandardDataFormats.StorageItems))
-            {
-                var items = await e.DataView.GetStorageItemsAsync();
-                if (items.Any())
-                {
-                    // Obtém o arquivo arrastado
-                    var storageFile = items[0] as Windows.Storage.StorageFile;
-                    if (storageFile != null)
-                    {
-                        PickAFileOutputTextBlock1.Text = $"Arquivo selecionado: {storageFile.Name}";
-                        FilePickerDialog1.Hide(); // Fecha o ContentDialog
-                    }
-                }
-            }
-        }
 
-        private async void DragDropArea2_Drop(object sender, DragEventArgs e)
-        {
-            // Verifica se o conteúdo solto é um arquivo
-            if (e.DataView.Contains(StandardDataFormats.StorageItems))
-            {
-                var items = await e.DataView.GetStorageItemsAsync();
-                if (items.Any())
-                {
-                    // Obtém o arquivo arrastado
-                    var storageFile = items[0] as Windows.Storage.StorageFile;
-                    if (storageFile != null)
-                    {
-                        PickAFileOutputTextBlock2.Text = $"Arquivo selecionado: {storageFile.Name}";
-                        FilePickerDialog2.Hide(); // Fecha o ContentDialog
-                    }
-                }
-            }
-        }
-
-
-        private async void OpenFilePickerButton1_Click(object sender, RoutedEventArgs e)
-        {
-            // Cria um FileOpenPicker para a primeira seção
-            var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.FileTypeFilter.Add("*"); // permite selecionar qualquer tipo de arquivo
-
-            // Inicializa o picker com a janela atual
-            var window = (Application.Current as App)?.MainWindow;
-            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
-            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
-
-            // Abre o seletor de arquivos
-            var file = await openPicker.PickSingleFileAsync();
-
-            // Verifica se o arquivo foi selecionado
-            if (file != null)
-            {
-                // Exibe o nome do arquivo selecionado na ContentDialog1
-                SelectedFileNameTextBlock1.Text = "Arquivo selecionado: " + file.Name;
-            }
-            else
-            {
-                // Se o usuário cancelar a operação
-                SelectedFileNameTextBlock1.Text = "Nenhum arquivo selecionado.";
-            }
-        }
-
-        private async void OpenFilePickerButton2_Click(object sender, RoutedEventArgs e)
-        {
-            // Cria um FileOpenPicker para a segunda seção
-            var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.FileTypeFilter.Add("*"); // permite selecionar qualquer tipo de arquivo
-
-            // Inicializa o picker com a janela atual
-            var window = (Application.Current as App)?.MainWindow;
-            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
-            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
-
-            // Abre o seletor de arquivos
-            var file = await openPicker.PickSingleFileAsync();
-
-            // Verifica se o arquivo foi selecionado
-            if (file != null)
-            {
-                // Exibe o nome do arquivo selecionado na ContentDialog2
-                SelectedFileNameTextBlock2.Text = "Arquivo selecionado: " + file.Name;
-            }
-            else
-            {
-                // Se o usuário cancelar a operação
-                SelectedFileNameTextBlock2.Text = "Nenhum arquivo selecionado.";
-            }
-        }
     }
 }
