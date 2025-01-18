@@ -134,6 +134,7 @@
 
                 <PasswordBox
                     Grid.Row="1"
+                    Name="CaixaSenha"
                     Padding="10"
                     Width="269" 
                     PlaceholderText="Chave de acesso"
