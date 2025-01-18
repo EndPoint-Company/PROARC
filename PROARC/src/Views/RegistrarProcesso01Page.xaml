@@ -195,39 +195,43 @@
                         <!-- Primeira Linha -->
                         <StackPanel Orientation="Horizontal" Spacing="20">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="Instituição *" FontSize="14"/>
                                 <TextBox x:Name="inputNomeRaclamado" PlaceholderText="Insira o nome da Instituição" Width="300" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
-                                <TextBox x:Name="inputIdentificador" PlaceholderText="Insira o CNPJ/CPF" Width="200" />
+                                <TextBlock Text="CNPJ/CPF *" FontSize="14"/>
+                                <TextBox x:Name="inputIdentificador" PlaceholderText="Insira o CNPJ/CPF" Width="250" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="E-mail" FontSize="14"/>
+                                <TextBox x:Name="inputEmail" PlaceholderText="Insira o E-mail" Width="250" />
                             </StackPanel>
                         </StackPanel>
 
                         <!-- Segunda Linha -->
                         <StackPanel Orientation="Horizontal" Spacing="20">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="Rua" FontSize="14"/>
                                 <TextBox x:Name="inputRua" PlaceholderText="Insira a rua" Width="300" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="Número" FontSize="14"/>
                                 <TextBox x:Name="inputBairro" PlaceholderText="Insira o bairro" Width="280" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="Bairro" FontSize="14"/>
                                 <TextBox x:Name="inputNumeroRua" PlaceholderText="Insira o número" Width="120" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="Cidade" FontSize="14"/>
                                 <TextBox x:Name="inputCidadeReclamado" PlaceholderText="Insira a cidade" Width="180" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="UF" FontSize="14"/>
                                 <TextBox x:Name="inputUfReclamado" PlaceholderText="Insira a UF" Width="100" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBlock Text="CEP" FontSize="14"/>
                                 <TextBox x:Name="inputCepReclamado" PlaceholderText="Insira o CEP" Width="150" />
                             </StackPanel>
                         </StackPanel>
