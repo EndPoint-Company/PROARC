@@ -28,7 +28,50 @@ namespace PROARC.src.Views
             this.DataContext = this;
         }
 
+<<<<<<< Updated upstream
         private void ProcessoItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+=======
+        private void Processo_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+        {
+            if (sender is FrameworkElement element && element.DataContext is ProcessoAdministrativo processo)
+            {
+                // Crie um MenuFlyout
+                var menuFlyout = new MenuFlyout();
+
+                // Adicione opções ao MenuFlyout
+                var visualizarItem = new MenuFlyoutItem { Text = "Visualizar Processo" };
+                //visualizarItem.Click += (s, args) => VisualizarProcesso(processo);
+
+                var editarItem = new MenuFlyoutItem { Text = "Editar Processo" };
+                editarItem.Click += (s, args) => EditarProcesso(processo);
+
+                var excluirItem = new MenuFlyoutItem
+                {
+                    Text = "Excluir Processo",
+                    Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red) // Define a cor vermelha
+                };
+                //excluirItem.Click += (s, args) => ExcluirProcesso(processo);
+
+                menuFlyout.Items.Add(visualizarItem);
+                menuFlyout.Items.Add(editarItem);
+                menuFlyout.Items.Add(new MenuFlyoutSeparator());
+                menuFlyout.Items.Add(excluirItem);
+
+                // Exiba o menu no ponto clicado
+                menuFlyout.ShowAt(element, e.GetPosition(element));
+            }
+        }
+
+
+        private void EditarProcesso(ProcessoAdministrativo processo)
+        {
+            Frame.Navigate(typeof(RegistrarProcesso01Page));
+        }
+
+
+        // Método para navegar de volta
+        private void BackPage_Click(object sender, RoutedEventArgs e)
+>>>>>>> Stashed changes
         {
             var stackPanel = sender as StackPanel;
             FlyoutBase.ShowAttachedFlyout(stackPanel);
