@@ -28,9 +28,17 @@ namespace PROARC.src.Views
             this.DataContext = this;
         }
 
-<<<<<<< Updated upstream
         private void ProcessoItem_PointerEntered(object sender, PointerRoutedEventArgs e)
-=======
+        {
+            var stackPanel = sender as StackPanel;
+            FlyoutBase.ShowAttachedFlyout(stackPanel);
+        }
+
+        private void ProcessoItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            // Aqui você pode ocultar o Flyout se necessário (geralmente feito automaticamente pelo sistema)
+        }
+
         private void Processo_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
             if (sender is FrameworkElement element && element.DataContext is ProcessoAdministrativo processo)
@@ -66,20 +74,6 @@ namespace PROARC.src.Views
         private void EditarProcesso(ProcessoAdministrativo processo)
         {
             Frame.Navigate(typeof(RegistrarProcesso01Page));
-        }
-
-
-        // Método para navegar de volta
-        private void BackPage_Click(object sender, RoutedEventArgs e)
->>>>>>> Stashed changes
-        {
-            var stackPanel = sender as StackPanel;
-            FlyoutBase.ShowAttachedFlyout(stackPanel);
-        }
-
-        private void ProcessoItem_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            // Aqui você pode ocultar o Flyout se necessário (geralmente feito automaticamente pelo sistema)
         }
     }
 }

@@ -20,15 +20,12 @@
                 <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
                     <TreeView.ItemTemplate>
                         <DataTemplate x:DataType="models:ProcessoAdministrativo">
-<<<<<<< Updated upstream
                             <StackPanel Orientation="Horizontal"
+                                        RightTapped="Processo_RightTapped"
                                         Margin="0,5"
                                         ToolTipService.ToolTip="Detalhes do Processo"
                                         PointerEntered="ProcessoItem_PointerEntered"
                                         PointerExited="ProcessoItem_PointerExited">
-=======
-                            <StackPanel Orientation="Horizontal" RightTapped="Processo_RightTapped">
->>>>>>> Stashed changes
                                 <TextBlock Text="{x:Bind Titulo}" FontSize="16" Margin="5,0,10,0" />
                                 <TextBlock Text="{x:Bind Reclamante.Nome}" FontSize="16" Margin="5,0,10,0" />
                                 <TextBlock Text="{x:Bind Reclamante.Cpf}" FontSize="16" Margin="5,0,10,0" />
