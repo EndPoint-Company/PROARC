@@ -24,9 +24,9 @@
                 <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO" 
                            FontSize="32" 
                            FontWeight="Bold" 
-                           Margin="160,20,0,20" />
+                           Margin="160,40, 160, 0" />
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160, 0">
                     <Button x:Name="btnProcessoNovo" 
                         Content="Processo Novo" 
                         Width="224" Height="50" 
@@ -47,11 +47,8 @@
 
 
                 <StackPanel Orientation="Horizontal" Margin="160,0">
-
-                    
                     <StackPanel Orientation="Vertical" Spacing="32">
-
-
+                        
                         <!-- Seção Processo / data -->
                         <StackPanel x:Name="MainStackPanel" Orientation="Horizontal" Opacity="1">
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
@@ -126,7 +123,7 @@
 
 
                 <!-- Contêiner principal para os dois StackPanels -->
-                <StackPanel Orientation="Horizontal" Margin="160,0">
+                <StackPanel Orientation="Horizontal" Margin="160, 0">
                     <!-- StackPanel adicional para a borda azul -->
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
@@ -155,11 +152,11 @@
                 </StackPanel>
 
                 <!-- Contêiner principal para o StackPanel Procurador -->
-                <StackPanel Orientation="Horizontal" Margin="160,0" Width="auto" >
+                <StackPanel Orientation="Horizontal" Margin="160, 0" x:Name="ProcuradorSection1" Visibility="Collapsed">
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
                     <!-- Seção Procurador -->
-                    <StackPanel CornerRadius="10" Padding="40" Background="#FFF" Spacing="10" Visibility="Collapsed" x:Name="ProcuradorSection" Shadow="{StaticResource SharedShadow}" Width="1478">
+                    <StackPanel Padding="40" Background="#FFF" Spacing="10" x:Name="ProcuradorSection2" Shadow="{StaticResource SharedShadow}" Width="1478" CornerRadius="0, 10, 10, 0">
                         <TextBlock Text="Procurador" FontSize="18" FontWeight="Bold" />
 
                         <!-- Primeira Linha -->
@@ -247,10 +244,6 @@
                     Margin="0,0,56,0" 
                     Click="ContinuarButton_Click"/>
             </StackPanel>
-            
-            
-            
-            
         </ScrollViewer>
     </Grid>
 </Page>

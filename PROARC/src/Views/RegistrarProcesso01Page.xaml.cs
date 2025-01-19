@@ -99,13 +99,13 @@ namespace PROARC.src.Views
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             // Torna a seção "Procurador" visível quando o checkbox está marcado
-            ProcuradorSection.Visibility = Visibility.Visible;
+            ProcuradorSection1.Visibility = Visibility.Visible;
         }
 
         private void ProcuradorCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             // Oculta a seção "Procurador" quando o checkbox está desmarcado
-            ProcuradorSection.Visibility = Visibility.Collapsed;
+            ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
@@ -151,7 +151,7 @@ namespace PROARC.src.Views
             AudienciaSection.Translation = new Vector3(1, 1, 20);
             StatusSection.Translation = new Vector3(1, 1, 20);
             ReclamanteSection.Translation = new Vector3(1, 1, 20);
-            ProcuradorSection.Translation = new Vector3(1, 1, 20);
+            ProcuradorSection2.Translation = new Vector3(1, 1, 20);
             ReclamadoSection.Translation = new Vector3(1, 1, 20);
         }
 
