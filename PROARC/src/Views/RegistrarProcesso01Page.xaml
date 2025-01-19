@@ -17,7 +17,6 @@
             </Style>
 
             <ThemeShadow x:Name="SharedShadow" />
-
         </Grid.Resources>
         <ScrollViewer>
             <StackPanel Padding="20" Spacing="40">
