@@ -33,8 +33,6 @@
                         Padding="20,10" 
                         Background="#003366" 
                         Foreground="White" 
-
-                        
                         Click="ProcessoNovo_Click" />
                     <Button x:Name="btnProcessoAntigo" 
                         Content="Processo Antigo" 
@@ -180,12 +178,10 @@
 
 
                 <StackPanel Orientation="Horizontal" Margin="160,0">
-                    <!-- StackPanel adicional para a borda azul -->
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
                     <!-- Primeira seção de Reclamado -->
                     <StackPanel Padding="40" Spacing="10" Background="#FFF" x:Name="ReclamadoSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Width="1478">
-                        <!-- Título -->
                         <TextBlock Text="Reclamado" FontSize="18" FontWeight="Bold" />
 
                         <!-- Primeira Linha -->
@@ -211,11 +207,11 @@
                                 <TextBox x:Name="inputRua" PlaceholderText="Insira a rua" Width="300" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Número" FontSize="14"/>
+                                <TextBlock Text="Bairro" FontSize="14"/>
                                 <TextBox x:Name="inputBairro" PlaceholderText="Insira o bairro" Width="280" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Bairro" FontSize="14"/>
+                                <TextBlock Text="Número" FontSize="14"/>
                                 <TextBox x:Name="inputNumeroRua" PlaceholderText="Insira o número" Width="120" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
@@ -231,9 +227,69 @@
                                 <TextBox x:Name="inputCepReclamado" PlaceholderText="Insira o CEP" Width="150" />
                             </StackPanel>
                         </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                            <Button 
+                                Content="Adicionar Reclamado" 
+                                Background="#003366" 
+                                Foreground="White" 
+                                Padding="10,5" 
+                                Width="200" 
+                                Height="40" 
+                                CornerRadius="5" 
+                                FontSize="16" /> 
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
+
+                <StackPanel Orientation="Horizontal" Margin="160,0">
+                    <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+
+                    <StackPanel Padding="40" Spacing="10" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478" >
+                        <TextBlock Text="Anexar Arquivos" FontSize="18" FontWeight="Bold" />
+
+                        <!-- Área para Arrastar e Soltar Arquivos -->
+                        <Border x:Name="DragDropArea" 
+                                BorderBrush="#d8d9d7" 
+                                BorderThickness="1" 
+                                Background="#F0F0F0" 
+                                CornerRadius="5" 
+                                Height="150" 
+                                AllowDrop="True" 
+                                Drop="DragDropArea_Drop" 
+                                DragOver="DragDropArea_DragOver">
+
+                            <Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                                    <Button Content="Procurar" 
+                                            x:Name="PickFileButton" 
+                                            Background="#003366" 
+                                            Foreground="White" 
+                                            Padding="10,5" 
+                                            HorizontalAlignment="Center" 
+                                            Click="PickFileButton_Click"
+                                            CornerRadius="5"/>
+
+                                    <TextBlock Text="ou arraste um arquivo até aqui" 
+                                               HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center" 
+                                               FontSize="14" 
+                                               Foreground="Gray" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Lista de Arquivos Anexados -->
+                        <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
+                            <TextBlock Text="Nenhum arquivo selecionado." 
+                                       x:Name="MensagemNenhumArquivo" 
+                                       FontSize="14" 
+                                       Foreground="Gray" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                
                 <!-- Botão de Continuar -->
                 <Button 
                     Content="Continuar" 

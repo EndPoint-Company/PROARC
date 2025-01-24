@@ -11,12 +11,16 @@ using System.ComponentModel;
 using Microsoft.UI.Xaml.Media;
 using System.Drawing;
 using System.Numerics;
+using Windows.Storage;
+using Microsoft.UI.Text;
+using Microsoft.UI;
 
 namespace PROARC.src.Views
 {
     public sealed partial class RegistrarProcesso01Page : Page, INotifyPropertyChanged
     {
         private string numeroProcesso;
+        private List<string> arquivosSelecionados = new();
         public string NumeroProcesso
         {
             get => numeroProcesso;
@@ -37,6 +41,8 @@ namespace PROARC.src.Views
                 OnPropertyChanged(nameof(AnoProcesso));
             }
         }
+
+        public object DragDropEffects { get; private set; }
 
         public RegistrarProcesso01Page()
         {
@@ -127,21 +133,82 @@ namespace PROARC.src.Views
             Frame.Navigate(typeof(RegistrarProcesso02Page), dicionarioObjetos);
         }
 
-        private void DragDropArea1_DragOver(object sender, DragEventArgs e)
+
+        // Botão para abrir o seletor de arquivos
+        private async void PickFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // Define o efeito de arrastar como "Copiar"
-            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+            // Instancia o FileOpenPicker
+            var picker = new FileOpenPicker
+            {
+                ViewMode = PickerViewMode.Thumbnail,
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+
+            // Adiciona os filtros de tipo de arquivo
+            picker.FileTypeFilter.Add("*"); // Permite qualquer arquivo
+
+            // Associa o FileOpenPicker à janela do aplicativo
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+            // Mostra o seletor de arquivos e espera a seleção
+            var files = await picker.PickMultipleFilesAsync();
+
+            if (files != null && files.Any())
+            {
+                // Adiciona os arquivos selecionados à lista
+                AdicionarArquivos(files.Select(file => file.Path));
+            }
         }
 
-        private void DragDropArea2_DragOver(object sender, DragEventArgs e)
+        // Método para adicionar arquivos à lista visual
+        private void AdicionarArquivos(IEnumerable<string> arquivos)
         {
-            // Define o efeito de arrastar como "Copiar"
-            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+            foreach (var arquivo in arquivos)
+            {
+                var nomeArquivo = System.IO.Path.GetFileName(arquivo);
+
+                // Verifica se o arquivo já foi adicionado
+                if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
+                {
+                    ListaArquivos.Children.Add(new TextBlock
+                    {
+                        Text = nomeArquivo,
+                        FontSize = 14,
+                        Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Green)
+                    });
+                }
+            }
+
+            AtualizarMensagemNenhumArquivo();
         }
 
-        private void FilePickerDialog_Close(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        // Atualiza a mensagem de "Nenhum arquivo selecionado"
+        private void AtualizarMensagemNenhumArquivo()
         {
-            // Evento disparado ao clicar no botão "Fechar" do ContentDialog
+            MensagemNenhumArquivo.Visibility = ListaArquivos.Children.OfType<TextBlock>().Any()
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+        }
+
+        // Suporte a Drag and Drop para arquivos
+        private async void DragDropArea_Drop(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                var items = await e.DataView.GetStorageItemsAsync();
+                var arquivos = items.OfType<StorageFile>().Select(file => file.Path);
+
+                if (arquivos.Any())
+                {
+                    AdicionarArquivos(arquivos);
+                }
+            }
+        }
+
+        private void DragDropArea_DragOver(object sender, Microsoft.UI.Xaml.DragEventArgs e)
+        {
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
         }
 
         private void ConfigureShadows()
@@ -153,7 +220,7 @@ namespace PROARC.src.Views
             ReclamanteSection.Translation = new Vector3(1, 1, 20);
             ProcuradorSection2.Translation = new Vector3(1, 1, 20);
             ReclamadoSection.Translation = new Vector3(1, 1, 20);
+            AnexarArquivosSection.Translation = new Vector3(1, 1, 20);
         }
-
     }
 }
