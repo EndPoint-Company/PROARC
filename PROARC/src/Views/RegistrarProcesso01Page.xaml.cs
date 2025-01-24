@@ -219,8 +219,116 @@ namespace PROARC.src.Views
             StatusSection.Translation = new Vector3(1, 1, 20);
             ReclamanteSection.Translation = new Vector3(1, 1, 20);
             ProcuradorSection2.Translation = new Vector3(1, 1, 20);
-            ReclamadoSection.Translation = new Vector3(1, 1, 20);
             AnexarArquivosSection.Translation = new Vector3(1, 1, 20);
+            ReclamadoSection.Translation = new Vector3(1, 1, 20);
+        }
+
+        private TextBox CriarTextBox(string placeholder, double width)
+        {
+            return new TextBox
+            {
+                PlaceholderText = placeholder,
+                Width = width
+            };
+        }
+
+        private StackPanel CriarCampo(string titulo, string placeholder, double width)
+        {
+            return new StackPanel
+            {
+                Orientation = Orientation.Vertical,
+                Children =
+        {
+            new TextBlock
+            {
+                Text = titulo,
+                FontSize = 14
+            },
+            CriarTextBox(placeholder, width)
+        }
+            };
+        }
+
+        private StackPanel CriarLinhaCampos(params StackPanel[] campos)
+        {
+            var linha = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 20
+            };
+            foreach (var campo in campos)
+            {
+                linha.Children.Add(campo);
+            }
+            return linha;
+        }
+
+        private StackPanel CriarSecaoReclamado()
+        {
+            // Primeira linha de campos
+            var primeiraLinha = CriarLinhaCampos(
+                CriarCampo("Instituição *", "Insira o nome da Instituição", 300),
+                CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 250),
+                CriarCampo("E-mail", "Insira o E-mail", 250)
+            );
+
+            // Segunda linha de campos
+            var segundaLinha = CriarLinhaCampos(
+                CriarCampo("Rua", "Insira a rua", 300),
+                CriarCampo("Bairro", "Insira o bairro", 280),
+                CriarCampo("Número", "Insira o número", 120),
+                CriarCampo("Cidade", "Insira a cidade", 180),
+                CriarCampo("UF", "Insira a UF", 100),
+                CriarCampo("CEP", "Insira o CEP", 150)
+            );
+
+            // Seção de Reclamado
+            var reclamadoSection = new StackPanel
+            {
+                Padding = new Thickness(40),
+                Spacing = 10,
+                Background = new SolidColorBrush(Colors.White),
+                CornerRadius = new CornerRadius(0, 10, 10, 0),
+                Width = 1478,
+                Shadow = new ThemeShadow(),
+                Children =
+        {
+            new TextBlock
+            {
+                Text = "Reclamado",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold
+            },
+            primeiraLinha,
+            segundaLinha
+        }
+            };
+
+            // Adicionar a Translation para sombra
+            reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+
+            // Container da seção
+            return new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 32, 0, 0),
+                Children =
+        {
+            new StackPanel
+            {
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
+                Width = 10,
+                CornerRadius = new CornerRadius(10, 0, 0, 10)
+            },
+            reclamadoSection
+        }
+            };
+        }
+
+        private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
+        {
+            // Adicionar uma nova seção ao MainContainer
+            MainContainer.Children.Add(CriarSecaoReclamado());
         }
     }
 }

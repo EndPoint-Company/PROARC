@@ -19,7 +19,7 @@
             <ThemeShadow x:Name="SharedShadow" />
         </Grid.Resources>
         <ScrollViewer>
-            <StackPanel Padding="20" Spacing="40">
+            <StackPanel Padding="20" Spacing="32">
                 <!-- Título -->
                 <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO" 
                            FontSize="32" 
@@ -177,70 +177,69 @@
                 </StackPanel>
 
 
-                <StackPanel Orientation="Horizontal" Margin="160,0">
-                    <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-
+                <StackPanel x:Name="MainContainer" Orientation="Vertical" Margin="160,0">
                     <!-- Primeira seção de Reclamado -->
-                    <StackPanel Padding="40" Spacing="10" Background="#FFF" x:Name="ReclamadoSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Width="1478">
-                        <TextBlock Text="Reclamado" FontSize="18" FontWeight="Bold" />
-
-                        <!-- Primeira Linha -->
-                        <StackPanel Orientation="Horizontal" Spacing="20">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Instituição *" FontSize="14"/>
-                                <TextBox x:Name="inputNomeRaclamado" PlaceholderText="Insira o nome da Instituição" Width="300" />
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                        <StackPanel Padding="40" Spacing="10" Background="#FFF" CornerRadius="0, 10, 10, 0"  x:Name="ReclamadoSection" Shadow="{StaticResource SharedShadow}" Width="1478">
+                            <TextBlock Text="Reclamado" FontSize="18" FontWeight="Bold" />
+                            <StackPanel Orientation="Horizontal" Spacing="20">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Instituição *" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira o nome da Instituição" Width="300" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="CNPJ/CPF *" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira o CNPJ/CPF" Width="250" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="E-mail" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira o E-mail" Width="250" />
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="CNPJ/CPF *" FontSize="14"/>
-                                <TextBox x:Name="inputIdentificador" PlaceholderText="Insira o CNPJ/CPF" Width="250" />
+                            <StackPanel Orientation="Horizontal" Spacing="20">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Rua" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira a rua" Width="300" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Bairro" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira o bairro" Width="280" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Número" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira o número" Width="120" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Cidade" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira a cidade" Width="180" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="UF" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira a UF" Width="100" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="CEP" FontSize="14"/>
+                                    <TextBox PlaceholderText="Insira o CEP" Width="150" />
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="E-mail" FontSize="14"/>
-                                <TextBox x:Name="inputEmail" PlaceholderText="Insira o E-mail" Width="250" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                                <Button 
+                    Content="Adicionar Reclamado" 
+                    Background="#003366" 
+                    Foreground="White" 
+                    Padding="10,5" 
+                    Width="200" 
+                    Height="40" 
+                    CornerRadius="5" 
+                    FontSize="16" 
+                    Click="OnAddReclamadoClick" />
                             </StackPanel>
-                        </StackPanel>
-
-                        <!-- Segunda Linha -->
-                        <StackPanel Orientation="Horizontal" Spacing="20">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Rua" FontSize="14"/>
-                                <TextBox x:Name="inputRua" PlaceholderText="Insira a rua" Width="300" />
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Bairro" FontSize="14"/>
-                                <TextBox x:Name="inputBairro" PlaceholderText="Insira o bairro" Width="280" />
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Número" FontSize="14"/>
-                                <TextBox x:Name="inputNumeroRua" PlaceholderText="Insira o número" Width="120" />
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Cidade" FontSize="14"/>
-                                <TextBox x:Name="inputCidadeReclamado" PlaceholderText="Insira a cidade" Width="180" />
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="UF" FontSize="14"/>
-                                <TextBox x:Name="inputUfReclamado" PlaceholderText="Insira a UF" Width="100" />
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="CEP" FontSize="14"/>
-                                <TextBox x:Name="inputCepReclamado" PlaceholderText="Insira o CEP" Width="150" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                            <Button 
-                                Content="Adicionar Reclamado" 
-                                Background="#003366" 
-                                Foreground="White" 
-                                Padding="10,5" 
-                                Width="200" 
-                                Height="40" 
-                                CornerRadius="5" 
-                                FontSize="16" /> 
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
+
+
 
 
                 <StackPanel Orientation="Horizontal" Margin="160,0">
@@ -253,7 +252,7 @@
                         <Border x:Name="DragDropArea" 
                                 BorderBrush="#d8d9d7" 
                                 BorderThickness="1" 
-                                Background="#F0F0F0" 
+                                Background="#f5f5f5" 
                                 CornerRadius="5" 
                                 Height="150" 
                                 AllowDrop="True" 
