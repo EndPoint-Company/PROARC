@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace PROARC.src.Views
 {
@@ -16,12 +17,12 @@ namespace PROARC.src.Views
             Frame.Navigate(typeof(HomeNavigationPage));
         }
 
-        //private void LoginButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Suponha que o login foi bem-sucedido, então mostramos o NavigationView
-        //    var parentPage = (RegistrarProcesso01Page)this.Parent;
-        //    parentPage.nvSample.Visibility = Visibility.Visible; // Restaura o NavigationView
-        //    parentPage.contentFrame.Navigate(typeof(HomePage)); // Navega para a HomePage ou a página desejada após o login
-        //}
+        private void PasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                LoginButton_Click(sender, e);
+            }
+        }
     }
 }
