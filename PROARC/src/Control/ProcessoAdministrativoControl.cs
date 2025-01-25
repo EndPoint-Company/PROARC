@@ -170,4 +170,5 @@ namespace PROARC.src.Control
             catch (Exception) { return false; }
             return true;
         }
+    }
 }
