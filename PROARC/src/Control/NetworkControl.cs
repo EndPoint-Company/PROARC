@@ -11,14 +11,14 @@ namespace PROARC.src.Control
 {
     public class NetworkControl
     {
-        private static readonly string ServerIp = "35.199.99.101";
+        private static readonly string ServerIp = "127.0.0.1";
         private static readonly int ServerPort = 6666;
 
         public static async Task<string> SendRequestAsync(object request)
         {
             using TcpClient client = new();
             await client.ConnectAsync(ServerIp, ServerPort);
-
+            await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));
             NetworkStream stream = client.GetStream();
             string? jsonRequest = JsonSerializer.Serialize(request);
 
