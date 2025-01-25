@@ -19,24 +19,23 @@
             <ThemeShadow x:Name="SharedShadow" />
         </Grid.Resources>
         <ScrollViewer>
-            <StackPanel Padding="20" Spacing="32">
+            <StackPanel Padding="20" Spacing="32" Margin="0,0,0, 40">
                 <!-- Título -->
                 <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO" 
                            FontSize="32" 
                            FontWeight="Bold" 
                            Margin="160,40, 160, 0" />
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160, 0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160, 0" Spacing="10">
                     <Button x:Name="btnProcessoNovo" 
                         Content="Processo Novo" 
-                        Width="224" Height="50" 
                         Padding="20,10" 
                         Background="#003366" 
                         Foreground="White" 
                         Click="ProcessoNovo_Click" />
                     <Button x:Name="btnProcessoAntigo" 
                         Content="Processo Antigo" 
-                        Width="224" Height="50"
+                        Padding="20,10" 
                         Background="White" 
                         BorderBrush="#005BC1" 
                         Foreground="#003366"     
@@ -54,11 +53,11 @@
                                 <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="200" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Orientation="Horizontal">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="N° Processo" FontSize="18" FontWeight="Bold" />
-                                        <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="300" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
+                                        <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
                                         <TextBlock Text="Ano" FontSize="18" FontWeight="Bold" />
-                                        <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="300" Text="{Binding AnoProcesso}" IsReadOnly="False" />
+                                        <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="200" Text="{Binding AnoProcesso}" IsReadOnly="False" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -130,18 +129,18 @@
                         <TextBlock Text="Reclamante" FontSize="18" FontWeight="Bold" />
 
                         <!-- Primeira Linha -->
-                        <StackPanel Orientation="Horizontal" Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="20">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="Nome *" FontSize="14"/>
                                 <TextBox x:Name="inputNome" PlaceholderText="Insira o nome completo" Width="300"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="CPF *" FontSize="14"/>
-                                <TextBox x:Name="inputCpfReclamante" PlaceholderText="Insira o CPF" Width="200"/>
+                                <TextBox x:Name="inputCpfReclamante" PlaceholderText="Insira o CPF" Width="280"/>
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="RG *" FontSize="14"/>
-                                <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="200"/>
+                                <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="280"/>
                             </StackPanel>
                         </StackPanel>
                         
@@ -158,18 +157,18 @@
                         <TextBlock Text="Procurador" FontSize="18" FontWeight="Bold" />
 
                         <!-- Primeira Linha -->
-                        <StackPanel Orientation="Horizontal" Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="20">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="Nome *" FontSize="14"/>
                                 <TextBox PlaceholderText="Insira o nome completo" Width="300" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="CPF *" FontSize="14"/>
-                                <TextBox PlaceholderText="Insira o CPF" Width="200" />
+                                <TextBox PlaceholderText="Insira o CPF" Width="280" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="RG *" FontSize="14"/>
-                                <TextBox PlaceholderText="Insira o RG" Width="200" />
+                                <TextBox PlaceholderText="Insira o RG" Width="280" />
                             </StackPanel>
                         </StackPanel>
 
@@ -190,13 +189,14 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="CNPJ/CPF *" FontSize="14"/>
-                                    <TextBox PlaceholderText="Insira o CNPJ/CPF" Width="250" />
+                                    <TextBox PlaceholderText="Insira o CNPJ/CPF" Width="280" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="E-mail" FontSize="14"/>
                                     <TextBox PlaceholderText="Insira o E-mail" Width="250" />
                                 </StackPanel>
                             </StackPanel>
+                            
                             <StackPanel Orientation="Horizontal" Spacing="20">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="Rua" FontSize="14"/>
@@ -225,15 +225,12 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                                 <Button 
-                    Content="Adicionar Reclamado" 
-                    Background="#003366" 
-                    Foreground="White" 
-                    Padding="10,5" 
-                    Width="200" 
-                    Height="40" 
-                    CornerRadius="5" 
-                    FontSize="16" 
-                    Click="OnAddReclamadoClick" />
+                                    Content="Adicionar Reclamado" 
+                                    Background="#003366" 
+                                    Foreground="White" 
+                                    Padding="20, 10" 
+                                    CornerRadius="5" 
+                                    Click="OnAddReclamadoClick" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -245,14 +242,14 @@
                 <StackPanel Orientation="Horizontal" Margin="160,0">
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
-                    <StackPanel Padding="40" Spacing="10" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478" >
+                    <StackPanel Padding="40" Spacing="20" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478" >
                         <TextBlock Text="Anexar Arquivos" FontSize="18" FontWeight="Bold" />
 
                         <!-- Área para Arrastar e Soltar Arquivos -->
                         <Border x:Name="DragDropArea" 
                                 BorderBrush="#d8d9d7" 
                                 BorderThickness="1" 
-                                Background="#f5f5f5" 
+                                Background="#F7F7F7" 
                                 CornerRadius="5" 
                                 Height="150" 
                                 AllowDrop="True" 
@@ -261,7 +258,7 @@
 
                             <Grid>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-                                    <Button Content="Procurar" 
+                                    <Button Content="Procurar Arquivos" 
                                             x:Name="PickFileButton" 
                                             Background="#003366" 
                                             Foreground="White" 
@@ -281,11 +278,12 @@
 
                         <!-- Lista de Arquivos Anexados -->
                         <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
-                            <TextBlock Text="Nenhum arquivo selecionado." 
-                                       x:Name="MensagemNenhumArquivo" 
-                                       FontSize="14" 
-                                       Foreground="Gray" />
+                            <TextBlock Text="Nenhum arquivo selecionado."
+                               x:Name="MensagemNenhumArquivo"
+                               FontSize="14"
+                               Foreground="Gray" />
                         </StackPanel>
+
                     </StackPanel>
                 </StackPanel>
                 
@@ -296,7 +294,7 @@
                     Padding="20,10" 
                     Background="#003366" 
                     Foreground="White" 
-                    Margin="0,0,56,0" 
+                    Margin="0,0,50,0" 
                     Click="ContinuarButton_Click"/>
             </StackPanel>
         </ScrollViewer>

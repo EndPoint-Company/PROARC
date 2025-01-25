@@ -265,65 +265,106 @@ namespace PROARC.src.Views
 
         private StackPanel CriarSecaoReclamado()
         {
+            // Contêiner principal da seção de Reclamado
+            var reclamadoContainer = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 32, 0, 0)
+            };
+
+            // Contêiner da borda azul
+            reclamadoContainer.Children.Add(new StackPanel
+            {
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
+                Width = 10,
+                CornerRadius = new CornerRadius(10, 0, 0, 10)
+            });
+
+            // Grid principal para a seção
+            var reclamadoSection = new Grid
+            {
+                Background = new SolidColorBrush(Colors.White),
+                CornerRadius = new CornerRadius(0, 10, 10, 0),
+                Width = 1478,
+                Padding = new Thickness(40),
+                Shadow = new ThemeShadow()
+            };
+
+            reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+
+            // Definição de linhas e colunas no Grid
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Linha para o botão "X"
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Linha para o conteúdo
+            reclamadoSection.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            // Botão "X" para remover a seção
+            var removerBotao = new Button
+            {
+                Content = "X",
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
+                Foreground = new SolidColorBrush(Colors.White),
+                Width = 35,
+                Height = 35,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                CornerRadius = new CornerRadius(5),
+                Margin = new Thickness(0, -20, -20, 0) // Ajuste para posicionar fora do Grid
+            };
+
+            // Evento para remover o contêiner
+            removerBotao.Click += (s, e) =>
+            {
+                if (MainContainer.Children.Contains(reclamadoContainer))
+                {
+                    MainContainer.Children.Remove(reclamadoContainer);
+                }
+            };
+
+            // Adicionar o botão "X" ao Grid (linha 0, coluna 0)
+            Grid.SetRow(removerBotao, 0);
+            reclamadoSection.Children.Add(removerBotao);
+
+            // Conteúdo da seção
+            var conteudoReclamado = new StackPanel
+            {
+                Spacing = 10
+            };
+
+            // Título
+            conteudoReclamado.Children.Add(new TextBlock
+            {
+                Text = "Reclamado",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold
+            });
+
             // Primeira linha de campos
-            var primeiraLinha = CriarLinhaCampos(
+            conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Instituição *", "Insira o nome da Instituição", 300),
-                CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 250),
+                CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 280),
                 CriarCampo("E-mail", "Insira o E-mail", 250)
-            );
+            ));
 
             // Segunda linha de campos
-            var segundaLinha = CriarLinhaCampos(
+            conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Rua", "Insira a rua", 300),
                 CriarCampo("Bairro", "Insira o bairro", 280),
                 CriarCampo("Número", "Insira o número", 120),
                 CriarCampo("Cidade", "Insira a cidade", 180),
                 CriarCampo("UF", "Insira a UF", 100),
                 CriarCampo("CEP", "Insira o CEP", 150)
-            );
+            ));
 
-            // Seção de Reclamado
-            var reclamadoSection = new StackPanel
-            {
-                Padding = new Thickness(40),
-                Spacing = 10,
-                Background = new SolidColorBrush(Colors.White),
-                CornerRadius = new CornerRadius(0, 10, 10, 0),
-                Width = 1478,
-                Shadow = new ThemeShadow(),
-                Children =
-        {
-            new TextBlock
-            {
-                Text = "Reclamado",
-                FontSize = 18,
-                FontWeight = FontWeights.Bold
-            },
-            primeiraLinha,
-            segundaLinha
-        }
-            };
+            // Adicionar o conteúdo ao Grid (linha 1, coluna 0)
+            Grid.SetRow(conteudoReclamado, 1);
+            reclamadoSection.Children.Add(conteudoReclamado);
 
-            // Adicionar a Translation para sombra
-            reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+            // Adicionar a seção ao contêiner principal
+            reclamadoContainer.Children.Add(reclamadoSection);
 
-            // Container da seção
-            return new StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                Margin = new Thickness(0, 32, 0, 0),
-                Children =
-        {
-            new StackPanel
-            {
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
-                Width = 10,
-                CornerRadius = new CornerRadius(10, 0, 0, 10)
-            },
-            reclamadoSection
+            return reclamadoContainer;
         }
-            };
-        }
+
 
         private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
         {
