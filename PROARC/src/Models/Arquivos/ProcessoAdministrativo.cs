@@ -7,8 +7,8 @@ namespace PROARC.src.Models.Arquivos
 {
     public class ProcessoAdministrativo
     {
-        private string titulo;
-        private string caminhoDoProcesso;
+        private string? titulo;
+        private string? caminhoDoProcesso;
         private short ano;
         private Status status;
         private Motivo? motivo;
@@ -17,7 +17,9 @@ namespace PROARC.src.Models.Arquivos
         private DateTime? dataDaAudiencia;
         private DateTime? dataDeModificacao;
         private DateTime? dataDeCriacao;
-        private Dictionary<ArquivoTipo, Diretorio> diretorios;
+        private Dictionary<ArquivoTipo, Diretorio>? diretorios;
+
+        public ProcessoAdministrativo() { }
 
         public ProcessoAdministrativo(
             string caminhoDoProcesso, string titulo, short ano, Motivo? motivo = null,
@@ -67,7 +69,7 @@ namespace PROARC.src.Models.Arquivos
             this.diretorios[arquivo.Tipo].RemoverArquivo(arquivo);
         }
 
-        public string Titulo { get => this.titulo; }
+        public string Titulo { get => this.titulo; set { this.titulo = value; } }
         public short Ano { get => this.ano; set { this.ano = value; } }
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
         public Reclamado? Reclamado { get => this.reclamado; set { this.reclamado = value; } }
