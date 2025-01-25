@@ -23,7 +23,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetMotivoAsyncTest1()
         {
-            Console.WriteLine((await MotivoControl.GetMotivoAsync(20)).Nome);
+            Console.WriteLine((await MotivoControl.GetMotivoAsync(5)).Nome);
         }
 
         [TestMethod()]
@@ -40,7 +40,7 @@ namespace PROARC.src.Control.Tests
 
             foreach (Motivo motivos in motivo)
             {
-                Console.WriteLine($"Nome = {motivos.Nome}, Descrição = {motivos.Descricao}");
+                Console.WriteLine($"Nome = {motivos.Nome}");
             }
         }
     

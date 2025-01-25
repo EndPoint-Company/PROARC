@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Models.Arquivos
@@ -68,6 +69,24 @@ namespace PROARC.src.Models.Arquivos
         {
             this.diretorios[arquivo.Tipo].RemoverArquivo(arquivo);
         }
+
+        public override string ToString()
+        {
+            return $"Processo Administrativo:\n" +
+                   $"Título: {titulo ?? "Não definido"}\n" +
+                   $"Caminho do Processo: {caminhoDoProcesso ?? "Não definido"}\n" +
+                   $"Ano: {ano}\n" +
+                   $"Status: {status}\n" +
+                   $"Motivo: {motivo?.ToString() ?? "Não definido"}\n" +
+                   $"Reclamado: {reclamado?.ToString() ?? "Não definido"}\n" +
+                   $"Reclamante: {reclamante?.ToString() ?? "Não definido"}\n" +
+                   $"Data da Audiência: {dataDaAudiencia?.ToString("dd/MM/yyyy") ?? "Não definida"}\n" +
+                   $"Data de Modificação: {dataDeModificacao?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Não definida"}\n" +
+                   $"Data de Criação: {dataDeCriacao?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Não definida"}\n" +
+                   $"Diretórios:\n" +
+                   $"{(diretorios != null ? string.Join("\n", diretorios.Select(d => $"- {d.Key}: {d.Value}")) : "Nenhum")}";
+        }
+
 
         public string Titulo { get => this.titulo; set { this.titulo = value; } }
         public short Ano { get => this.ano; set { this.ano = value; } }

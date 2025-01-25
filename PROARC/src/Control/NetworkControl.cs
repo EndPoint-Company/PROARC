@@ -19,7 +19,7 @@ namespace PROARC.src.Control
             using TcpClient client = new();
             await client.ConnectAsync(ServerIp, ServerPort);
 
-            await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));
+            await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));    
 
             NetworkStream stream = client.GetStream();
             string? jsonRequest = JsonSerializer.Serialize(request);

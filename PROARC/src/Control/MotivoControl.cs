@@ -32,18 +32,17 @@ namespace PROARC.src.Control
 
         public static async Task<Motivo?> GetMotivoAsync(int id)
         {
-            var request = new { action = "get_motivo_id", id };
+            var request = new { action = "get_motivo_by_id", id };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 2)
+            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
                 string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;
-                string descricaoMotivo = motivoElement[1].GetString() ?? string.Empty;
 
-                return new Motivo(nomeMotivo, descricaoMotivo);
+                return new Motivo(nomeMotivo);
             }
 
             return null;

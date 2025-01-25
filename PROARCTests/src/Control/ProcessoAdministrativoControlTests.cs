@@ -16,5 +16,11 @@ namespace PROARC.src.Control.Tests
         {
             await ProcessoAdministrativoControl.GetAll();
         }
+
+        [TestMethod()]
+        public async Task GetTest()
+        {
+            await ProcessoAdministrativoControl.Get(1);
+        }
     }
 }
