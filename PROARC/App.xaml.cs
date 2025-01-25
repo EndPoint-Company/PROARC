@@ -9,30 +9,34 @@ namespace PROARC
 {
     public partial class App : Application
     {
+        private static App _instance;
+        private Window? _mainWindow;
+
         public App()
         {
+            _instance = this;
             this.InitializeComponent();
         }
 
         protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            m_window = new MainWindow();
+            _mainWindow = new MainWindow();
             Frame rootFrame = new Frame();
             rootFrame.NavigationFailed += OnNavigationFailed;
             rootFrame.Navigate(typeof(LoginPage), args.Arguments);
 
-            m_window.Activate();
+            _mainWindow.Activate();
 
             await Task.Delay(1280);
 
-            m_window.Content = rootFrame;
+            _mainWindow.Content = rootFrame;
         }
+
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Falha ao carregar página " + e.SourcePageType.FullName);
         }
 
-        private Window? m_window;
-        public Window MainWindow => m_window;
+        public static Window MainWindow => _instance._mainWindow;
     }
 }
