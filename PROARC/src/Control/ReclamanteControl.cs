@@ -1,67 +1,96 @@
-﻿using PROARC.src.Control.Database;
+﻿
 using PROARC.src.Models;
 using System;
 using System.Collections.Generic;
+using static PROARC.src.Control.NetworkControl;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PROARC.src.Control
 {
     public static class ReclamanteControl
     {
-        public static int? GetReclamanteId(string rg)
+        public static async Task<Reclamante?> GetReclamanteByIdAsync(int id)
         {
-            string sql = $"use ProArc; SELECT reclamante_id FROM Reclamantes WHERE rg = '{rg}'";
+            var request = new { action = "get_reclamante_by_id", id };
+            string response = await SendRequestAsync(request);
 
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
 
-            if (reader.Count >= 1)
+            if (root.TryGetProperty("reclamante", out JsonElement reclamanteElement) && reclamanteElement.ValueKind == JsonValueKind.Array)
             {
-                int idReclamante = int.Parse(reader[0]);
+                string nome = reclamanteElement[1].GetString() ?? string.Empty;
+                string? rg = reclamanteElement[2].GetString();
+                string? cpf = reclamanteElement[3].GetString();
 
-                return idReclamante;
+                return new Reclamante(nome, cpf, rg);
             }
 
             return null;
         }
 
-        public static Reclamante? GetReclamante(int id)
+        public static async Task<Reclamante?> GetReclamanteByCpfAsync(string cpf)
         {
-            string sql = $"use ProArc; SELECT nome, rg, cpf FROM Reclamantes WHERE reclamante_id = {id}";
+            var request = new { action = "get_reclamante_by_cpf", cpf };
+            string response = await SendRequestAsync(request);
 
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
 
-            if (reader.Count >= 3)
+            if (root.TryGetProperty("reclamante", out JsonElement reclamanteElement) && reclamanteElement.ValueKind == JsonValueKind.Array)
             {
-                string nome = reader[0];
-                string rg = reader[1];
-                string cpf = reader[2];
+                string nome = reclamanteElement[1].GetString() ?? string.Empty;
+                string? rg = reclamanteElement[2].GetString();
+                string? cpfFromResponse = reclamanteElement[3].GetString();
 
-                return new Reclamante(nome, cpf, rg);   
+                return new Reclamante(nome, cpfFromResponse, rg);
             }
 
             return null;
         }
 
-        public static LinkedList<Reclamante>? GetAllReclamante()
+        public static async Task<Reclamante?> GetReclamanteByRgAsync(string rg)
         {
-            LinkedList<Reclamante> reclamantes = new LinkedList<Reclamante>();
-            string sql = "use ProArc; SELECT reclamante_id FROM Reclamantes";
+            var request = new { action = "get_reclamante_by_rg", rg };
+            string response = await SendRequestAsync(request);
 
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
 
-            if (reader.Count == 0)
+            if (root.TryGetProperty("reclamante", out JsonElement reclamanteElement) && reclamanteElement.ValueKind == JsonValueKind.Array)
             {
-                return null;
+                string nome = reclamanteElement[1].GetString() ?? string.Empty;
+                string? rgFromResponse = reclamanteElement[2].GetString();
+                string? cpf = reclamanteElement[3].GetString();
+
+                return new Reclamante(nome, cpf, rgFromResponse);
             }
 
-            foreach (string idStr in reader)
+            return null;
+        }
+
+        public static async Task<List<Reclamante>> GetAllReclamantesAsync()
+        {
+            var request = new { action = "get_all_reclamantes" };
+            string response = await SendRequestAsync(request);
+
+            List<Reclamante> reclamantes = new();
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            JsonElement root = doc.RootElement;
+
+            if (root.TryGetProperty("reclamantes", out JsonElement reclamantesArray) && reclamantesArray.ValueKind == JsonValueKind.Array)
             {
-                if (int.TryParse(idStr, out int id))
+                foreach (JsonElement item in reclamantesArray.EnumerateArray())
                 {
-                    Reclamante? reclamante = GetReclamante(id);
-
-                    if (reclamante != null)
+                    if (item.ValueKind == JsonValueKind.Array)
                     {
-                        reclamantes.AddLast(reclamante);
+                        string nome = item[1].GetString() ?? string.Empty;
+                        string? rg = item[2].GetString();
+                        string? cpf = item[3].GetString();
+
+                        reclamantes.Add(new Reclamante(nome, cpf, rg));
                     }
                 }
             }
@@ -69,43 +98,39 @@ namespace PROARC.src.Control
             return reclamantes;
         }
 
-        public static void AddReclamante(Reclamante reclamante)
+        public static async Task AddReclamanteAsync(Reclamante reclamante)
         {
-            if (reclamante == null)
-            {
-                throw new Exception("Insira um reclamante válido.");
-            }
-
-            string sql = $"use ProArc; INSERT INTO Reclamantes (nome, rg, cpf) VALUES ('{reclamante.Nome}', '{reclamante.Rg}', '{reclamante.Cpf}')";
-
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-
-            //foreach (string str in reader)
-            //{
-            //    Console.WriteLine("Reclamante adicionado com sucesso");
-            //}
+            var request = new { action = "add_reclamante", reclamante };
+            await SendRequestAsync(request);
         }
 
-        public static void AtualizarReclamante(string rg, string novoNome, string novoRg, string novoCpf)
+        public static async Task UpdateReclamanteByIdAsync(int id, Reclamante reclamante)
         {
-            string sql = $"use ProArc; UPDATE Reclamantes SET nome = '{novoNome}', rg = '{novoRg}', cpf = '{novoCpf}' WHERE rg  = '{rg}'";
-
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-            foreach (string str in reader)
-            {
-                Console.WriteLine("Reclamante atualizado com sucesso");
-            }
+            var request = new { action = "update_reclamante_by_id", id, reclamante };
+            await SendRequestAsync(request);
         }
 
-        public static void RemoverReclamante(string rg)
+        public static async Task RemoveReclamanteByIdAsync(int id)
         {
-            string sql = $"use ProArc; DELETE FROM Reclamantes WHERE rg = '{rg}'";
+            var request = new { action = "remove_reclamante_by_id", id };
+            await SendRequestAsync(request);
+        }
 
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-            foreach (string str in reader)
+        public static async Task<int> CountReclamantesAsync()
+        {
+            var request = new { action = "count_reclamantes" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
             {
-                Console.WriteLine("Reclamante removido com sucesso");
+                return countElement.GetInt32();
             }
+
+            return 0;
         }
     }
 }
+

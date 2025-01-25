@@ -126,7 +126,7 @@ namespace PROARC.src.Views
                                         inputCpfReclamante.Text,
                                         inputRgReclamante.Text);
 
-            ReclamanteControl.AddReclamante(reclamante);
+            //ReclamanteControl.AddReclamante(reclamante);
 
             dicionarioObjetos.Add("Reclamante", reclamante);
 
