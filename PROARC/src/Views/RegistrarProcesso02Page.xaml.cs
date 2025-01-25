@@ -139,7 +139,7 @@ namespace PROARC.src.Views
 
             //Reclamado reclamado = new Reclamado("Jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
 
-            ReclamadoControl.AddReclamado(reclamado);
+            //ReclamadoControl.AddReclamado(reclamado);
             dicionarioObjetos.Add("Reclamado", reclamado);
 
             Frame.Navigate(typeof(RegistrarProcesso03Page), dicionarioObjetos);

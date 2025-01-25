@@ -37,19 +37,19 @@ namespace PROARC.src.Views
         private void CarregarMotivos()
         {
             // Simula busca no banco de dados
-            LinkedList<string>? motivos = MotivoControl.GetAllMotivosToString();
+            //LinkedList<string>? motivos = MotivoControl.GetAllMotivosToString();
       
-            cbMotivo.ItemsSource = motivos;
+            //cbMotivo.ItemsSource = motivos;
         }
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dataAudiencia = calendario.Date.Value.DateTime;
-            Motivo motivo = new(cbMotivo.SelectedItem.ToString());
-            MotivoControl.AddMotivo(motivo);
-            FileNetworkControl.Local_SetDefaultFolder(@"D:/ProarcFiles/Teste1");
-            ProcessoAdministrativo processo = new(@"D:/ProarcFiles/Teste1", "0003o2024", short.Parse(DateTime.Now.Year.ToString()), motivo, reclamado, reclamante, dataAudiencia);
-            ProcessoAdministrativoControl.RegistrarProcessoAdministrativo(processo);
+            //DateTime dataAudiencia = calendario.Date.Value.DateTime;
+            //Motivo motivo = new(cbMotivo.SelectedItem.ToString());
+            //MotivoControl.AddMotivo(motivo);
+            //FileNetworkControl.Local_SetDefaultFolder(@"D:/ProarcFiles/Teste1");
+            //ProcessoAdministrativo processo = new(@"D:/ProarcFiles/Teste1", "0003o2024", short.Parse(DateTime.Now.Year.ToString()), motivo, reclamado, reclamante, dataAudiencia);
+            //ProcessoAdministrativoControl.RegistrarProcessoAdministrativo(processo);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

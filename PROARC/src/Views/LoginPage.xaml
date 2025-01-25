@@ -61,7 +61,7 @@
                     </StackPanel>
 
                     <PasswordBox
-                        x:Name="PasswordBox"
+                        Name="CaixaSenha"
                         Padding="10"
                         Width="269"
                         PlaceholderText="Chave de acesso"

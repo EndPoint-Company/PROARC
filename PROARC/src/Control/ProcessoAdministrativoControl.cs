@@ -1,68 +1,174 @@
 ﻿using System;
 using System.Collections.Generic;
-using PROARC.src.Control.Database;
+using System.Linq;
+using System.Text.Json;
+using System.Text;
+using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Models.Tipos;
+using PROARC.src.Models;
+using Newtonsoft.Json;
+using static PROARC.src.Control.NetworkControl;
+using Newtonsoft.Json.Linq;
+using System.Globalization;
+using System.Diagnostics;
 
 namespace PROARC.src.Control
 {
-    public static class ProcessoAdministrativoControl
+    public class ProcessoAdministrativoControl : IDatabaseCRUD<ProcessoAdministrativo>
     {
-        // Engloba o controle das entidades-arquivo.
-
-        // Usei snake_case em alguns lugares, mas depois a gente ajeita isso.
-
-        public static void RegistrarProcessoAdministrativo(ProcessoAdministrativo processo)
+        public static async Task<List<ProcessoAdministrativo>?> GetAll()
         {
-            // Resolver questões de nulidade
-            int? motivo_id = MotivoControl.GetMotivoId(processo.Motivo.Nome);
+            var request = new { action = "get_all_processos" };
 
-            int? reclamante_id = ReclamanteControl.GetReclamanteId(processo.Reclamante.Rg);
-            int? reclamado_id = null; // TODO
+            string response = await SendRequestAsync(request);
+            var jo = JObject.Parse(response);
+            Console.WriteLine(jo);
 
-            if (processo.Reclamado?.Cpf != null)
-                reclamado_id = ReclamadoControl.GetReclamadoId(processo.Reclamado.Cpf, processo.Reclamado.Nome);
-            if (processo.Reclamado?.Cnpj != null)
-                reclamado_id = ReclamadoControl.GetReclamadoId(processo.Reclamado.Cnpj, processo.Reclamado.Nome);
+            List<ProcessoAdministrativo> processos = new List<ProcessoAdministrativo>();
 
-            AdicionarProcessoAdministrativo(processo.Titulo, processo.Ano, motivo_id, reclamante_id,
-                reclamado_id, processo.CaminhoDoProcesso, processo.DataDaAudiencia);
+            foreach (var a in jo.Values())
+            {
+                var list = JsonConvert.DeserializeObject<List<List<object>>>((string)a);
+                foreach (List<object> b in list)
+                {
+                    ProcessoAdministrativo processo = new ProcessoAdministrativo();
+                    Console.WriteLine("!!!!!!!!");
+
+                    Motivo? motivo = await MotivoControl.GetMotivoAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
+                    Console.WriteLine("!!!!!!!!");
+                    processo.Motivo = motivo;
+                    Console.WriteLine("!!!!!!!!");
+
+                    Reclamante? reclamante = await ReclamanteControl.GetReclamanteByIdAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
+                    processo.Reclamante = reclamante;
+                    Console.WriteLine("!!!!!!!!");
+
+                    processo.Titulo = (string)b[3];
+
+                    processo.Status = Status.EmTramitacaoAguardandoDocumentacao;
+
+                    processo.CaminhoDoProcesso = (string)b[5];
+
+                    processo.Ano = Convert.ToInt16(b[6]);
+
+                    try
+                    {
+                        processo.DataDaAudiencia = DateTime.Parse((string)b[7], CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                        processo.DataDaAudiencia = null;
+                    }
+
+                    Console.WriteLine(processo.ToString());
+
+                    processos.Add(processo);
+                }
+
+            }
+
+            return processos;
         }
 
-        public static ProcessoAdministrativo? GetProcessoAdministrativo(string tituloDoProcesso)
+        public static async Task<ProcessoAdministrativo?> Get(int id)
         {
-            string sql = "USE ProArc; SELECT motivo_id, reclamante_id, reclamado_id, numero_processo," +
-                $" caminho_processo, ano, data_audiencia FROM ProcessosAdministrativos WHERE titulo_processo = {tituloDoProcesso}";
+            var request = new { action = "get_processo_by_id", id };
 
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
+            ProcessoAdministrativo processo = new();
 
-            return new(
-                reader[4],
-                tituloDoProcesso,
-                short.Parse(reader[5]),
-                MotivoControl.GetMotivo(reader[0]),
-                ReclamadoControl.GetReclamado(int.Parse(reader[2])),
-                ReclamanteControl.GetReclamante(int.Parse(reader[1])),
-                DateTime.Parse(reader[3])
-            );
+            var jo = JObject.Parse(response);
+            Console.WriteLine(jo);
+
+            foreach (var a in jo.Values())
+            {
+                var list = JsonConvert.DeserializeObject<List<List<object>>>((string)a);
+                foreach (List<object> b in list)
+                {
+                    Console.WriteLine("!!!!!!!!");
+
+                    Motivo? motivo = await MotivoControl.GetMotivoAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
+                    Console.WriteLine("!!!!!!!!");
+                    processo.Motivo = motivo;
+                    Console.WriteLine("!!!!!!!!");
+
+                    Reclamante? reclamante = await ReclamanteControl.GetReclamanteByIdAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
+                    processo.Reclamante = reclamante;
+                    Console.WriteLine("!!!!!!!!");
+
+                    processo.Titulo = (string)b[3];
+
+                    processo.Status = Status.EmTramitacaoAguardandoDocumentacao;
+
+                    processo.CaminhoDoProcesso = (string)b[5];
+
+                    processo.Ano = Convert.ToInt16(b[6]);
+
+                    try
+                    {
+                        processo.DataDaAudiencia = DateTime.Parse((string)b[7], CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                        processo.DataDaAudiencia = null;
+                    }
+
+                    Console.WriteLine(processo.ToString());
+                }
+
+            }
+
+            return processo;
         }
 
-        // Baixo nível, deve ser usada no RegistrarProcessoAdministrativo()
-        private static void AdicionarProcessoAdministrativo
-            (string titulo_processo, short ano, int? motivo_id = null, int? reclamante_id = null,
-            int? reclamado_id = null, string? caminho_processo = null, DateTime? data_audiencia = null,
-            Status status = Status.EmTramitacaoAguardandoEnvioDaNotificacao) // Transformar em objeto depois
+        public static async Task<bool> Insert(ProcessoAdministrativo processo)
         {
-            string? sqlFormattedDate = data_audiencia?.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var request = new { action = "add_processo", processo };
 
-            string sql = "USE ProArc; INSERT INTO ProcessosAdministrativos " +
-                "(motivo_id, reclamante_id, reclamado_id, titulo_processo, status_processo, caminho_processo, ano, data_audiencia)" +
-                $"VALUES ({motivo_id}, {reclamante_id}, {reclamado_id}, '{titulo_processo}', '{status}', '{caminho_processo}', {ano}, '{sqlFormattedDate}')";
+            try
+            {
+                string response = await SendRequestAsync(request);
 
-            DatabaseOperations.QuerySqlCommandNoReturn(sql);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
-            FileNetworkControl.Local_CriarProcessoAdministrativo(titulo_processo);
-            FileNetworkControl.Local_CriarAllDiretorios(titulo_processo);
+        public static async Task<bool> Update
+            (int id, int motivo_id, int reclamante_id,
+            string titulo_processo, short ano, Status status_processo,
+            string path_processo, string data_audiencia)
+        {
+            var request = new
+            {
+                action = "update_processo_by_id",
+                id,
+                motivo_id,
+                reclamante_id,
+                titulo_processo,
+                ano,
+                status_processo,
+                path_processo,
+                data_audiencia
+            };
+
+            try { await SendRequestAsync(request); }
+            catch (Exception) { return false; }
+
+            return true;
+        }
+
+        public static async Task<bool> Delete(int id)
+        {
+            var request = new { action = "remove_processo_by_id", id };
+            try { await SendRequestAsync(request); }
+            catch (Exception) { return false; }
+            return true;
         }
     }
 }
