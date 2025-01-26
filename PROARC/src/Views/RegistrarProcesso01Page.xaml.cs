@@ -100,8 +100,6 @@ namespace PROARC.src.Views
             AnoProcesso = "2023";
         }
 
-
-
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             // Torna a seção "Procurador" visível quando o checkbox está marcado
@@ -120,9 +118,7 @@ namespace PROARC.src.Views
                 (new(@"dir/folder", "titulo", 2025, new("Cobrança indevida"),
                 null, new("Junin", "11122266677", "rgmassa"), DateTime.Now)); 
             // Só inserir os dados das caixas aqui.
-            // A parte do Reclamado deve ser feita no servidor.
         }
-
 
         // Botão para abrir o seletor de arquivos
         private async void PickFileButton_Click(object sender, RoutedEventArgs e)
@@ -354,7 +350,6 @@ namespace PROARC.src.Views
 
             return reclamadoContainer;
         }
-
 
         private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
         {
