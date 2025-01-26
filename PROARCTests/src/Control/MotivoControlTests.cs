@@ -17,19 +17,19 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetMotivoAsyncTest()
         {
-            Console.WriteLine((await MotivoControl.GetMotivoAsync("Curiosidade")).Nome);
+            Console.WriteLine(await MotivoControl.GetMotivoAsync("Atraso na entrega"));
         }
 
         [TestMethod()]
         public async Task GetMotivoAsyncTest1()
         {
-            Console.WriteLine((await MotivoControl.GetMotivoAsync(20)).Nome);
+            Console.WriteLine((await MotivoControl.GetMotivoAsync(7)).Nome);
         }
 
         [TestMethod()]
         public async Task GetIdMotivoAsyncTest()
         {
-            int? abacaxi = await MotivoControl.GetIdMotivoAsync("Apetite");
+            int? abacaxi = await MotivoControl.GetIdMotivoAsync("Atraso na entrega");
             Console.WriteLine(abacaxi);
         }
 
@@ -40,26 +40,32 @@ namespace PROARC.src.Control.Tests
 
             foreach (Motivo motivos in motivo)
             {
-                Console.WriteLine($"Nome = {motivos.Nome}, Descrição = {motivos.Descricao}");
+                Console.WriteLine(motivos);
             }
-        }
-    
-        [TestMethod()]
-        public async Task AddMotivoAsyncTest()
-        {
-            await MotivoControl.AddMotivoAsync(new Motivo("juros splashsticos", "marcos gostoso"));
         }
 
         [TestMethod()]
-        public async Task RemoveMotivoAsyncTest()
+        public async Task AddMotivoAsyncTest()
         {
-            await MotivoControl.UpdateMotivoAsync("Estudo", "juros capistropolicos", "redefinido para análise futura");
+            await MotivoControl.AddMotivoAsync(new Motivo("juros splashsticos"));
         }
 
         [TestMethod()]
         public async Task UpdateMotivoAsyncTest()
         {
-            await MotivoControl.RemoveMotivoAsync("juros capistropolicos");
+            await MotivoControl.UpdateMotivoAsync("Atraso na entrega", "juros capistropolicos");
+        }
+
+        [TestMethod()]
+        public async Task RemoveMotivoAsyncTest()
+        {
+            await MotivoControl.RemoveMotivoAsync("Juros abusivos");
+        }
+
+        [TestMethod()]
+        public async Task CountMotivosTest()
+        {
+            Console.WriteLine(await MotivoControl.CountMotivos());
         }
     }
 }

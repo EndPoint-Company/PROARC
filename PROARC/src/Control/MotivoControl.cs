@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
+using PROARC.src.Models;
 
 namespace PROARC.src.Control
 {
@@ -13,18 +14,16 @@ namespace PROARC.src.Control
     {
         public static async Task<Motivo?> GetMotivoAsync(string nome)
         {
-            var request = new { action = "get_motivo", nome };
+            var request = new { action = "get_motivo_by_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 2)
+            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
-                string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;
-                string descricaoMotivo = motivoElement[1].GetString() ?? string.Empty;
-
-                return new Motivo(nomeMotivo, descricaoMotivo);
+                string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;      
+                return new Motivo(nomeMotivo);
             }
 
             return null;
@@ -32,18 +31,18 @@ namespace PROARC.src.Control
 
         public static async Task<Motivo?> GetMotivoAsync(int id)
         {
-            var request = new { action = "get_motivo_id", id };
+            var request = new { action = "get_motivo_by_id", id };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 2)
+            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
                 string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;
-                string descricaoMotivo = motivoElement[1].GetString() ?? string.Empty;
+                
 
-                return new Motivo(nomeMotivo, descricaoMotivo);
+                return new Motivo(nomeMotivo);
             }
 
             return null;
@@ -51,7 +50,7 @@ namespace PROARC.src.Control
 
         public static async Task<int?> GetIdMotivoAsync(string nome)
         {
-            var request = new { action = "get_id_motivo", nome };
+            var request = new { action = "get_id_motivo_by_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -75,7 +74,6 @@ namespace PROARC.src.Control
         public static async Task<List<Motivo>> GetAllMotivosAsync()
         {
             var request = new { action = "get_all_motivos" };
-
             string response = await SendRequestAsync(request);
 
             List<Motivo> motivos = new();
@@ -83,40 +81,17 @@ namespace PROARC.src.Control
             using JsonDocument doc = JsonDocument.Parse(response);
             JsonElement root = doc.RootElement;
 
-
-            string rootString = root.ToString();
-            List<char> reader = rootString.ToList();
-
-            string nome = string.Empty;
-            string descricao = string.Empty;
-            bool isNome = true;
-
-            StringBuilder currentString = new StringBuilder();
-
-            foreach (char ch in reader)
+            if (root.TryGetProperty("motivos", out JsonElement motivosArray) && motivosArray.ValueKind == JsonValueKind.Array)
             {
-                if (ch == ',' || ch == '}')
+                foreach (JsonElement item in motivosArray.EnumerateArray())
                 {
-                    if (isNome)
-                    {
-                        nome = currentString.ToString();
-                        isNome = false;
+                    if (item.ValueKind == JsonValueKind.Array)
+                    {                       
+                        string nome = item[0].GetString() ?? string.Empty;                       
+                        motivos.Add(new Motivo(nome));
                     }
-                    else
-                    {
-                        descricao = currentString.ToString();
-                        motivos.Add(new Motivo(nome, descricao));
-                        isNome = true;
-                    }
-
-                    currentString.Clear();
-                }
-                else if (ch != '{' && ch != '[' && ch != ']' && ch != '"')
-                {
-                    currentString.Append(ch);
                 }
             }
-
             return motivos;
         }
 
@@ -128,14 +103,30 @@ namespace PROARC.src.Control
 
         public static async Task RemoveMotivoAsync(string nome)
         {
-            var request = new { action = "remove_motivo", nome };
+            var request = new { action = "remove_motivo_by_nome", nome };
             await SendRequestAsync(request);
         }
 
         public static async Task UpdateMotivoAsync(string nome, string? novoNome = null, string? novaDescricao = null)
         {
-            var request = new { action = "update_motivo", nome, novoNome, novaDescricao };
+            var request = new { action = "update_motivo_by_id", nome, novoNome, novaDescricao };
             await SendRequestAsync(request);
+        }
+
+        public static async Task<int> CountMotivos()
+        {
+            var request = new { action = "count_motivos" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+            return 0;
+
         }
     }
 }

@@ -17,7 +17,7 @@ namespace PROARC.src.Models.Tipos
 
         public override string ToString()
         {
-            return $"Nome: {nome} \nDescricao: {descricao}";
+            return nome ;
         }
 
         public string Nome { get => this.nome; set { this.nome = value; } }
