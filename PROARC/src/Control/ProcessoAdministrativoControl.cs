@@ -33,20 +33,16 @@ namespace PROARC.src.Control
                 foreach (List<object> b in list)
                 {
                     ProcessoAdministrativo processo = new ProcessoAdministrativo();
-                    Console.WriteLine("!!!!!!!!");
 
                     Motivo? motivo = await MotivoControl.GetMotivoAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
-                    Console.WriteLine("!!!!!!!!");
                     processo.Motivo = motivo;
-                    Console.WriteLine("!!!!!!!!");
 
                     Reclamante? reclamante = await ReclamanteControl.GetReclamanteByIdAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
                     processo.Reclamante = reclamante;
-                    Console.WriteLine("!!!!!!!!");
 
                     processo.Titulo = (string)b[3];
 
-                    processo.Status = Status.EmTramitacaoAguardandoDocumentacao;
+                    processo.Status = (string)b[4];
 
                     processo.CaminhoDoProcesso = (string)b[5];
 
@@ -61,11 +57,8 @@ namespace PROARC.src.Control
                         processo.DataDaAudiencia = null;
                     }
 
-                    Console.WriteLine(processo.ToString());
-
                     processos.Add(processo);
                 }
-
             }
 
             return processos;
@@ -87,20 +80,15 @@ namespace PROARC.src.Control
                 var list = JsonConvert.DeserializeObject<List<List<object>>>((string)a);
                 foreach (List<object> b in list)
                 {
-                    Console.WriteLine("!!!!!!!!");
-
                     Motivo? motivo = await MotivoControl.GetMotivoAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
-                    Console.WriteLine("!!!!!!!!");
                     processo.Motivo = motivo;
-                    Console.WriteLine("!!!!!!!!");
 
                     Reclamante? reclamante = await ReclamanteControl.GetReclamanteByIdAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
                     processo.Reclamante = reclamante;
-                    Console.WriteLine("!!!!!!!!");
 
                     processo.Titulo = (string)b[3];
 
-                    processo.Status = Status.EmTramitacaoAguardandoDocumentacao;
+                    processo.Status = (string)b[4];
 
                     processo.CaminhoDoProcesso = (string)b[5];
 
@@ -114,8 +102,6 @@ namespace PROARC.src.Control
                     {
                         processo.DataDaAudiencia = null;
                     }
-
-                    Console.WriteLine(processo.ToString());
                 }
 
             }

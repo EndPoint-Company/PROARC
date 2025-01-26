@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
+using PROARC.src.Models;
+using Newtonsoft.Json.Linq;
 
 namespace PROARC.src.Control
 {
@@ -13,18 +15,16 @@ namespace PROARC.src.Control
     {
         public static async Task<Motivo?> GetMotivoAsync(string nome)
         {
-            var request = new { action = "get_motivo", nome };
+            var request = new { action = "get_motivo_by_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 2)
+            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
-                string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;
-                string descricaoMotivo = motivoElement[1].GetString() ?? string.Empty;
-
-                return new Motivo(nomeMotivo, descricaoMotivo);
+                string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;      
+                return new Motivo(nomeMotivo);
             }
 
             return null;
@@ -50,7 +50,7 @@ namespace PROARC.src.Control
 
         public static async Task<int?> GetIdMotivoAsync(string nome)
         {
-            var request = new { action = "get_id_motivo", nome };
+            var request = new { action = "get_id_motivo_by_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -76,43 +76,16 @@ namespace PROARC.src.Control
             var request = new { action = "get_all_motivos" };
 
             string response = await SendRequestAsync(request);
+            JObject jsonResponse = JObject.Parse(response);
 
-            List<Motivo> motivos = new();
+            List<Motivo> motivos = new List<Motivo>();
 
-            using JsonDocument doc = JsonDocument.Parse(response);
-            JsonElement root = doc.RootElement;
-
-
-            string rootString = root.ToString();
-            List<char> reader = rootString.ToList();
-
-            string nome = string.Empty;
-            string descricao = string.Empty;
-            bool isNome = true;
-
-            StringBuilder currentString = new StringBuilder();
-
-            foreach (char ch in reader)
+            foreach (JToken motivosList in jsonResponse.Values())
             {
-                if (ch == ',' || ch == '}')
+                foreach (var motivoNome in motivosList.Values())
                 {
-                    if (isNome)
-                    {
-                        nome = currentString.ToString();
-                        isNome = false;
-                    }
-                    else
-                    {
-                        descricao = currentString.ToString();
-                        motivos.Add(new Motivo(nome, descricao));
-                        isNome = true;
-                    }
-
-                    currentString.Clear();
-                }
-                else if (ch != '{' && ch != '[' && ch != ']' && ch != '"')
-                {
-                    currentString.Append(ch);
+                    Motivo motivo = new((string)motivoNome);
+                    motivos.Add(motivo);
                 }
             }
 
@@ -127,14 +100,30 @@ namespace PROARC.src.Control
 
         public static async Task RemoveMotivoAsync(string nome)
         {
-            var request = new { action = "remove_motivo", nome };
+            var request = new { action = "remove_motivo_by_nome", nome };
             await SendRequestAsync(request);
         }
 
         public static async Task UpdateMotivoAsync(string nome, string? novoNome = null, string? novaDescricao = null)
         {
-            var request = new { action = "update_motivo", nome, novoNome, novaDescricao };
+            var request = new { action = "update_motivo_by_id", nome, novoNome, novaDescricao };
             await SendRequestAsync(request);
+        }
+
+        public static async Task<int> CountMotivos()
+        {
+            var request = new { action = "count_motivos" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+            return 0;
+
         }
     }
 }

@@ -110,8 +110,6 @@ namespace PROARC.src.Views
             AnoProcesso = "2023";
         }
 
-
-
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             // Torna a seção "Procurador" visível quando o checkbox está marcado
@@ -126,23 +124,11 @@ namespace PROARC.src.Views
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (inputNome.Text == "" || inputRgReclamante.Text == "")
-            {
-                return;
-            }
-
-            Dictionary<string, object> dicionarioObjetos = new();
-            Reclamante reclamante = new(inputNome.Text,
-                                        inputCpfReclamante.Text,
-                                        inputRgReclamante.Text);
-
-            //ReclamanteControl.AddReclamante(reclamante);
-
-            dicionarioObjetos.Add("Reclamante", reclamante);
-
-            Frame.Navigate(typeof(RegistrarProcesso02Page), dicionarioObjetos);
+            ProcessoAdministrativoControl.Insert
+                (new(@"dir/folder", "titulo", 2025, new("Cobrança indevida"),
+                null, new("Junin", "11122266677", "rgmassa"), DateTime.Now)); 
+            // Só inserir os dados das caixas aqui.
         }
-
 
         // Botão para abrir o seletor de arquivos
         private async void PickFileButton_Click(object sender, RoutedEventArgs e)
@@ -374,7 +360,6 @@ namespace PROARC.src.Views
 
             return reclamadoContainer;
         }
-
 
         private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
         {
