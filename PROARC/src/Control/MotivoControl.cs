@@ -40,7 +40,6 @@ namespace PROARC.src.Control
             if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
                 string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;
-                
 
                 return new Motivo(nomeMotivo);
             }

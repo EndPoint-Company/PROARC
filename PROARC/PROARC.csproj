@@ -20,10 +20,8 @@
 	</PropertyGroup>
 
   <ItemGroup>
-	  
 	  <Content Include="Assets\proarc-white-logo.ico" />
 	  <Content Include="Assets\bannerHome.png" />
-	  
   </ItemGroup>
 
   <ItemGroup>
