@@ -16,12 +16,16 @@
                 <!-- Cabeçalho -->
                 <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
 
-                <!-- TODO -->
                 <!-- TreeView -->
                 <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
                     <TreeView.ItemTemplate>
                         <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        RightTapped="Processo_RightTapped"
+                                        Margin="0,5"
+                                        ToolTipService.ToolTip="Detalhes do Processo"
+                                        PointerEntered="ProcessoItem_PointerEntered"
+                                        PointerExited="ProcessoItem_PointerExited">
                                 <TextBlock Text="{x:Bind Titulo}" FontSize="16" Margin="5,0,10,0" />
                                 <TextBlock Text="{x:Bind Reclamante.Nome}" FontSize="16" Margin="5,0,10,0" />
                                 <TextBlock Text="{x:Bind Reclamante.Cpf}" FontSize="16" Margin="5,0,10,0" />
@@ -30,6 +34,19 @@
                                 <TextBlock Text="{x:Bind DataDaAudiencia}" FontSize="16" Margin="5,0,10,0" />
                                 <TextBlock Text="{x:Bind Motivo.Nome}" FontSize="16" Margin="5,0,10,0" />
                                 <TextBlock Text="{x:Bind Status}" FontSize="16" Margin="5,0,10,0" />
+
+                                <!-- Flyout para exibir detalhes -->
+                                <FlyoutBase.AttachedFlyout>
+                                    <Flyout>
+                                        <StackPanel>
+                                            <TextBlock Text="Detalhes do Processo" FontWeight="Bold" Margin="0,0,0,10" />
+                                            <TextBlock Text="{x:Bind Reclamante.Nome}" />
+                                            <TextBlock Text="{x:Bind Reclamado.Nome}" />
+                                            <TextBlock Text="{x:Bind Motivo.Nome}" />
+                                            <TextBlock Text="{x:Bind Status}" />
+                                        </StackPanel>
+                                    </Flyout>
+                                </FlyoutBase.AttachedFlyout>
                             </StackPanel>
                         </DataTemplate>
                     </TreeView.ItemTemplate>

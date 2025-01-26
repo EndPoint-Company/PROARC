@@ -27,17 +27,22 @@ namespace PROARC.src.Views
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            bool senhaValida = await LoginConnect(CaixaSenha.AccessKey);
+            statusText.Text = "";
+            carregando.IsActive = true;
+            LoginButton.IsEnabled = false;
+            bool senhaValida = await LoginConnect(CaixaSenha.Password);
 
             if (senhaValida)
                 Frame.Navigate(typeof(HomeNavigationPage));
             else 
-                Console.WriteLine("Senha inválida");
+                statusText.Text = "Senha inválida";
+            LoginButton.IsEnabled = true;
+            carregando.IsActive = false;
         }
 
         private async Task<bool> LoginConnect(string password)
         {
-            var ipEndPoint = new IPEndPoint(IPAddress.Parse("35.247.235.49"), 9999);
+            var ipEndPoint = new IPEndPoint(IPAddress.Parse("34.95.187.203"), 9999);
 
             using TcpClient client = new();
             await client.ConnectAsync(ipEndPoint);
@@ -63,8 +68,8 @@ namespace PROARC.src.Views
 
             foreach (var salt in list)
             {
-                using SHA256 sha256Hash = SHA256.Create();
-                byte[] passwordHash = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
+                Console.WriteLine(salt);
+                byte[] passwordHash = SHA256.HashData(Encoding.UTF8.GetBytes(password + salt));
 
                 client.Client.Send(passwordHash);
 
@@ -77,11 +82,15 @@ namespace PROARC.src.Views
 
                 if (responsee == "OK")
                 {
+                    client.Client.Send(Encoding.UTF8.GetBytes("BYE"));
+
                     return true;
                 }
             }
 
-            return true;
+            client.Client.Send(Encoding.UTF8.GetBytes("BYE"));
+
+            return false;
         }
 
         private void PasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)

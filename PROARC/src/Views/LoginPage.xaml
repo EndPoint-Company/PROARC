@@ -80,6 +80,10 @@
                         HorizontalAlignment="Left" />
                 </StackPanel>
 
+                <ProgressRing x:Name="carregando" IsActive="False" Background="White"/>
+
+                <TextBlock x:Name="statusText" Margin="10" HorizontalAlignment="Center"/>
+
                 <Button 
                     x:Name="LoginButton"
                     Click="LoginButton_Click"
