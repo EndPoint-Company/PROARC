@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 using PROARC.src.Models;
+using Newtonsoft.Json.Linq;
 
 namespace PROARC.src.Control
 {
@@ -73,24 +74,21 @@ namespace PROARC.src.Control
         public static async Task<List<Motivo>> GetAllMotivosAsync()
         {
             var request = new { action = "get_all_motivos" };
+
             string response = await SendRequestAsync(request);
+            JObject jsonResponse = JObject.Parse(response);
 
-            List<Motivo> motivos = new();
+            List<Motivo> motivos = new List<Motivo>();
 
-            using JsonDocument doc = JsonDocument.Parse(response);
-            JsonElement root = doc.RootElement;
-
-            if (root.TryGetProperty("motivos", out JsonElement motivosArray) && motivosArray.ValueKind == JsonValueKind.Array)
+            foreach (JToken motivosList in jsonResponse.Values())
             {
-                foreach (JsonElement item in motivosArray.EnumerateArray())
+                foreach (var motivoNome in motivosList.Values())
                 {
-                    if (item.ValueKind == JsonValueKind.Array)
-                    {                       
-                        string nome = item[0].GetString() ?? string.Empty;                       
-                        motivos.Add(new Motivo(nome));
-                    }
+                    Motivo motivo = new((string)motivoNome);
+                    motivos.Add(motivo);
                 }
             }
+
             return motivos;
         }
 
