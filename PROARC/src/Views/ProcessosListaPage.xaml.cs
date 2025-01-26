@@ -20,9 +20,9 @@ namespace PROARC.src.Views
             // Inicializando a coleção de processos
             Processos = new ObservableCollection<ProcessoAdministrativo>
             {
-                new ProcessoAdministrativo("Caminho/Para/Processo1", "0001/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.EmTramitacaoAguardandoEnvioDaNotificacao, DateTime.Now, DateTime.Now),
-                new ProcessoAdministrativo("Caminho/Para/Processo2", "0002/2024", 2023, new Motivo("Cobrança indevida"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.ArquivadoAtendido, DateTime.Now, DateTime.Now),
-                new ProcessoAdministrativo("Caminho/Para/Processo3", "0003/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.ArquivadoNaoAtendido, DateTime.Now, DateTime.Now),
+                new ProcessoAdministrativo("Caminho/Para/Processo1", "0001/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
+                new ProcessoAdministrativo("Caminho/Para/Processo2", "0002/2024", 2023, new Motivo("Cobrança indevida"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
+                new ProcessoAdministrativo("Caminho/Para/Processo3", "0003/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
             };
 
             this.DataContext = this;
