@@ -11,8 +11,8 @@ namespace PROARC.src.Control
 {
     public class NetworkControl
     {
-        private static readonly string ServerIp = "34.95.187.203";
-        private static readonly int ServerPort = 9999;
+        private static readonly string ServerIp = "192.168.0.14";
+        private static readonly int ServerPort = 6666;
 
         public static async Task<string> SendRequestAsync(object request)
         {
