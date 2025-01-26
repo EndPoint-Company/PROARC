@@ -80,6 +80,8 @@
                         HorizontalAlignment="Left" />
                 </StackPanel>
 
+                <TextBlock x:Name="statusText" Margin="10" HorizontalAlignment="Center"/>
+
                 <Button 
                     x:Name="LoginButton"
                     Click="LoginButton_Click"
