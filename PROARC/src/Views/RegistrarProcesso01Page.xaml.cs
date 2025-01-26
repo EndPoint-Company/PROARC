@@ -14,6 +14,9 @@ using System.Numerics;
 using Windows.Storage;
 using Microsoft.UI.Text;
 using Microsoft.UI;
+using PROARC.src.Models.Tipos;
+using static PROARC.src.Control.MotivoControl;
+using System.Threading.Tasks;
 
 namespace PROARC.src.Views
 {
@@ -48,7 +51,7 @@ namespace PROARC.src.Views
         {
             this.InitializeComponent();
             DataContext = this;
-
+            CarregarMotivosAsync();
             ConfigureShadows();
         }
 
@@ -56,6 +59,13 @@ namespace PROARC.src.Views
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async Task CarregarMotivosAsync()
+        {
+            List<Motivo> motivos = await MotivoControl.GetAllMotivosAsync();
+
+            cbMotivo.ItemsSource = motivos;
         }
 
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
