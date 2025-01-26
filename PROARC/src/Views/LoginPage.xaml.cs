@@ -27,6 +27,8 @@ namespace PROARC.src.Views
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            statusText.Text = "";
+            carregando.IsActive = true;
             LoginButton.IsEnabled = false;
             bool senhaValida = await LoginConnect(CaixaSenha.Password);
 
@@ -35,6 +37,7 @@ namespace PROARC.src.Views
             else 
                 statusText.Text = "Senha inválida";
             LoginButton.IsEnabled = true;
+            carregando.IsActive = false;
         }
 
         private async Task<bool> LoginConnect(string password)
