@@ -20,38 +20,20 @@
                 <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
                     <TreeView.ItemTemplate>
                         <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                            <Grid RightTapped="Processo_RightTapped"
-                                  PointerEntered="ProcessoItem_PointerEntered"
-                                  PointerExited="ProcessoItem_PointerExited"
-                                  ToolTipService.ToolTip="Detalhes do Processo"
-                                  Margin="0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="150" />
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Título -->
-                                <TextBlock Text="{x:Bind Titulo}" Grid.Column="0" FontSize="16" Margin="5" />
-                                <!-- Nome do Reclamante -->
-                                <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
-                                <!-- CPF do Reclamante -->
-                                <TextBlock Text="{x:Bind Reclamante.Cpf}" Grid.Column="2" FontSize="16" Margin="5" />
-                                <!-- Nome do Reclamado -->
-                                <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" />
-                                <!-- Data de Criação -->
-                                <TextBlock Text="{x:Bind DataDeCriacao}" Grid.Column="4" FontSize="16" Margin="5" />
-                                <!-- Data da Audiência -->
-                                <TextBlock Text="{x:Bind DataDaAudiencia}" Grid.Column="5" FontSize="16" Margin="5" />
-                                <!-- Motivo -->
-                                <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" />
-                                <!-- Status -->
-                                <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" />
+                            <StackPanel Orientation="Horizontal"
+                                        RightTapped="Processo_RightTapped"
+                                        Margin="0,5"
+                                        ToolTipService.ToolTip="Detalhes do Processo"
+                                        PointerEntered="ProcessoItem_PointerEntered"
+                                        PointerExited="ProcessoItem_PointerExited">
+                                <TextBlock Text="{x:Bind Titulo}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Reclamante.Nome}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Reclamante.Cpf}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Reclamado.Nome}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind DataDeCriacao}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind DataDaAudiencia}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Motivo.Nome}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{x:Bind Status}" FontSize="16" Margin="5,0,10,0" />
 
                                 <!-- Flyout para exibir detalhes -->
                                 <FlyoutBase.AttachedFlyout>
@@ -65,7 +47,7 @@
                                         </StackPanel>
                                     </Flyout>
                                 </FlyoutBase.AttachedFlyout>
-                            </Grid>
+                            </StackPanel>
                         </DataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>

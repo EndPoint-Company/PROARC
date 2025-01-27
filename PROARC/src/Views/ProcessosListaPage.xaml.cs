@@ -24,8 +24,15 @@ namespace PROARC.src.Views
         {
             try
             {
+
                 this.InitializeComponent();
                 this.DataContext = this;
+
+                //new ProcessoAdministrativo("Caminho/Para/Processo1", "0001/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
+                //new ProcessoAdministrativo("Caminho/Para/Processo2", "0002/2024", 2023, new Motivo("Cobrança indevida"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
+                //new ProcessoAdministrativo("Caminho/Para/Processo3", "0003/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
+            
+
 
                 Processos.Add(new ProcessoAdministrativo
                 {
