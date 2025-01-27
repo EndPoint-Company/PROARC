@@ -64,6 +64,79 @@ namespace PROARC.src.Control
             return processos;
         }
 
+
+
+
+
+        public ProcessoAdministrativo ParseProcesso(string dados)
+        {
+            var processo = new ProcessoAdministrativo();
+            var linhas = dados.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var linha in linhas)
+            {
+                var partes = linha.Split(':', 2);
+                if (partes.Length < 2) continue;
+
+                var chave = partes[0].Trim();
+                var valor = partes[1].Trim();
+
+                switch (chave)
+                {
+                    case "Título":
+                        processo.Titulo = valor;
+                        break;
+                    case "Caminho do Processo":
+                        processo.CaminhoDoProcesso = valor;
+                        break;
+                    case "Ano":
+                        processo.Ano = short.TryParse(valor, out var ano) ? ano : (short)0;
+                        break;
+                    case "Status":
+                        processo.Status = valor;
+                        break;
+                    case "Motivo":
+                        processo.Motivo = new Motivo (valor); // Ajuste conforme a definição de Motivo
+                        break;
+                    case "Reclamado":
+                        processo.Reclamado = new Reclamado(nome: valor); // Nome é obrigatório
+                        break;
+                    case "Reclamante":
+                        var reclamanteInfo = valor.Split(',');
+                        processo.Reclamante = new Reclamante(
+                            nome: reclamanteInfo.Length > 0 ? reclamanteInfo[0].Split(':')[1].Trim() : "Não definido",
+                            rg: reclamanteInfo.Length > 1 ? reclamanteInfo[1].Split(':')[1].Trim() : null,
+                            cpf: reclamanteInfo.Length > 2 ? reclamanteInfo[2].Split(':')[1].Trim() : null
+                        );
+                        break;
+                    case "Data da Audiência":
+                        processo.DataDaAudiencia = DateTime.TryParse(valor, out var data) ? data : (DateTime?)null;
+                        break;
+                }
+            }
+
+            return processo;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static async Task<ProcessoAdministrativo?> Get(int id)
         {
             var request = new { action = "get_processo_by_id", id };

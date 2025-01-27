@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="PROARC.src.Views.ProcessosListaPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,42 +7,43 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Border CornerRadius="10" Margin="50, 0">
         <Grid Padding="40" CornerRadius="10">
             <StackPanel Spacing="20">
-                <!-- Cabeçalho -->
                 <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
 
-                <!-- TreeView -->
+                <!-- TreeView para exibir os processos -->
                 <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
                     <TreeView.ItemTemplate>
                         <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                            <StackPanel Orientation="Horizontal"
+                            <StackPanel Orientation="Horizontal" Margin="0,5" 
                                         RightTapped="Processo_RightTapped"
-                                        Margin="0,5"
-                                        ToolTipService.ToolTip="Detalhes do Processo"
                                         PointerEntered="ProcessoItem_PointerEntered"
-                                        PointerExited="ProcessoItem_PointerExited">
-                                <TextBlock Text="{x:Bind Titulo}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Reclamante.Nome}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Reclamante.Cpf}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Reclamado.Nome}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind DataDeCriacao}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind DataDaAudiencia}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Motivo.Nome}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Status}" FontSize="16" Margin="5,0,10,0" />
+                                        PointerExited="ProcessoItem_PointerExited"
+                                        ToolTipService.ToolTip="Detalhes do Processo">
 
-                                <!-- Flyout para exibir detalhes -->
+                                <TextBlock Text="{Binding Titulo}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding Reclamante.Nome, FallbackValue='Não definido'}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding Reclamante.Cpf, FallbackValue='-'}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding Reclamado.Nome, FallbackValue='Não definido'}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding DataDaAudiencia, Converter={StaticResource DateTimeConverter}, FallbackValue='Não definida'}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding Motivo.Nome, FallbackValue='Não especificado'}" FontSize="16" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding Status}" FontSize="16" Margin="5,0,10,0" />
+
                                 <FlyoutBase.AttachedFlyout>
                                     <Flyout>
                                         <StackPanel>
                                             <TextBlock Text="Detalhes do Processo" FontWeight="Bold" Margin="0,0,0,10" />
+                                            <TextBlock Text="{x:Bind Titulo}" />
                                             <TextBlock Text="{x:Bind Reclamante.Nome}" />
+                                            <TextBlock Text="{x:Bind Reclamante.Cpf}" />
                                             <TextBlock Text="{x:Bind Reclamado.Nome}" />
                                             <TextBlock Text="{x:Bind Motivo.Nome}" />
                                             <TextBlock Text="{x:Bind Status}" />
+                                            <TextBlock Text="{x:Bind DataDaAudiencia, Converter={StaticResource DateTimeConverter}}" />
                                         </StackPanel>
                                     </Flyout>
                                 </FlyoutBase.AttachedFlyout>

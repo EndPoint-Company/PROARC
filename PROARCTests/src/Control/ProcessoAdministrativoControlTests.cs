@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control.Tests
 {
@@ -14,7 +16,11 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAllTest()
         {
-            await ProcessoAdministrativoControl.GetAll();
+            List<ProcessoAdministrativo> lista = await ProcessoAdministrativoControl.GetAll();
+            foreach (ProcessoAdministrativo listas in lista)
+            {
+                Console.WriteLine(listas);
+            }
         }
 
         [TestMethod()]
