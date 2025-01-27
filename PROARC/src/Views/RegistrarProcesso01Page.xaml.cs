@@ -69,10 +69,12 @@ namespace PROARC.src.Views
             cbMotivo.ItemsSource = motivos;
         }
 
-        private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
+        private async void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         {
+            // Marca o primeiro rádio como selecionado
             radio_agRealizacaoAudiencia.IsChecked = true;
 
+            // Configura estilos dos botões
             btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
             btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
 
@@ -80,14 +82,21 @@ namespace PROARC.src.Views
             btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
             btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
 
+            // Configura campos como somente leitura
             inputNProcesso.IsReadOnly = true;
             inputAnoProcesso.IsReadOnly = true;
 
+            // Reduz a opacidade do painel principal
             MainStackPanel.Opacity = 0.4;
 
-            NumeroProcesso = "123";
+            // Obtém o número atual de processos, soma 1 e define como número do processo
+            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            NumeroProcesso = (count + 1).ToString();
+
+            // Define o ano do processo
             AnoProcesso = "2025";
         }
+
 
 
         private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
@@ -125,8 +134,13 @@ namespace PROARC.src.Views
         //    // Só inserir os dados das caixas aqui.
         //}
 
-        private void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
+            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            NumeroProcesso = (count + 1).ToString();
+
+            string numeroProcesso = (count + 1).ToString();
+
             string motivo = cbMotivo.SelectedItem?.ToString();
 
             string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
@@ -154,7 +168,7 @@ namespace PROARC.src.Views
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             ProcessoAdministrativoControl.Insert(
-                new(@"dir/folder2", "23", 2025, GetSelectedRadioButton(),
+                new(@"dir/folder2", NumeroProcesso, 2025, GetSelectedRadioButton(),
                 new(motivo),
                 reclamado,
                 reclamante,
