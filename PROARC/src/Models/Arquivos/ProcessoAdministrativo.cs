@@ -21,9 +21,8 @@ namespace PROARC.src.Models.Arquivos
         public ProcessoAdministrativo() { }
 
         public ProcessoAdministrativo(
-            string caminhoDoProcesso, string titulo, short ano, Motivo? motivo = null,
-            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null,
-            string status = "Em tramitação", DateTime? dataDeModificacao = null,
+            string caminhoDoProcesso, string titulo, short ano, string status, Motivo? motivo = null,
+            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null, DateTime? dataDeModificacao = null,
             DateTime? dataDeCriacao = null)
         {
             this.titulo = titulo;

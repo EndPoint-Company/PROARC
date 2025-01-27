@@ -156,5 +156,21 @@ namespace PROARC.src.Control
             catch (Exception) { return false; }
             return true;
         }
+
+        public static async Task<int> CountProcessosAsync()
+        {
+            var request = new { action = "count_processos" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+
+            return 0;
+        }
     }
 }

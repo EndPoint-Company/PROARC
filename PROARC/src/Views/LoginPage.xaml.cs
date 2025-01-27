@@ -27,22 +27,37 @@ namespace PROARC.src.Views
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            statusText.Text = "";
+            ErrorPanel.Visibility = Visibility.Collapsed;
+            carregando.Visibility = Visibility.Visible;
             carregando.IsActive = true;
             LoginButton.IsEnabled = false;
+
             bool senhaValida = await LoginConnect(CaixaSenha.Password);
 
-            if (senhaValida)
-                Frame.Navigate(typeof(HomeNavigationPage));
-            else 
-                statusText.Text = "Senha inválida";
-            LoginButton.IsEnabled = true;
+            carregando.Visibility = Visibility.Collapsed;
             carregando.IsActive = false;
+
+            if (senhaValida)
+            {
+                Frame.Navigate(typeof(HomeNavigationPage));
+            }
+            else
+            {
+                ErrorPanel.Visibility = Visibility.Visible;
+            }
+
+            LoginButton.IsEnabled = true;
         }
+
 
         private async Task<bool> LoginConnect(string password)
         {
-            var ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9999);
+            if(password == "")
+            {
+                return false;
+            }
+
+            var ipEndPoint = new IPEndPoint(IPAddress.Parse("34.95.187.203"), 9999);
 
             using TcpClient client = new();
             await client.ConnectAsync(ipEndPoint);

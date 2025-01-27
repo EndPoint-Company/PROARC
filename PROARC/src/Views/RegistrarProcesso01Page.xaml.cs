@@ -23,6 +23,7 @@ namespace PROARC.src.Views
     public sealed partial class RegistrarProcesso01Page : Page, INotifyPropertyChanged
     {
         private string numeroProcesso;
+
         private List<string> arquivosSelecionados = new();
         public string NumeroProcesso
         {
@@ -53,6 +54,7 @@ namespace PROARC.src.Views
             DataContext = this;
             CarregarMotivosAsync();
             ConfigureShadows();
+            ProcessoNovo_Click(btnProcessoNovo, null);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -64,107 +66,171 @@ namespace PROARC.src.Views
         private async Task CarregarMotivosAsync()
         {
             List<Motivo> motivos = await MotivoControl.GetAllMotivosAsync();
-
             cbMotivo.ItemsSource = motivos;
         }
 
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         {
+            radio_agRealizacaoAudiencia.IsChecked = true;
 
-            // Alterar estilo do botão "Processo Novo" para selecionado
-            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
+            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
             btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
 
-            // Alterar estilo do botão "Processo Antigo" para não selecionado
             btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue); // Cor "#005BC1"
+            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
+            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
 
-            // Permitir edição dos campos
-            inputNProcesso.IsReadOnly = false;
-            inputAnoProcesso.IsReadOnly = false;
-
-            MainStackPanel.Opacity = 1; // Torna o painel totalmente visível
-            NumeroProcesso = ""; // Limpa os campos
-            AnoProcesso = "";
-        }
-
-        private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
-        {
-
-            // Alterar estilo do botão "Processo Antigo" para selecionado
-            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
-
-            // Alterar estilo do botão "Processo Novo" para não selecionado
-            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue); // Cor "#005BC1"
-
-            // Tornar os campos somente leitura
             inputNProcesso.IsReadOnly = true;
             inputAnoProcesso.IsReadOnly = true;
 
-            MainStackPanel.Opacity = 0.4; // Define opacidade de 40%
-            NumeroProcesso = "12345"; // Preenche os campos com valores
-            AnoProcesso = "2023";
+            MainStackPanel.Opacity = 0.4;
+
+            NumeroProcesso = "123";
+            AnoProcesso = "2025";
+        }
+
+
+        private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
+        {
+            radio_agRealizacaoAudiencia.IsChecked = false;
+            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); 
+            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+
+            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
+            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); 
+            btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
+
+            inputNProcesso.IsReadOnly = false;
+            inputAnoProcesso.IsReadOnly = false;
+
+            MainStackPanel.Opacity = 1; 
+            NumeroProcesso = ""; 
+            AnoProcesso = "";
         }
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            // Torna a seção "Procurador" visível quando o checkbox está marcado
             ProcuradorSection1.Visibility = Visibility.Visible;
         }
 
         private void ProcuradorCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            // Oculta a seção "Procurador" quando o checkbox está desmarcado
             ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
 
+        //private void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ProcessoAdministrativoControl.Insert
+        //        (new(@"dir/folder", "titulo", 2025, new("Cobrança indevida"), null, new("Junin", "11122266677", "rgmassa"), DateTime.Now)); 
+        //    // Só inserir os dados das caixas aqui.
+        //}
+
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            ProcessoAdministrativoControl.Insert
-                (new(@"dir/folder", "titulo", 2025, new("Cobrança indevida"),
-                null, new("Junin", "11122266677", "rgmassa"), DateTime.Now)); 
-            // Só inserir os dados das caixas aqui.
+            string motivo = cbMotivo.SelectedItem?.ToString();
+
+            string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
+            var reclamado = new Reclamado(
+                inputInstituicao.Text,
+                short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
+                inputRua.Text,
+                inputBairro.Text,
+                inputEmail.Text,
+                inputCidade.Text,
+                inputUf.Text,
+                cpfLimpo1,
+                cpfLimpo1
+            );
+
+            string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
+            var reclamante = new Reclamante(
+                inputNome.Text,
+                cpfLimpo,
+                inputRgReclamante.Text
+            );
+
+            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            DateTime? dataSelecionada = calendario.Date?.DateTime;
+            string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            ProcessoAdministrativoControl.Insert(
+                new(@"dir/folder2", "23", 2025, GetSelectedRadioButton(),
+                new(motivo),
+                reclamado,
+                reclamante,
+                DateTime.Parse(dataFormatada))
+            );
         }
 
-        // Botão para abrir o seletor de arquivos
+        private string GetSelectedRadioButton()
+        {
+            // Verificar qual RadioButton está marcado
+            if (radio_agRealizacaoAudiencia.IsChecked == true)
+                return "Aguardando realização da audiência";
+            if (radio_agResposta.IsChecked == true)
+                return "Aguardando resposta da empresa";
+            if (radio_agEnvioNotificacao.IsChecked == true)
+                return "Aguardando envio da notificação";
+            if (radio_agDocumentacao.IsChecked == true)
+                return "Aguardando documentação";
+            if (radio_atendido.IsChecked == true)
+                return "Atendido";
+            if (radio_naoAtendido.IsChecked == true)
+                return "Não Atendido";
+
+            return "Nenhum status selecionado";
+        }
+
+
+        private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox == null) return;
+
+            string rawText = new string(textBox.Text.Where(char.IsDigit).ToArray());
+
+            if (rawText.Length > 3)
+                rawText = rawText.Insert(3, ".");
+            if (rawText.Length > 7)
+                rawText = rawText.Insert(7, ".");
+            if (rawText.Length > 11)
+                rawText = rawText.Insert(11, "-");
+
+            textBox.Text = rawText;
+            textBox.SelectionStart = textBox.Text.Length;
+            string cpfForDatabase = new string(rawText.Where(char.IsDigit).ToArray());
+        }
+
+
+
+
         private async void PickFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // Instancia o FileOpenPicker
             var picker = new FileOpenPicker
             {
                 ViewMode = PickerViewMode.Thumbnail,
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            // Adiciona os filtros de tipo de arquivo
-            picker.FileTypeFilter.Add("*"); // Permite qualquer arquivo
+            picker.FileTypeFilter.Add("*"); 
 
-            // Associa o FileOpenPicker à janela do aplicativo
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
 
-            // Mostra o seletor de arquivos e espera a seleção
             var files = await picker.PickMultipleFilesAsync();
 
             if (files != null && files.Any())
             {
-                // Adiciona os arquivos selecionados à lista
                 AdicionarArquivos(files.Select(file => file.Path));
             }
         }
 
-        // Método para adicionar arquivos à lista visual
         private void AdicionarArquivos(IEnumerable<string> arquivos)
         {
             foreach (var arquivo in arquivos)
             {
                 var nomeArquivo = System.IO.Path.GetFileName(arquivo);
 
-                // Verifica se o arquivo já foi adicionado
                 if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
                 {
                     ListaArquivos.Children.Add(new TextBlock
@@ -179,7 +245,6 @@ namespace PROARC.src.Views
             AtualizarMensagemNenhumArquivo();
         }
 
-        // Atualiza a mensagem de "Nenhum arquivo selecionado"
         private void AtualizarMensagemNenhumArquivo()
         {
             MensagemNenhumArquivo.Visibility = ListaArquivos.Children.OfType<TextBlock>().Any()
@@ -187,7 +252,6 @@ namespace PROARC.src.Views
                 : Visibility.Visible;
         }
 
-        // Suporte a Drag and Drop para arquivos
         private async void DragDropArea_Drop(object sender, Microsoft.UI.Xaml.DragEventArgs e)
         {
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
@@ -261,14 +325,12 @@ namespace PROARC.src.Views
 
         private StackPanel CriarSecaoReclamado()
         {
-            // Contêiner principal da seção de Reclamado
             var reclamadoContainer = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
                 Margin = new Thickness(0, 32, 0, 0)
             };
 
-            // Contêiner da borda azul
             reclamadoContainer.Children.Add(new StackPanel
             {
                 Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
@@ -276,7 +338,6 @@ namespace PROARC.src.Views
                 CornerRadius = new CornerRadius(10, 0, 0, 10)
             });
 
-            // Grid principal para a seção
             var reclamadoSection = new Grid
             {
                 Background = new SolidColorBrush(Colors.White),
@@ -288,12 +349,10 @@ namespace PROARC.src.Views
 
             reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
 
-            // Definição de linhas e colunas no Grid
-            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Linha para o botão "X"
-            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Linha para o conteúdo
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); 
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); 
             reclamadoSection.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-            // Botão "X" para remover a seção
             var removerBotao = new Button
             {
                 Content = "X",
@@ -304,10 +363,9 @@ namespace PROARC.src.Views
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Top,
                 CornerRadius = new CornerRadius(5),
-                Margin = new Thickness(0, -20, -20, 0) // Ajuste para posicionar fora do Grid
+                Margin = new Thickness(0, -20, -20, 0) 
             };
 
-            // Evento para remover o contêiner
             removerBotao.Click += (s, e) =>
             {
                 if (MainContainer.Children.Contains(reclamadoContainer))
@@ -316,17 +374,14 @@ namespace PROARC.src.Views
                 }
             };
 
-            // Adicionar o botão "X" ao Grid (linha 0, coluna 0)
             Grid.SetRow(removerBotao, 0);
             reclamadoSection.Children.Add(removerBotao);
 
-            // Conteúdo da seção
             var conteudoReclamado = new StackPanel
             {
                 Spacing = 10
             };
 
-            // Título
             conteudoReclamado.Children.Add(new TextBlock
             {
                 Text = "Reclamado",
@@ -334,14 +389,12 @@ namespace PROARC.src.Views
                 FontWeight = FontWeights.Bold
             });
 
-            // Primeira linha de campos
             conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Instituição *", "Insira o nome da Instituição", 300),
                 CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 280),
                 CriarCampo("E-mail", "Insira o E-mail", 250)
             ));
 
-            // Segunda linha de campos
             conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Rua", "Insira a rua", 300),
                 CriarCampo("Bairro", "Insira o bairro", 280),
@@ -351,11 +404,9 @@ namespace PROARC.src.Views
                 CriarCampo("CEP", "Insira o CEP", 150)
             ));
 
-            // Adicionar o conteúdo ao Grid (linha 1, coluna 0)
             Grid.SetRow(conteudoReclamado, 1);
             reclamadoSection.Children.Add(conteudoReclamado);
 
-            // Adicionar a seção ao contêiner principal
             reclamadoContainer.Children.Add(reclamadoSection);
 
             return reclamadoContainer;
@@ -363,7 +414,6 @@ namespace PROARC.src.Views
 
         private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
         {
-            // Adicionar uma nova seção ao MainContainer
             MainContainer.Children.Add(CriarSecaoReclamado());
         }
     }

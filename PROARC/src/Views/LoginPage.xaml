@@ -34,7 +34,7 @@
         </Border>
 
         <Border Background="#FFFFFF" Grid.Column="1" CornerRadius="0,20,20,0" Padding="30">
-            <StackPanel VerticalAlignment="Center" Spacing="70" HorizontalAlignment="Center">
+            <StackPanel VerticalAlignment="Center" Spacing="60" HorizontalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Spacing="5">
                     <TextBlock 
                         Text="PROARC" 
@@ -49,16 +49,31 @@
                         HorizontalAlignment="Center" />
                 </StackPanel>
 
-                <StackPanel Spacing="10">
-                    <StackPanel Height="20">
-                        <TextBlock
-                            x:Name="ErrorTextBlock"
-                            Text="Chave incorreta. Tente novamente."
-                            Foreground="Red"
-                            FontSize="14"
-                            HorizontalAlignment="Left"
+                <StackPanel Spacing="12">
+                    <Grid Width="269" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ProgressRing
+                            x:Name="carregando"
+                            IsActive="False"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
                             Visibility="Collapsed" />
-                    </StackPanel>
+
+                        <Border
+                            x:Name="ErrorPanel"
+                            Background="#FFE6E6"
+                            Height="42"
+                            BorderBrush="#FFB3B3"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="10"
+                            Visibility="Collapsed">
+                            <TextBlock
+                                Text="Senha incorreta. Tente novamente."
+                                FontSize="14"
+                                Foreground="#FF3333"
+                                HorizontalAlignment="Center" />
+                        </Border>
+                    </Grid>
 
                     <PasswordBox
                         Name="CaixaSenha"
@@ -79,10 +94,6 @@
                         Foreground="#002B5B" 
                         HorizontalAlignment="Left" />
                 </StackPanel>
-
-                <ProgressRing x:Name="carregando" IsActive="False" Background="White"/>
-
-                <TextBlock x:Name="statusText" Margin="10" HorizontalAlignment="Center"/>
 
                 <Button 
                     x:Name="LoginButton"
