@@ -54,35 +54,35 @@ namespace PROARC.src.Views
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Erro na inicialização da página: {ex.Message}");
+                Debug.WriteLine($"Erro na inicializaÃ§Ã£o da pÃ¡gina: {ex.Message}");
             }
         }
 
         private async Task CarregarProcessosPeriodicamente()
         {
-            if (IsLoading) return; // Impede chamadas repetidas enquanto já está carregando
+            if (IsLoading) return; // Impede chamadas repetidas enquanto jÃ¡ estÃ¡ carregando
 
             IsLoading = true;
 
             try
             {
-                // Aguarda um intervalo de tempo antes de fazer a requisição
+                // Aguarda um intervalo de tempo antes de fazer a requisiÃ§Ã£o
                 while (true)
                 {
-                    // Obtém os processos do banco
+                    // ObtÃ©m os processos do banco
                     var processos = await ProcessoAdministrativoControl.GetAll();
 
                     if (processos != null && processos.Any())
                     {
                         foreach (var processo in processos)
                         {
-                            // Verifica se o processo já está na lista, evitando duplicatas
+                            // Verifica se o processo jÃ¡ estÃ¡ na lista, evitando duplicatas
                             if (!Processos.Any(p => p.Titulo == processo.Titulo))
                             {
-                                // Enfileira a atualização na UI para adicionar o processo
+                                // Enfileira a atualizaÃ§Ã£o na UI para adicionar o processo
                                 DispatcherQueue.TryEnqueue(() =>
                                 {
-                                    Processos.Add(processo); // Adiciona o processo à ObservableCollection
+                                    Processos.Add(processo); // Adiciona o processo Ã  ObservableCollection
                                 });
                             }
                         }
@@ -128,7 +128,7 @@ namespace PROARC.src.Views
 
         private void ProcessoItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            // Aqui você pode ocultar o Flyout se necessário (geralmente feito automaticamente pelo sistema)
+            // Aqui vocÃª pode ocultar o Flyout se necessÃ¡rio (geralmente feito automaticamente pelo sistema)
         }
 
         private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)

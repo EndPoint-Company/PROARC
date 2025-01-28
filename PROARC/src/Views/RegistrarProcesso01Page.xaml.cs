@@ -54,6 +54,7 @@ namespace PROARC.src.Views
             DataContext = this;
             CarregarMotivosAsync();
             ConfigureShadows();
+            calendario.Date = DateTime.Now.Date;
             ProcessoNovo_Click(btnProcessoNovo, null);
         }
 
@@ -127,39 +128,39 @@ namespace PROARC.src.Views
 
         private void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            string motivo = cbMotivo.SelectedItem?.ToString();
+            string motivo = cbMotivo.SelectedItem?.ToString() ?? "null";
 
             string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
             var reclamado = new Reclamado(
-                inputInstituicao.Text,
+                inputInstituicao.Text ?? "null",
                 short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
-                inputRua.Text,
-                inputBairro.Text,
-                inputEmail.Text,
-                inputCidade.Text,
-                inputUf.Text,
+                inputRua.Text ?? "null",
+                inputBairro.Text ?? "null",
+                inputEmail.Text ?? "null",
+                inputCidade.Text ?? "null",
+                inputUf.Text ?? "null",
                 cpfLimpo1,
                 cpfLimpo1
             );
 
             string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
             var reclamante = new Reclamante(
-                inputNome.Text,
+                inputNome.Text ?? "null",
                 cpfLimpo,
-                inputRgReclamante.Text
+                inputRgReclamante.Text ?? "null"
             );
 
-            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
             DateTime? dataSelecionada = calendario.Date?.DateTime;
+
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-            ProcessoAdministrativoControl.Insert(
-                new(@"dir/folder2", "23", 2025, GetSelectedRadioButton(),
-                new(motivo),
-                reclamado,
-                reclamante,
-                DateTime.Parse(dataFormatada))
-            );
+            ProcessoAdministrativoControl.InsertAsync(
+                            new(@"dir/folder2", "23", 2025, GetSelectedRadioButton(),
+                            new(motivo),
+                            reclamado,
+                            reclamante,
+                            DateTime.Parse(dataFormatada)));
         }
 
         private string GetSelectedRadioButton()

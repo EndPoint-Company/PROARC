@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Models.Tipos;
+using PROARC.src.Models;
 
 namespace PROARC.src.Control.Tests
 {
@@ -16,7 +17,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAllTest()
         {
-            List<ProcessoAdministrativo> lista = await ProcessoAdministrativoControl.GetAll();
+            List<ProcessoAdministrativo> lista = await ProcessoAdministrativoControl.GetAllAsync();
             foreach (ProcessoAdministrativo listas in lista)
             {
                 Console.WriteLine(listas);
@@ -26,13 +27,13 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetTest()
         {
-            await ProcessoAdministrativoControl.Get(1);
+            await ProcessoAdministrativoControl.GetAsync(1);
         }
 
         [TestMethod()]
-        public async Task InsertTest()
+        public async Task InsertAsyncTest()
         {
-            await ProcessoAdministrativoControl.Insert(new("caminho", "titulo", 2025, new("Cobrança indevida"), new("EmpresaX", 1, "rua", "bairro", "email@exemplo.com", "cidad", "CE", "07272636000131"), new("Zezin", "11122233345", "1234SP"), DateTime.Now));
+            Assert.Fail();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace PROARC.src.Control
 {
     public class ProcessoAdministrativoControl : IDatabaseCRUD<ProcessoAdministrativo>
     {
-        public static async Task<List<ProcessoAdministrativo>?> GetAll()
+        public static async Task<List<ProcessoAdministrativo>?> GetAllAsync()
         {
             var request = new { action = "get_all_processos" };
 
@@ -64,7 +64,7 @@ namespace PROARC.src.Control
             return processos;
         }
 
-        public static async Task<ProcessoAdministrativo?> Get(int id)
+        public static async Task<ProcessoAdministrativo?> GetAsync(int id)
         {
             var request = new { action = "get_processo_by_id", id };
 
@@ -109,7 +109,7 @@ namespace PROARC.src.Control
             return processo;
         }
 
-        public static async Task<bool> Insert(ProcessoAdministrativo processo)
+        public static async Task<bool> InsertAsync(ProcessoAdministrativo processo)
         {
             var request = new { action = "add_processo", processo };
 
@@ -125,7 +125,7 @@ namespace PROARC.src.Control
             }
         }
 
-        public static async Task<bool> Update
+        public static async Task<bool> UpdateAsync
             (int id, int motivo_id, int reclamante_id,
             string titulo_processo, short ano, Status status_processo,
             string path_processo, string data_audiencia)
@@ -149,7 +149,7 @@ namespace PROARC.src.Control
             return true;
         }
 
-        public static async Task<bool> Delete(int id)
+        public static async Task<bool> DeleteAsync(int id)
         {
             var request = new { action = "remove_processo_by_id", id };
             try { await SendRequestAsync(request); }
