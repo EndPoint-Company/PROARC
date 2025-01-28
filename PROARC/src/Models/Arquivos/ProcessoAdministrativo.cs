@@ -18,6 +18,29 @@ namespace PROARC.src.Models.Arquivos
         private DateTime? dataDaAudiencia;
         private DateTime? dataDeCriacao;
 
+
+        // Propriedades formatadas para exibição
+        public string DataDeCriacaoFormatada => DataDeCriacao?.ToString("dd/MM/yyyy");  
+        public string DataDaAudienciaFormatada => DataDaAudiencia?.ToString("dd/MM/yyyy") ?? "N/A";
+
+        public string NumeroProcesso
+        {
+            get
+            {
+                // Extraindo apenas o número do Título (removendo prefixos como "PROARC")
+                string numero = new string(Titulo.Where(char.IsDigit).ToArray());
+                if (numero.Length < 3)
+                    numero = numero.PadLeft(3, '0'); // Garante o formato 3 dígitos
+
+                // Verifica se a DataDeCriacao não é nula e retorna o ano, caso contrário, retorna "Desconhecido"
+                string ano = DataDeCriacao?.Year.ToString() ?? "2025";
+
+                // Formata no padrão "Número/Ano"
+                return $"{numero}/{ano}";
+            }
+        }
+
+
         public ProcessoAdministrativo() { }
 
         public ProcessoAdministrativo(
