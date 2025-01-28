@@ -68,7 +68,7 @@ namespace PROARC.src.Views
         {
             try
             {
-                var processos = await ProcessoAdministrativoControl.GetAll();
+                var processos = await ProcessoAdministrativoControl.GetAllAsync();
 
                 if (processos != null && processos.Any())
                 {

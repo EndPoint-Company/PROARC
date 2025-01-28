@@ -153,7 +153,7 @@ namespace PROARC.src.Views
             DateTime? dataSelecionada = calendario.Date?.DateTime;
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-            ProcessoAdministrativoControl.Insert(
+            ProcessoAdministrativoControl.InsertAsync(
                 new(@"dir/folder2", "23", 2025, GetSelectedRadioButton(),
                 new(motivo),
                 reclamado,
