@@ -175,7 +175,7 @@ namespace PROARC.src.Views
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
 
-            ProcessoAdministrativoControl.Insert(
+            ProcessoAdministrativoControl.InsertAsync(
                 new(caminhoPasta, NumeroProcesso, 2025, GetSelectedRadioButton(),
                 new(motivo),
                 reclamado,
