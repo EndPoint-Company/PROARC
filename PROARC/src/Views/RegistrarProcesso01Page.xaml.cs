@@ -54,6 +54,7 @@ namespace PROARC.src.Views
             DataContext = this;
             CarregarMotivosAsync();
             ConfigureShadows();
+            calendario.Date = DateTime.Now.Date;
             ProcessoNovo_Click(btnProcessoNovo, null);
         }
 
@@ -71,10 +72,10 @@ namespace PROARC.src.Views
 
         private async void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         {
-            // Marca o primeiro rádio como selecionado
+            // Marca o primeiro rÃ¡dio como selecionado
             radio_agRealizacaoAudiencia.IsChecked = true;
 
-            // Configura estilos dos botões
+            // Configura estilos dos botÃµes
             btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
             btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
 
@@ -89,7 +90,7 @@ namespace PROARC.src.Views
             // Reduz a opacidade do painel principal
             MainStackPanel.Opacity = 0.4;
 
-            // Obtém o número atual de processos, soma 1 e define como número do processo
+            // ObtÃ©m o nÃºmero atual de processos, soma 1 e define como nÃºmero do processo
             int count = await ProcessoAdministrativoControl.CountProcessosAsync();
             NumeroProcesso = (count + 1).ToString();
 
@@ -129,6 +130,7 @@ namespace PROARC.src.Views
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
+
             int count = await ProcessoAdministrativoControl.CountProcessosAsync();
             NumeroProcesso = (count + 1).ToString();
             string numeroProcesso = (count + 1).ToString();
@@ -141,7 +143,7 @@ namespace PROARC.src.Views
                 cbMotivo.SelectedItem == null ||
                 calendario.Date == null)
             {
-                ShowError("Preencha todos os campos obrigatórios antes de continuar.");
+                ShowError("Preencha todos os campos obrigatÃ³rios antes de continuar.");
                 return;
             }
 
@@ -149,26 +151,27 @@ namespace PROARC.src.Views
 
             string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
             var reclamado = new Reclamado(
-                inputInstituicao.Text,
+                inputInstituicao.Text ?? "null",
                 short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
-                inputRua.Text,
-                inputBairro.Text,
-                inputEmail.Text,
-                inputCidade.Text,
-                inputUf.Text,
+                inputRua.Text ?? "null",
+                inputBairro.Text ?? "null",
+                inputEmail.Text ?? "null",
+                inputCidade.Text ?? "null",
+                inputUf.Text ?? "null",
                 cpfLimpo1,
                 cpfLimpo1
             );
 
             string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
             var reclamante = new Reclamante(
-                inputNome.Text,
+                inputNome.Text ?? "null",
                 cpfLimpo,
-                inputRgReclamante.Text
+                inputRgReclamante.Text ?? "null"
             );
 
-            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
             DateTime? dataSelecionada = calendario.Date?.DateTime;
+
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
 
@@ -180,14 +183,13 @@ namespace PROARC.src.Views
                 DateTime.Parse(dataFormatada))
             );
 
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
         }
 
         private async void ShowError(string mensagemErro)
         {
             var dialog = new ContentDialog
             {
-                Title = "Erro de Validação",
+                Title = "Erro de ValidaÃ§Ã£o",
                 Content = mensagemErro,
                 CloseButtonText = "OK",
                 XamlRoot = this.Content.XamlRoot
@@ -200,17 +202,17 @@ namespace PROARC.src.Views
         private string GetSelectedRadioButton()
         {
             if (radio_agRealizacaoAudiencia.IsChecked == true)
-                return "Aguardando realização da audiência";
+                return "Aguardando realizaÃ§Ã£o da audiÃªncia";
             if (radio_agResposta.IsChecked == true)
                 return "Aguardando resposta da empresa";
             if (radio_agEnvioNotificacao.IsChecked == true)
-                return "Aguardando envio da notificação";
+                return "Aguardando envio da notificaÃ§Ã£o";
             if (radio_agDocumentacao.IsChecked == true)
-                return "Aguardando documentação";
+                return "Aguardando documentaÃ§Ã£o";
             if (radio_atendido.IsChecked == true)
                 return "Atendido";
             if (radio_naoAtendido.IsChecked == true)
-                return "Não Atendido";
+                return "NÃ£o Atendido";
 
             return "Nenhum status selecionado";
         }
@@ -420,7 +422,7 @@ namespace PROARC.src.Views
             });
 
             conteudoReclamado.Children.Add(CriarLinhaCampos(
-                CriarCampo("Instituição *", "Insira o nome da Instituição", 300),
+                CriarCampo("InstituiÃ§Ã£o *", "Insira o nome da InstituiÃ§Ã£o", 300),
                 CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 280),
                 CriarCampo("E-mail", "Insira o E-mail", 250)
             ));
@@ -428,7 +430,7 @@ namespace PROARC.src.Views
             conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Rua", "Insira a rua", 300),
                 CriarCampo("Bairro", "Insira o bairro", 280),
-                CriarCampo("Número", "Insira o número", 120),
+                CriarCampo("NÃºmero", "Insira o nÃºmero", 120),
                 CriarCampo("Cidade", "Insira a cidade", 180),
                 CriarCampo("UF", "Insira a UF", 100),
                 CriarCampo("CEP", "Insira o CEP", 150)

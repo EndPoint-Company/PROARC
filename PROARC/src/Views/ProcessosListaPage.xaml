@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="PROARC.src.Views.ProcessosListaPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,47 +10,62 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Border CornerRadius="10" Margin="50, 0">
-        <Grid Padding="40" CornerRadius="10">
-            <StackPanel Spacing="20">
-                <!-- Cabeçalho -->
-                <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
+        <StackPanel Spacing="10" Padding="40">
+            <!-- Cabeçalho -->
+            <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
 
-                <!-- TreeView -->
-                <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
-                    <TreeView.ItemTemplate>
-                        <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                            <StackPanel Orientation="Horizontal"
-                                        RightTapped="Processo_RightTapped"
-                                        Margin="0,5"
-                                        ToolTipService.ToolTip="Detalhes do Processo"
-                                        PointerEntered="ProcessoItem_PointerEntered"
-                                        PointerExited="ProcessoItem_PointerExited">
-                                <TextBlock Text="{x:Bind Titulo}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Reclamante.Nome}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Reclamante.Cpf}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Reclamado.Nome}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind DataDeCriacao}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind DataDaAudiencia}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Motivo.Nome}" FontSize="16" Margin="5,0,10,0" />
-                                <TextBlock Text="{x:Bind Status}" FontSize="16" Margin="5,0,10,0" />
+            <!-- Títulos -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
 
-                                <!-- Flyout para exibir detalhes -->
-                                <FlyoutBase.AttachedFlyout>
-                                    <Flyout>
-                                        <StackPanel>
-                                            <TextBlock Text="Detalhes do Processo" FontWeight="Bold" Margin="0,0,0,10" />
-                                            <TextBlock Text="{x:Bind Reclamante.Nome}" />
-                                            <TextBlock Text="{x:Bind Reclamado.Nome}" />
-                                            <TextBlock Text="{x:Bind Motivo.Nome}" />
-                                            <TextBlock Text="{x:Bind Status}" />
-                                        </StackPanel>
-                                    </Flyout>
-                                </FlyoutBase.AttachedFlyout>
-                            </StackPanel>
-                        </DataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-            </StackPanel>
-        </Grid>
+                <TextBlock Text="N° Processo" Grid.Column="0" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="Reclamante" Grid.Column="1" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="CPF do Reclamante" Grid.Column="2" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="Reclamado" Grid.Column="3" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="Criado" Grid.Column="4" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="Audiência" Grid.Column="5" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="Motivo" Grid.Column="6" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                <TextBlock Text="Status" Grid.Column="7" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+            </Grid>
+
+            <!-- TreeView -->
+            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
+                <TreeView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ProcessoAdministrativo">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="200" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Dados -->
+                            <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind DataDeCriacaoFormatada}" Grid.Column="4" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind DataDaAudienciaFormatada}" Grid.Column="5" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" />
+                        </Grid>
+                    </DataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
     </Border>
 </Page>
