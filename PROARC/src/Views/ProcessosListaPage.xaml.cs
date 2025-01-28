@@ -70,7 +70,7 @@ namespace PROARC.src.Views
                 while (true)
                 {
                     // Obtém os processos do banco
-                    var processos = await ProcessoAdministrativoControl.GetAll();
+                    var processos = await ProcessoAdministrativoControl.GetAllAsync();
 
                     if (processos != null && processos.Any())
                     {
