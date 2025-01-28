@@ -1,111 +1,124 @@
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Collections.ObjectModel;
-using PROARC.src.Models.Arquivos;
-using PROARC.src.Models.Tipos;
-using PROARC.src.Control;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using PROARC.src.Control;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using PROARC.src.Models;
-using System.Linq;
+using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Views
 {
-    public sealed partial class ProcessosListaPage : Page
+    public sealed partial class ProcessosListaPage : Page, INotifyPropertyChanged
     {
         public ObservableCollection<ProcessoAdministrativo> Processos { get; set; } = new ObservableCollection<ProcessoAdministrativo>();
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public ProcessosListaPage()
         {
             try
             {
-
                 this.InitializeComponent();
                 this.DataContext = this;
 
-                //new ProcessoAdministrativo("Caminho/Para/Processo1", "0001/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
-                //new ProcessoAdministrativo("Caminho/Para/Processo2", "0002/2024", 2023, new Motivo("Cobrança indevida"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
-                //new ProcessoAdministrativo("Caminho/Para/Processo3", "0003/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, "Em Tramitação", DateTime.Now, DateTime.Now),
-            
+                _ = CarregarProcessosPeriodicamente();
 
-
-                Processos.Add(new ProcessoAdministrativo
-                {
-                    Titulo = "Processo 1",
-                    Reclamante = new Reclamante("Carlos Silva", "123.456.789-00", "12345678"),
-                    Reclamado = new Reclamado("Empresa XYZ", 123, "Rua das Flores", "Centro", "empresa@xyz.com", "São Paulo", "SP", "12.345.678/0001-00", null),
-                    DataDaAudiencia = DateTime.Now,
-                    Motivo = new Motivo("Cobrança indevida", "Cobrança feita sem justificativa válida"),
-                    Status = "Em andamento"
-                });
-
-                Processos.Add(new ProcessoAdministrativo
-                {
-                    Titulo = "Processo 2",
-                    Reclamante = new Reclamante("Maria Oliveira", "987.654.321-00", "87654321"),
-                    Reclamado = new Reclamado("Loja ABC", null, null, "Bairro Verde", null, "Rio de Janeiro", "RJ", null, "987.654.321-00"),
-                    DataDaAudiencia = DateTime.Now.AddDays(7),
-                    Motivo = new Motivo("Juros abusivos"),
-                    Status = "Concluído"
-                });
-
-                // Carregar os dados do banco
-                _ = CarregarProcessosAsync();
-
+                // Adicionando itens de exemplo
+                
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Erro na inicialização da página: {ex.Message}");
+                Debug.WriteLine($"Erro na inicializaÃ§Ã£o da pÃ¡gina: {ex.Message}");
             }
         }
 
-        private async Task CarregarProcessosAsync()
+        private async Task CarregarProcessosPeriodicamente()
         {
+            if (IsLoading) return; // Impede chamadas repetidas enquanto jÃ¡ estÃ¡ carregando
+
+            IsLoading = true;
+
             try
             {
-                var processos = await ProcessoAdministrativoControl.GetAllAsync();
+                // Aguarda um intervalo de tempo antes de fazer a requisiÃ§Ã£o
+                while (true)
+                {
+                    // ObtÃ©m os processos do banco
+                    var processos = await ProcessoAdministrativoControl.GetAll();
 
-                if (processos != null && processos.Any())
-                {
-                    foreach (var processo in processos)
+                    if (processos != null && processos.Any())
                     {
-                        Processos.Add(processo);
+                        foreach (var processo in processos)
+                        {
+                            // Verifica se o processo jÃ¡ estÃ¡ na lista, evitando duplicatas
+                            if (!Processos.Any(p => p.Titulo == processo.Titulo))
+                            {
+                                // Enfileira a atualizaÃ§Ã£o na UI para adicionar o processo
+                                DispatcherQueue.TryEnqueue(() =>
+                                {
+                                    Processos.Add(processo); // Adiciona o processo Ã  ObservableCollection
+                                });
+                            }
+                        }
+
+                        Debug.WriteLine($"Carregados {processos.Count} processos.");
                     }
-                    Debug.WriteLine($"Carregados {processos.Count} processos.");
-                }
-                else
-                {
-                    Debug.WriteLine("Nenhum processo foi retornado.");
+                    else
+                    {
+                        Debug.WriteLine("Nenhum novo processo foi retornado.");
+                    }
+
+                    // Espera um intervalo de tempo (por exemplo, 10 segundos) antes de verificar novamente
+                    await Task.Delay(10000); // 10 segundos de intervalo
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Erro ao carregar os processos: {ex.Message}");
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                FlyoutBase.ShowAttachedFlyout(element);
+            }
+        }
 
         private void ProcessoItem_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
@@ -115,40 +128,33 @@ namespace PROARC.src.Views
 
         private void ProcessoItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            // Aqui você pode ocultar o Flyout se necessário (geralmente feito automaticamente pelo sistema)
+            // Aqui vocÃª pode ocultar o Flyout se necessÃ¡rio (geralmente feito automaticamente pelo sistema)
         }
 
-        private void Processo_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+        private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             if (sender is FrameworkElement element && element.DataContext is ProcessoAdministrativo processo)
             {
-                // Crie um MenuFlyout
                 var menuFlyout = new MenuFlyout();
 
-                // Adicione opções ao MenuFlyout
                 var visualizarItem = new MenuFlyoutItem { Text = "Visualizar Processo" };
-                //visualizarItem.Click += (s, args) => VisualizarProcesso(processo);
-
                 var editarItem = new MenuFlyoutItem { Text = "Editar Processo" };
                 editarItem.Click += (s, args) => EditarProcesso(processo);
 
                 var excluirItem = new MenuFlyoutItem
                 {
                     Text = "Excluir Processo",
-                    Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red) // Define a cor vermelha
+                    Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red)
                 };
-                //excluirItem.Click += (s, args) => ExcluirProcesso(processo);
 
                 menuFlyout.Items.Add(visualizarItem);
                 menuFlyout.Items.Add(editarItem);
                 menuFlyout.Items.Add(new MenuFlyoutSeparator());
                 menuFlyout.Items.Add(excluirItem);
 
-                // Exiba o menu no ponto clicado
                 menuFlyout.ShowAt(element, e.GetPosition(element));
             }
         }
-
 
         private void EditarProcesso(ProcessoAdministrativo processo)
         {
