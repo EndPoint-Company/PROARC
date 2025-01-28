@@ -227,14 +227,14 @@
                                     <TextBox x:Name="inputCep" PlaceholderText="Insira o CEP" Width="150" />
                                 </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
                                 <Button 
-                    Content="Adicionar Reclamado" 
-                    Background="#003366" 
-                    Foreground="White" 
-                    Padding="20, 10" 
-                    CornerRadius="5" 
-                    Click="OnAddReclamadoClick" />
+                                    Content="Adicionar Reclamado" 
+                                    Background="#003366" 
+                                    Foreground="White" 
+                                    Padding="20, 10" 
+                                    CornerRadius="5" 
+                                    Click="OnAddReclamadoClick" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -293,10 +293,11 @@
                 <Button 
                     Content="Continuar" 
                     HorizontalAlignment="Right" 
-                    Padding="20,10" 
+                    Padding="30,10" 
+                    FontSize="16"
                     Background="#003366" 
                     Foreground="White" 
-                    Margin="0,0,50,0" 
+                    Margin="0,0,180,0" 
                     Click="ContinuarButton_Click"/>
             </StackPanel>
         </ScrollViewer>

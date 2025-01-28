@@ -34,6 +34,7 @@ namespace PROARC.src.Control.Tests
         }
 
         [TestMethod()]
+
         public async Task GetAllMotivosAsyncTest()
         {
             List<Motivo> motivo = await MotivoControl.GetAllMotivosAsync();

@@ -70,10 +70,12 @@ namespace PROARC.src.Views
             cbMotivo.ItemsSource = motivos;
         }
 
-        private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
+        private async void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         {
+            // Marca o primeiro r√°dio como selecionado
             radio_agRealizacaoAudiencia.IsChecked = true;
 
+            // Configura estilos dos bot√µes
             btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
             btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
 
@@ -81,14 +83,21 @@ namespace PROARC.src.Views
             btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
             btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
 
+            // Configura campos como somente leitura
             inputNProcesso.IsReadOnly = true;
             inputAnoProcesso.IsReadOnly = true;
 
+            // Reduz a opacidade do painel principal
             MainStackPanel.Opacity = 0.4;
 
-            NumeroProcesso = "123";
+            // Obt√©m o n√∫mero atual de processos, soma 1 e define como n√∫mero do processo
+            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            NumeroProcesso = (count + 1).ToString();
+
+            // Define o ano do processo
             AnoProcesso = "2025";
         }
+
 
 
         private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
@@ -106,7 +115,7 @@ namespace PROARC.src.Views
 
             MainStackPanel.Opacity = 1; 
             NumeroProcesso = ""; 
-            AnoProcesso = "";
+            AnoProcesso = ""; 
         }
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -119,16 +128,26 @@ namespace PROARC.src.Views
             ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
 
-        //private void ContinuarButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    ProcessoAdministrativoControl.Insert
-        //        (new(@"dir/folder", "titulo", 2025, new("CobranÁa indevida"), null, new("Junin", "11122266677", "rgmassa"), DateTime.Now)); 
-        //    // SÛ inserir os dados das caixas aqui.
-        //}
-
-        private void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            string motivo = cbMotivo.SelectedItem?.ToString() ?? "null";
+
+            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            NumeroProcesso = (count + 1).ToString();
+            string numeroProcesso = (count + 1).ToString();
+
+            if (string.IsNullOrWhiteSpace(inputNome.Text) ||
+                string.IsNullOrWhiteSpace(inputCpfReclamante.Text) ||
+                string.IsNullOrWhiteSpace(inputRgReclamante.Text) ||
+                string.IsNullOrWhiteSpace(inputInstituicao.Text) ||
+                string.IsNullOrWhiteSpace(inputCnpjCpfReclamado.Text) ||
+                cbMotivo.SelectedItem == null ||
+                calendario.Date == null)
+            {
+                ShowError("Preencha todos os campos obrigat√≥rios antes de continuar.");
+                return;
+            }
+
+            string motivo = cbMotivo.SelectedItem?.ToString();
 
             string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
             var reclamado = new Reclamado(
@@ -154,30 +173,46 @@ namespace PROARC.src.Views
             DateTime? dataSelecionada = calendario.Date?.DateTime;
 
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string caminhoPasta = $"dir/folder{NumeroProcesso}";
 
-            ProcessoAdministrativoControl.InsertAsync(
-                            new(@"dir/folder2", "23", 2025, GetSelectedRadioButton(),
-                            new(motivo),
-                            reclamado,
-                            reclamante,
-                            DateTime.Parse(dataFormatada)));
+            ProcessoAdministrativoControl.Insert(
+                new(caminhoPasta, NumeroProcesso, 2025, GetSelectedRadioButton(),
+                new(motivo),
+                reclamado,
+                reclamante,
+                DateTime.Parse(dataFormatada))
+            );
+
         }
+
+        private async void ShowError(string mensagemErro)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Erro de Valida√ß√£o",
+                Content = mensagemErro,
+                CloseButtonText = "OK",
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            await dialog.ShowAsync();
+        }
+
 
         private string GetSelectedRadioButton()
         {
-            // Verificar qual RadioButton est· marcado
             if (radio_agRealizacaoAudiencia.IsChecked == true)
-                return "Aguardando realizaÁ„o da audiÍncia";
+                return "Aguardando realiza√ß√£o da audi√™ncia";
             if (radio_agResposta.IsChecked == true)
                 return "Aguardando resposta da empresa";
             if (radio_agEnvioNotificacao.IsChecked == true)
-                return "Aguardando envio da notificaÁ„o";
+                return "Aguardando envio da notifica√ß√£o";
             if (radio_agDocumentacao.IsChecked == true)
-                return "Aguardando documentaÁ„o";
+                return "Aguardando documenta√ß√£o";
             if (radio_atendido.IsChecked == true)
                 return "Atendido";
             if (radio_naoAtendido.IsChecked == true)
-                return "N„o Atendido";
+                return "N√£o Atendido";
 
             return "Nenhum status selecionado";
         }
@@ -199,11 +234,7 @@ namespace PROARC.src.Views
 
             textBox.Text = rawText;
             textBox.SelectionStart = textBox.Text.Length;
-            string cpfForDatabase = new string(rawText.Where(char.IsDigit).ToArray());
         }
-
-
-
 
         private async void PickFileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -391,7 +422,7 @@ namespace PROARC.src.Views
             });
 
             conteudoReclamado.Children.Add(CriarLinhaCampos(
-                CriarCampo("InstituiÁ„o *", "Insira o nome da InstituiÁ„o", 300),
+                CriarCampo("Institui√ß√£o *", "Insira o nome da Institui√ß√£o", 300),
                 CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 280),
                 CriarCampo("E-mail", "Insira o E-mail", 250)
             ));
@@ -399,7 +430,7 @@ namespace PROARC.src.Views
             conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Rua", "Insira a rua", 300),
                 CriarCampo("Bairro", "Insira o bairro", 280),
-                CriarCampo("N˙mero", "Insira o n˙mero", 120),
+                CriarCampo("N√∫mero", "Insira o n√∫mero", 120),
                 CriarCampo("Cidade", "Insira a cidade", 180),
                 CriarCampo("UF", "Insira a UF", 100),
                 CriarCampo("CEP", "Insira o CEP", 150)

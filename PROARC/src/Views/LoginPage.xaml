@@ -34,8 +34,8 @@
         </Border>
 
         <Border Background="#FFFFFF" Grid.Column="1" CornerRadius="0,20,20,0" Padding="30">
-            <StackPanel VerticalAlignment="Center" Spacing="60" HorizontalAlignment="Center">
-                <StackPanel HorizontalAlignment="Center" Spacing="5">
+            <StackPanel VerticalAlignment="Center" Spacing="70" HorizontalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center" Spacing="5" Margin="0, 0, 0, -10">
                     <TextBlock 
                         Text="PROARC" 
                         FontSize="40" 
@@ -49,14 +49,15 @@
                         HorizontalAlignment="Center" />
                 </StackPanel>
 
-                <StackPanel Spacing="12">
+                <StackPanel Spacing="10">
                     <Grid Width="269" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <ProgressRing
                             x:Name="carregando"
                             IsActive="False"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Visibility="Collapsed" />
+                            Visibility="Collapsed"
+                            Margin="0, 0, 0, 10"/>
 
                         <Border
                             x:Name="ErrorPanel"
