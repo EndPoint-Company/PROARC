@@ -70,54 +70,6 @@ namespace PROARC.src.Views
             cbMotivo.ItemsSource = motivos;
         }
 
-        //private async void ProcessoNovo_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Marca o primeiro rádio como selecionado
-        //    radio_agRealizacaoAudiencia.IsChecked = true;
-
-        //    // Configura estilos dos botões
-        //    btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
-        //    btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
-
-        //    btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-        //    btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
-        //    btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
-
-        //    // Configura campos como somente leitura
-        //    inputNProcesso.IsReadOnly = true;
-        //    inputAnoProcesso.IsReadOnly = true;
-
-        //    // Reduz a opacidade do painel principal
-        //    MainStackPanel.Opacity = 0.4;
-
-        //    // Obtém o número atual de processos, soma 1 e define como número do processo
-        //    int count = await ProcessoAdministrativoControl.CountProcessosAsync();
-        //    NumeroProcesso = (count + 1).ToString();
-
-        //    // Define o ano do processo
-        //    AnoProcesso = "2025";
-        //}
-
-
-
-        //private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
-        //{
-        //    radio_agRealizacaoAudiencia.IsChecked = false;
-        //    btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
-        //    btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
-
-        //    btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-        //    btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
-        //    btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
-
-        //    inputNProcesso.IsReadOnly = false;
-        //    inputAnoProcesso.IsReadOnly = false;
-
-        //    MainStackPanel.Opacity = 1;
-        //    NumeroProcesso = "";
-        //    AnoProcesso = "";
-        //}
-
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         {
             ConfigurarEstadoProcesso(isNovoProcesso: true);
@@ -151,7 +103,8 @@ namespace PROARC.src.Views
             }
             else
             {
-                LimparProcesso();
+                NumeroProcesso = string.Empty;
+                AnoProcesso = string.Empty;
             }
         }
 
@@ -162,13 +115,6 @@ namespace PROARC.src.Views
             AnoProcesso = "2025";
         }
 
-        private void LimparProcesso()
-        {
-            NumeroProcesso = string.Empty;
-            AnoProcesso = string.Empty;
-        }
-
-
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             ProcuradorSection1.Visibility = Visibility.Visible;
@@ -178,6 +124,97 @@ namespace PROARC.src.Views
         {
             ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
+
+        private async void OnNovoMotivoClick(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Adicionar Novo Motivo",
+                Content = CreateDialogContent(),
+                PrimaryButtonText = "Salvar",
+                CloseButtonText = "Cancelar",
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                var motivoTexto = ((TextBox)dialog.Content).Text;
+
+                if (!string.IsNullOrWhiteSpace(((TextBox)dialog.Content).Text))
+                {
+                    var motivosExistentes = await GetAllMotivosAsync();
+
+                    if (motivosExistentes.Any(m => m.Nome.Equals(motivoTexto, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var errorDialog = new ContentDialog
+                        {
+                            Title = "Erro",
+                            Content = "Este motivo já existe.",
+                            CloseButtonText = "Ok",
+                            XamlRoot = this.Content.XamlRoot
+                        };
+                        await errorDialog.ShowAsync();
+                    }
+                    else
+                    {
+                        var motivo = new Motivo(motivoTexto, null);
+
+                        try
+                        {
+                            await MotivoControl.AddMotivoAsync(motivo);
+                            await CarregarMotivosAsync();
+
+                            var successDialog = new ContentDialog
+                            {
+                                Title = "Sucesso",
+                                Content = "Motivo salvo com sucesso!",
+                                CloseButtonText = "Ok",
+                                XamlRoot = this.Content.XamlRoot
+                            };
+
+                            await successDialog.ShowAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            var errorDialog = new ContentDialog
+                            {
+                                Title = "Erro",
+                                Content = $"Falha ao salvar motivo: {ex.Message}",
+                                CloseButtonText = "Ok",
+                                XamlRoot = this.Content.XamlRoot
+                            };
+
+                            await errorDialog.ShowAsync();
+                        }
+                    }
+                }
+                else
+                {
+                    var errorDialog = new ContentDialog
+                    {
+                        Title = "Erro",
+                        Content = "O motivo não pode estar vazio.",
+                        CloseButtonText = "Ok",
+                        XamlRoot = this.Content.XamlRoot
+                    };
+
+                    await errorDialog.ShowAsync();
+                }
+            }
+        }
+
+
+        private UIElement CreateDialogContent()
+        {
+            return new TextBox
+            {
+                PlaceholderText = "Digite o motivo"
+            };
+        }
+
+
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
@@ -228,13 +265,14 @@ namespace PROARC.src.Views
             {
                 nProcesso = inputNProcesso.Text;
                 anoProcesso = short.Parse(inputAnoProcesso.Text);
-            } else
+            }
+            else
             {
                 nProcesso = NumeroProcesso;
                 anoProcesso = 2025;
             }
 
-            ProcessoAdministrativoControl.InsertAsync(
+            bool success = await ProcessoAdministrativoControl.InsertAsync(
                 new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
                 new(motivo),
                 reclamado,
@@ -242,6 +280,24 @@ namespace PROARC.src.Views
                 DateTime.Parse(dataFormatada))
             );
 
+            if (success)
+            {
+                var successDialog = new ContentDialog
+                {
+                    Title = "Sucesso",
+                    Content = "O processo foi cadastrado com sucesso!",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await successDialog.ShowAsync();
+
+                Frame.Navigate(typeof(RegistrarProcesso01Page));
+            }
+            else
+            {
+                ShowError("Falha ao cadastrar o processo. Tente novamente.");
+            }
         }
 
         private bool CamposPreenchidos()

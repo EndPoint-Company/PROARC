@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sys="using:System"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -63,15 +63,21 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <!-- Seção Motivo e Audiência -->
                         <StackPanel Orientation="Horizontal" Spacing="32">
 
                             <!-- Seção Motivo -->
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                                 <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="200" CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}" Width="376">
-                                    <TextBlock Text="Motivo" FontSize="18" FontWeight="Bold" />
-                                    <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Motivo" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Grid.Column="0" />
+                                        <Button Content="Novo Motivo" Grid.Column="1" Click="OnNovoMotivoClick" Background="#003366" Foreground="White"/>
+                                    </Grid>
+                                    <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -80,10 +86,11 @@
                                 <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                                 <StackPanel Padding="40" Height="200" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="376" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
                                     <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
-                                    <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" />
+                                    <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" MinDate="{x:Bind sys:DateTime.Now, Mode=OneWay}" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
+
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
