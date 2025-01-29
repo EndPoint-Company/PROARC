@@ -70,53 +70,104 @@ namespace PROARC.src.Views
             cbMotivo.ItemsSource = motivos;
         }
 
-        private async void ProcessoNovo_Click(object sender, RoutedEventArgs e)
+        //private async void ProcessoNovo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    // Marca o primeiro rádio como selecionado
+        //    radio_agRealizacaoAudiencia.IsChecked = true;
+
+        //    // Configura estilos dos botões
+        //    btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
+        //    btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+
+        //    btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
+        //    btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
+        //    btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
+
+        //    // Configura campos como somente leitura
+        //    inputNProcesso.IsReadOnly = true;
+        //    inputAnoProcesso.IsReadOnly = true;
+
+        //    // Reduz a opacidade do painel principal
+        //    MainStackPanel.Opacity = 0.4;
+
+        //    // Obtém o número atual de processos, soma 1 e define como número do processo
+        //    int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+        //    NumeroProcesso = (count + 1).ToString();
+
+        //    // Define o ano do processo
+        //    AnoProcesso = "2025";
+        //}
+
+
+
+        //private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    radio_agRealizacaoAudiencia.IsChecked = false;
+        //    btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
+        //    btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+
+        //    btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
+        //    btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
+        //    btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
+
+        //    inputNProcesso.IsReadOnly = false;
+        //    inputAnoProcesso.IsReadOnly = false;
+
+        //    MainStackPanel.Opacity = 1;
+        //    NumeroProcesso = "";
+        //    AnoProcesso = "";
+        //}
+
+        private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         {
-            // Marca o primeiro rádio como selecionado
-            radio_agRealizacaoAudiencia.IsChecked = true;
-
-            // Configura estilos dos botões
-            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
-            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
-
-            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
-            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
-
-            // Configura campos como somente leitura
-            inputNProcesso.IsReadOnly = true;
-            inputAnoProcesso.IsReadOnly = true;
-
-            // Reduz a opacidade do painel principal
-            MainStackPanel.Opacity = 0.4;
-
-            // Obtém o número atual de processos, soma 1 e define como número do processo
-            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
-            NumeroProcesso = (count + 1).ToString();
-
-            // Define o ano do processo
-            AnoProcesso = "2025";
+            ConfigurarEstadoProcesso(isNovoProcesso: true);
         }
-
-
 
         private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
         {
-            radio_agRealizacaoAudiencia.IsChecked = false;
-            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); 
-            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
-
-            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); 
-            btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
-
-            inputNProcesso.IsReadOnly = false;
-            inputAnoProcesso.IsReadOnly = false;
-
-            MainStackPanel.Opacity = 1; 
-            NumeroProcesso = ""; 
-            AnoProcesso = ""; 
+            ConfigurarEstadoProcesso(isNovoProcesso: false);
         }
+
+
+        private void ConfigurarEstadoProcesso(bool isNovoProcesso)
+        {
+            radio_agRealizacaoAudiencia.IsChecked = isNovoProcesso;
+
+            btnProcessoNovo.Background = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.DarkBlue : Microsoft.UI.Colors.White);
+            btnProcessoNovo.Foreground = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.DarkBlue);
+
+            btnProcessoAntigo.Background = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.DarkBlue);
+            btnProcessoAntigo.Foreground = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.DarkBlue : Microsoft.UI.Colors.White);
+            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
+
+            inputNProcesso.IsReadOnly = isNovoProcesso;
+            inputAnoProcesso.IsReadOnly = isNovoProcesso;
+
+            MainStackPanel.Opacity = isNovoProcesso ? 0.4 : 1;
+
+            if (isNovoProcesso)
+            {
+                DefinirNovoProcesso();
+            }
+            else
+            {
+                LimparProcesso();
+            }
+        }
+
+        private async void DefinirNovoProcesso()
+        {
+            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            NumeroProcesso = (count + 1).ToString();
+            AnoProcesso = "2025";
+        }
+
+        private void LimparProcesso()
+        {
+            NumeroProcesso = string.Empty;
+            AnoProcesso = string.Empty;
+        }
+
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -130,18 +181,13 @@ namespace PROARC.src.Views
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(NumeroProcesso))
+            {
+                int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+                NumeroProcesso = (count + 1).ToString();
+            }
 
-            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
-            NumeroProcesso = (count + 1).ToString();
-            string numeroProcesso = (count + 1).ToString();
-
-            if (string.IsNullOrWhiteSpace(inputNome.Text) ||
-                string.IsNullOrWhiteSpace(inputCpfReclamante.Text) ||
-                string.IsNullOrWhiteSpace(inputRgReclamante.Text) ||
-                string.IsNullOrWhiteSpace(inputInstituicao.Text) ||
-                string.IsNullOrWhiteSpace(inputCnpjCpfReclamado.Text) ||
-                cbMotivo.SelectedItem == null ||
-                calendario.Date == null)
+            if (!CamposPreenchidos())
             {
                 ShowError("Preencha todos os campos obrigatórios antes de continuar.");
                 return;
@@ -175,14 +221,38 @@ namespace PROARC.src.Views
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
 
-            ProcessoAdministrativoControl.Insert(
-                new(caminhoPasta, NumeroProcesso, 2025, GetSelectedRadioButton(),
+            string nProcesso;
+            short anoProcesso;
+
+            if (btnProcessoAntigo.IsEnabled)
+            {
+                nProcesso = inputNProcesso.Text;
+                anoProcesso = short.Parse(inputAnoProcesso.Text);
+            } else
+            {
+                nProcesso = NumeroProcesso;
+                anoProcesso = 2025;
+            }
+
+            ProcessoAdministrativoControl.InsertAsync(
+                new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
                 new(motivo),
                 reclamado,
                 reclamante,
                 DateTime.Parse(dataFormatada))
             );
 
+        }
+
+        private bool CamposPreenchidos()
+        {
+            return !string.IsNullOrWhiteSpace(inputNome.Text) &&
+                   !string.IsNullOrWhiteSpace(inputCpfReclamante.Text) &&
+                   !string.IsNullOrWhiteSpace(inputRgReclamante.Text) &&
+                   !string.IsNullOrWhiteSpace(inputInstituicao.Text) &&
+                   !string.IsNullOrWhiteSpace(inputCnpjCpfReclamado.Text) &&
+                   cbMotivo.SelectedItem != null &&
+                   calendario.Date != null;
         }
 
         private async void ShowError(string mensagemErro)

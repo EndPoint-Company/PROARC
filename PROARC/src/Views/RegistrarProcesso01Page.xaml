@@ -229,7 +229,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
                                 <Button 
-                                    Content="Adicionar Reclamado" 
+                                    Content="Novo Reclamado" 
                                     Background="#003366" 
                                     Foreground="White" 
                                     Padding="20, 10" 
