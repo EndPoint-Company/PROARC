@@ -48,10 +48,7 @@ namespace PROARC.src.Views
                 this.InitializeComponent();
                 this.DataContext = this;
 
-                _ = CarregarProcessosPeriodicamente();
-
-                // Adicionando itens de exemplo
-                
+                _ = CarregarProcessosPeriodicamente();                
             }
             catch (Exception ex)
             {
@@ -99,8 +96,8 @@ namespace PROARC.src.Views
                         Debug.WriteLine("Nenhum novo processo foi retornado.");
                     }
 
-                    // Espera um intervalo de tempo (por exemplo, 10 segundos) antes de verificar novamente
-                    await Task.Delay(10000); // 10 segundos de intervalo
+                    // Espera um intervalo de tempo, antes de verificar novamente
+                    await Task.Delay(10000); 
                 }
             }
             catch (Exception ex)
@@ -112,10 +109,6 @@ namespace PROARC.src.Views
                 IsLoading = false;
             }
         }
-
-
-
-
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {

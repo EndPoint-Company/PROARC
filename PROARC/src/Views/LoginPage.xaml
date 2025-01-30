@@ -69,6 +69,7 @@
                             Padding="10"
                             Visibility="Collapsed">
                             <TextBlock
+                                x:Name="ErrorText"
                                 Text="Senha incorreta. Tente novamente."
                                 FontSize="14"
                                 Foreground="#FF3333"

@@ -18,7 +18,8 @@ namespace PROARC.src.Control
         public static async Task<string> SendRequestAsync(object request)
         {
             using TcpClient client = new();
-            await client.ConnectAsync(ServerIp, ServerPort);
+            if (!client.ConnectAsync(ServerIp, ServerPort).Wait(2000))
+                throw new SocketException((int)SocketError.NotConnected);
 
             await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));
 
