@@ -66,7 +66,7 @@ namespace PROARC.src.Views
 
         private async Task CarregarMotivosAsync()
         {
-            List<Motivo> motivos = await MotivoControl.GetAllMotivosAsync();
+            List<Motivo> motivos = await MotivoControl.GetAllAsync();
             cbMotivo.ItemsSource = motivos;
         }
 
@@ -91,7 +91,7 @@ namespace PROARC.src.Views
             MainStackPanel.Opacity = 0.4;
 
             // Obtém o número atual de processos, soma 1 e define como número do processo
-            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            int count = await ProcessoAdministrativoControl.CountAsync();
             NumeroProcesso = (count + 1).ToString();
 
             // Define o ano do processo
@@ -131,7 +131,7 @@ namespace PROARC.src.Views
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
 
-            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            int count = await ProcessoAdministrativoControl.CountAsync();
             NumeroProcesso = (count + 1).ToString();
             string numeroProcesso = (count + 1).ToString();
 

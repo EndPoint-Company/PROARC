@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using Newtonsoft.Json.Linq;
 using PROARC.src.Control;
 using PROARC.src.Models;
 using PROARC.src.Models.Arquivos;
@@ -62,6 +63,8 @@ namespace PROARC.src.Views
         {
             if (IsLoading) return; // Impede chamadas repetidas enquanto já está carregando
 
+            carregando.Visibility = Visibility.Visible;
+            carregando.IsActive = true;
             IsLoading = true;
 
             try
@@ -88,6 +91,8 @@ namespace PROARC.src.Views
                         }
 
                         Debug.WriteLine($"Carregados {processos.Count} processos.");
+                        carregando.IsActive = false;
+                        carregando.Visibility = Visibility.Collapsed;
                     }
                     else
                     {

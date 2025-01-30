@@ -11,7 +11,7 @@ namespace PROARC.src.Control
 {
     public class NetworkControl
     {
-        private static readonly string ServerIp = "34.151.193.77";
+        private static readonly string ServerIp = "127.0.0.1";
 
         private static readonly int ServerPort = 9999;
 
@@ -20,9 +20,9 @@ namespace PROARC.src.Control
             using TcpClient client = new();
             await client.ConnectAsync(ServerIp, ServerPort);
 
-            await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));    
+            await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));
 
-            NetworkStream stream = client.GetStream();
+            using NetworkStream stream = client.GetStream();
             string? jsonRequest = JsonSerializer.Serialize(request);
 
             byte[] requestBytes = Encoding.UTF8.GetBytes(jsonRequest);

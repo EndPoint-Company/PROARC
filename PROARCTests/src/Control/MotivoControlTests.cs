@@ -17,27 +17,26 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetMotivoAsyncTest()
         {
-            Console.WriteLine(await MotivoControl.GetMotivoAsync("Atraso na entrega"));
+            Console.WriteLine(await MotivoControl.GetAsync("Atraso na entrega"));
         }
 
         [TestMethod()]
         public async Task GetMotivoAsyncTest1()
         {
-            Console.WriteLine((await MotivoControl.GetMotivoAsync(7)).Nome);
+            Console.WriteLine((await MotivoControl.GetAsync(7)).Nome);
         }
 
         [TestMethod()]
         public async Task GetIdMotivoAsyncTest()
         {
-            int? abacaxi = await MotivoControl.GetIdMotivoAsync("Atraso na entrega");
+            int? abacaxi = await MotivoControl.GetIdAsync("Atraso na entrega");
             Console.WriteLine(abacaxi);
         }
 
         [TestMethod()]
-
         public async Task GetAllMotivosAsyncTest()
         {
-            List<Motivo> motivo = await MotivoControl.GetAllMotivosAsync();
+            List<Motivo> motivo = await MotivoControl.GetAllAsync();
 
             foreach (Motivo motivos in motivo)
             {
@@ -48,25 +47,25 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task AddMotivoAsyncTest()
         {
-            await MotivoControl.AddMotivoAsync(new Motivo("juros splashsticos"));
+            await MotivoControl.InsertAsync(new Motivo("juros splashsticos"));
         }
 
         [TestMethod()]
         public async Task UpdateMotivoAsyncTest()
         {
-            await MotivoControl.UpdateMotivoAsync("Atraso na entrega", "juros capistropolicos");
+            await MotivoControl.UpdateAsync("Atraso na entrega", "juros capistropolicos");
         }
 
         [TestMethod()]
         public async Task RemoveMotivoAsyncTest()
         {
-            await MotivoControl.RemoveMotivoAsync("Juros abusivos");
+            await MotivoControl.DeketeAsync("Juros abusivos");
         }
 
         [TestMethod()]
         public async Task CountMotivosTest()
         {
-            Console.WriteLine(await MotivoControl.CountMotivos());
+            Console.WriteLine(await MotivoControl.CountAsync());
         }
     }
 }

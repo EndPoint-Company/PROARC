@@ -11,7 +11,7 @@ namespace PROARC.src.Control
 {
     public static class ReclamadoControl
     {
-        public static async Task<Reclamado?> GetReclamadoByIdAsync(int id)
+        public static async Task<Reclamado?> GetAsync(int id)
         {
 
             var request = new { action = "get_reclamado_by_id", id };
@@ -38,7 +38,7 @@ namespace PROARC.src.Control
             return null;
         }
 
-        public static async Task<List<Reclamado>> GetAllReclamadosAsync()
+        public static async Task<List<Reclamado>> GetAllAsync()
         {
             var request = new { action = "get_all_reclamados" };
             string response = await SendRequestAsync(request);
@@ -76,26 +76,26 @@ namespace PROARC.src.Control
 
 
 
-        public static async Task AddReclamadoAsync(Reclamado reclamado)
+        public static async Task InsertAsync(Reclamado reclamado)
         {
             var request = new { action = "add_reclamado", reclamado };
             Console.WriteLine(request);
             await SendRequestAsync(request);
         }
 
-        public static async Task UpdateReclamadoByIdAsync(int id, Reclamado reclamado)
+        public static async Task UpdateAsync(int id, Reclamado reclamado)
         {
             var request = new { action = "update_reclamado_by_id", id, reclamado };
             await SendRequestAsync(request);
         }
 
-        public static async Task RemoveReclamadoByIdAsync(int id)
+        public static async Task DeleteAsync(int id)
         {
             var request = new { action = "remove_reclamado_by_id", id };
             await SendRequestAsync(request);
         }
 
-        public static async Task<int> CountReclamadosAsync()
+        public static async Task<int> CountAsync()
         {
             var request = new { action = "count_reclamados" };
             string response = await SendRequestAsync(request);

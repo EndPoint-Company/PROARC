@@ -11,9 +11,9 @@ using Newtonsoft.Json.Linq;
 
 namespace PROARC.src.Control
 {
-    public static class MotivoControl
+    public class MotivoControl
     {
-        public static async Task<Motivo?> GetMotivoAsync(string nome)
+        public static async Task<Motivo?> GetAsync(string nome)
         {
             var request = new { action = "get_motivo_by_nome", nome };
             string response = await SendRequestAsync(request);
@@ -30,7 +30,7 @@ namespace PROARC.src.Control
             return null;
         }
 
-        public static async Task<Motivo?> GetMotivoAsync(int id)
+        public static async Task<Motivo?> GetAsync(int id)
         {
             var request = new { action = "get_motivo_by_id", id };
             string response = await SendRequestAsync(request);
@@ -48,7 +48,7 @@ namespace PROARC.src.Control
             return null;
         }
 
-        public static async Task<int?> GetIdMotivoAsync(string nome)
+        public static async Task<int?> GetIdAsync(string nome)
         {
             var request = new { action = "get_id_motivo_by_nome", nome };
             string response = await SendRequestAsync(request);
@@ -71,7 +71,7 @@ namespace PROARC.src.Control
             return int.Parse(numero);
         }
 
-        public static async Task<List<Motivo>> GetAllMotivosAsync()
+        public static async Task<List<Motivo>> GetAllAsync()
         {
             var request = new { action = "get_all_motivos" };
 
@@ -92,25 +92,25 @@ namespace PROARC.src.Control
             return motivos;
         }
 
-        public static async Task AddMotivoAsync(Motivo motivo)
+        public static async Task InsertAsync(Motivo motivo)
         {
             var request = new { action = "add_motivo", motivo };
             await SendRequestAsync(request);
         }
 
-        public static async Task RemoveMotivoAsync(string nome)
+        public static async Task DeketeAsync(string nome)
         {
             var request = new { action = "remove_motivo_by_nome", nome };
             await SendRequestAsync(request);
         }
 
-        public static async Task UpdateMotivoAsync(string nome, string? novoNome = null, string? novaDescricao = null)
+        public static async Task UpdateAsync(string nome, string? novoNome = null, string? novaDescricao = null)
         {
             var request = new { action = "update_motivo_by_id", nome, novoNome, novaDescricao };
             await SendRequestAsync(request);
         }
 
-        public static async Task<int> CountMotivos()
+        public static async Task<int> CountAsync()
         {
             var request = new { action = "count_motivos" };
             string response = await SendRequestAsync(request);
@@ -122,8 +122,8 @@ namespace PROARC.src.Control
             {
                 return countElement.GetInt32();
             }
-            return 0;
 
+            return 0;
         }
     }
 }
