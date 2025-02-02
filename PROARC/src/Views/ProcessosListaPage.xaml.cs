@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using Newtonsoft.Json.Linq;
 using PROARC.src.Control;
 using PROARC.src.Models;
 using PROARC.src.Models.Arquivos;
@@ -47,10 +48,7 @@ namespace PROARC.src.Views
                 this.InitializeComponent();
                 this.DataContext = this;
 
-                _ = CarregarProcessosPeriodicamente();
-
-                // Adicionando itens de exemplo
-                
+                _ = CarregarProcessosPeriodicamente();                
             }
             catch (Exception ex)
             {
@@ -62,6 +60,8 @@ namespace PROARC.src.Views
         {
             if (IsLoading) return; // Impede chamadas repetidas enquanto já está carregando
 
+            carregando.Visibility = Visibility.Visible;
+            carregando.IsActive = true;
             IsLoading = true;
 
             try
@@ -88,14 +88,16 @@ namespace PROARC.src.Views
                         }
 
                         Debug.WriteLine($"Carregados {processos.Count} processos.");
+                        carregando.IsActive = false;
+                        carregando.Visibility = Visibility.Collapsed;
                     }
                     else
                     {
                         Debug.WriteLine("Nenhum novo processo foi retornado.");
                     }
 
-                    // Espera um intervalo de tempo (por exemplo, 10 segundos) antes de verificar novamente
-                    await Task.Delay(10000); // 10 segundos de intervalo
+                    // Espera um intervalo de tempo, antes de verificar novamente
+                    await Task.Delay(10000); 
                 }
             }
             catch (Exception ex)
@@ -107,10 +109,6 @@ namespace PROARC.src.Views
                 IsLoading = false;
             }
         }
-
-
-
-
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {

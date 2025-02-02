@@ -10,7 +10,7 @@ namespace PROARC.src.Control
 {
     public static class ReclamanteControl
     {
-        public static async Task<Reclamante?> GetReclamanteByIdAsync(int id)
+        public static async Task<Reclamante?> GetAsync(int id)
         {
             var request = new { action = "get_reclamante_by_id", id };
             string response = await SendRequestAsync(request);
@@ -70,7 +70,7 @@ namespace PROARC.src.Control
             return null;
         }
 
-        public static async Task<List<Reclamante>> GetAllReclamantesAsync()
+        public static async Task<List<Reclamante>> GetAllAsync()
         {
             var request = new { action = "get_all_reclamantes" };
             string response = await SendRequestAsync(request);
@@ -98,25 +98,25 @@ namespace PROARC.src.Control
             return reclamantes;
         }
 
-        public static async Task AddReclamanteAsync(Reclamante reclamante)
+        public static async Task InsertAsync(Reclamante reclamante)
         {
             var request = new { action = "add_reclamante", reclamante };
             await SendRequestAsync(request);
         }
 
-        public static async Task UpdateReclamanteByIdAsync(int id, Reclamante reclamante)
+        public static async Task UpdateAsync(int id, Reclamante reclamante)
         {
             var request = new { action = "update_reclamante_by_id", id, reclamante };
             await SendRequestAsync(request);
         }
 
-        public static async Task RemoveReclamanteByIdAsync(int id)
+        public static async Task DeleteAsync(int id)
         {
             var request = new { action = "remove_reclamante_by_id", id };
             await SendRequestAsync(request);
         }
 
-        public static async Task<int> CountReclamantesAsync()
+        public static async Task<int> CountAsync()
         {
             var request = new { action = "count_reclamantes" };
             string response = await SendRequestAsync(request);

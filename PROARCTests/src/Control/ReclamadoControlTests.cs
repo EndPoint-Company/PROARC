@@ -23,7 +23,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAllReclamadosAsyncTest()
         {
-            List<Reclamado> abacate = await ReclamadoControl.GetAllReclamadosAsync();
+            List<Reclamado> abacate = await ReclamadoControl.GetAllAsync();
 
             foreach (Reclamado abacates in abacate)
             {

@@ -66,6 +66,13 @@
                     </DataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
+            <ProgressRing
+                x:Name="carregando"
+                IsActive="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="Collapsed"
+                Margin="0, 0, 0, 10"/>
         </StackPanel>
     </Border>
 </Page>

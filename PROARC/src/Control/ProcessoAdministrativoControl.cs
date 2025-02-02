@@ -12,10 +12,11 @@ using static PROARC.src.Control.NetworkControl;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Diagnostics;
+using System.Threading;
 
 namespace PROARC.src.Control
 {
-    public class ProcessoAdministrativoControl : IDatabaseCRUD<ProcessoAdministrativo>
+    public class ProcessoAdministrativoControl
     {
         public static async Task<List<ProcessoAdministrativo>?> GetAllAsync()
         {
@@ -26,39 +27,35 @@ namespace PROARC.src.Control
             Console.WriteLine(jo);
 
             List<ProcessoAdministrativo> processos = new List<ProcessoAdministrativo>();
-
-            foreach (var a in jo.Values())
+            var list = JsonConvert.DeserializeObject<List<List<object>>>((string)jo.Values().FirstOrDefault<JToken>());
+            foreach (List<object> b in list)
             {
-                var list = JsonConvert.DeserializeObject<List<List<object>>>((string)a);
-                foreach (List<object> b in list)
+                ProcessoAdministrativo processo = new ProcessoAdministrativo();
+
+                Motivo? motivo = await MotivoControl.GetAsync(Convert.ToInt32(b[1]));
+                processo.Motivo = motivo;
+
+                Reclamante? reclamante = await ReclamanteControl.GetAsync(Convert.ToInt32(b[2]));
+                processo.Reclamante = reclamante;
+
+                processo.Titulo = (string)b[3];
+
+                processo.Status = (string)b[4];
+
+                processo.CaminhoDoProcesso = (string)b[5];
+
+                processo.Ano = Convert.ToInt16(b[6]);
+
+                try
                 {
-                    ProcessoAdministrativo processo = new ProcessoAdministrativo();
-
-                    Motivo? motivo = await MotivoControl.GetMotivoAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
-                    processo.Motivo = motivo;
-
-                    Reclamante? reclamante = await ReclamanteControl.GetReclamanteByIdAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
-                    processo.Reclamante = reclamante;
-
-                    processo.Titulo = (string)b[3];
-
-                    processo.Status = (string)b[4];
-
-                    processo.CaminhoDoProcesso = (string)b[5];
-
-                    processo.Ano = Convert.ToInt16(b[6]);
-
-                    try
-                    {
-                        processo.DataDaAudiencia = DateTime.Parse((string)b[7], CultureInfo.InvariantCulture);
-                    }
-                    catch (Exception)
-                    {
-                        processo.DataDaAudiencia = null;
-                    }
-
-                    processos.Add(processo);
+                    processo.DataDaAudiencia = DateTime.Parse((string)b[7], CultureInfo.InvariantCulture);
                 }
+                catch (Exception)
+                {
+                    processo.DataDaAudiencia = null;
+                }
+
+                processos.Add(processo);
             }
 
             return processos;
@@ -80,10 +77,10 @@ namespace PROARC.src.Control
                 var list = JsonConvert.DeserializeObject<List<List<object>>>((string)a);
                 foreach (List<object> b in list)
                 {
-                    Motivo? motivo = await MotivoControl.GetMotivoAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
+                    Motivo? motivo = await MotivoControl.GetAsync(Convert.ToInt32(b[1])).ConfigureAwait(false);
                     processo.Motivo = motivo;
 
-                    Reclamante? reclamante = await ReclamanteControl.GetReclamanteByIdAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
+                    Reclamante? reclamante = await ReclamanteControl.GetAsync(Convert.ToInt32(b[2])).ConfigureAwait(false);
                     processo.Reclamante = reclamante;
 
                     processo.Titulo = (string)b[3];
@@ -149,6 +146,22 @@ namespace PROARC.src.Control
             return true;
         }
 
+        //mudar futuramente quando as criacoes de processo com mais de um reclamado estejam ajustadas
+        public static async Task<Reclamado> GetReclamadoFromRelacao(int processo_id)
+        {
+            var request = new { action = "get_reclamado_from_relacao_by_processo_id", processo_id };
+            string response = await SendRequestAsync(request);
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            int numero = root.GetProperty("reclamados")[0][0].GetInt32();
+
+            Reclamado reclamado = await ReclamadoControl.GetAsync(numero);
+
+            return reclamado;
+
+        }
+
         public static async Task<bool> DeleteAsync(int id)
         {
             var request = new { action = "remove_processo_by_id", id };
@@ -157,7 +170,7 @@ namespace PROARC.src.Control
             return true;
         }
 
-        public static async Task<int> CountProcessosAsync()
+        public static async Task<int> CountAsync()
         {
             var request = new { action = "count_processos" };
             string response = await SendRequestAsync(request);

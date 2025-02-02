@@ -66,7 +66,7 @@ namespace PROARC.src.Views
 
         private async Task CarregarMotivosAsync()
         {
-            List<Motivo> motivos = await MotivoControl.GetAllMotivosAsync();
+            List<Motivo> motivos = await MotivoControl.GetAllAsync();
             cbMotivo.ItemsSource = motivos;
         }
 
@@ -113,7 +113,7 @@ namespace PROARC.src.Views
 
         private async void DefinirNovoProcesso()
         {
-            int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+            int count = await ProcessoAdministrativoControl.CountAsync();
             NumeroProcesso = (count + 1).ToString();
             AnoProcesso = "2025";
         }
@@ -147,7 +147,7 @@ namespace PROARC.src.Views
 
                 if (!string.IsNullOrWhiteSpace(((TextBox)dialog.Content).Text))
                 {
-                    var motivosExistentes = await GetAllMotivosAsync();
+                    var motivosExistentes = await MotivoControl.GetAllAsync();
 
                     if (motivosExistentes.Any(m => m.Nome.Equals(motivoTexto, StringComparison.OrdinalIgnoreCase)))
                     {
@@ -166,7 +166,7 @@ namespace PROARC.src.Views
 
                         try
                         {
-                            await MotivoControl.AddMotivoAsync(motivo);
+                            await MotivoControl.InsertAsync(motivo);
                             await CarregarMotivosAsync();
 
                             var successDialog = new ContentDialog
@@ -223,7 +223,7 @@ namespace PROARC.src.Views
         {
             if (string.IsNullOrEmpty(NumeroProcesso))
             {
-                int count = await ProcessoAdministrativoControl.CountProcessosAsync();
+                int count = await ProcessoAdministrativoControl.CountAsync();
                 NumeroProcesso = (count + 1).ToString();
             }
 
