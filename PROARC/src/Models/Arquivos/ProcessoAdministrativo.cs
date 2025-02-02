@@ -45,7 +45,7 @@ namespace PROARC.src.Models.Arquivos
 
         public ProcessoAdministrativo(
             string caminhoDoProcesso, string titulo, short ano, string status, Motivo? motivo = null,
-            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null, DateTime? dataDeModificacao = null,
+            Reclamado? reclamado = null, Reclamante? reclamante = null, DateTime? dataDaAudiencia = null,
             DateTime? dataDeCriacao = null)
         {
             this.titulo = titulo;
@@ -69,8 +69,9 @@ namespace PROARC.src.Models.Arquivos
                    $"Motivo: {motivo?.ToString() ?? "Não definido"}\n" +
                    $"Reclamado: {reclamado?.ToString() ?? "Não definido"}\n" +
                    $"Reclamante: {reclamante?.ToString() ?? "Não definido"}\n" +
-                   $"Data da Audiência: {dataDaAudiencia?.ToString("dd/MM/yyyy") ?? "Não definida"}\n";
-                 
+                   $"Data da Audiência: {dataDaAudiencia?.ToString("dd/MM/yyyy") ?? "Não definida"}\n" +
+                   $"Data da criacao: {dataDeCriacao?.ToString("dd/MM/yyyy") ?? "Não definida"}\n";
+
         }
 
         public string Titulo { get => this.titulo; set { this.titulo = value; } }
