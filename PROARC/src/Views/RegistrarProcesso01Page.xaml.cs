@@ -100,11 +100,14 @@ namespace PROARC.src.Views
             if (isNovoProcesso)
             {
                 DefinirNovoProcesso();
+                calendario.MinDate = DateTimeOffset.Now;
             }
             else
             {
                 NumeroProcesso = string.Empty;
                 AnoProcesso = string.Empty;
+
+                calendario.ClearValue(CalendarDatePicker.MinDateProperty);
             }
         }
 

@@ -86,7 +86,7 @@
                                 <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                                 <StackPanel Padding="40" Height="200" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="376" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
                                     <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
-                                    <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" MinDate="{x:Bind sys:DateTime.Now, Mode=OneWay}" />
+                                    <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
