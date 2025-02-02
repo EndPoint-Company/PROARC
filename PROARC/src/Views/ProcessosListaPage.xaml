@@ -9,10 +9,10 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Border CornerRadius="10" Margin="50, 0">
+    <Border CornerRadius="5" Margin="20, 0">
         <StackPanel Spacing="10" Padding="40">
             <!-- Cabeçalho -->
-            <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
+            <TextBlock Text="Processos Administrativos" FontSize="24" FontWeight="Bold" />
 
             <!-- Títulos -->
             <Grid>
@@ -38,10 +38,10 @@
             </Grid>
 
             <!-- TreeView -->
-            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="False">
+            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="False" CanReorderItems="False" >
                 <TreeView.ItemTemplate>
                     <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                        <Grid RightTapped="Processo_RightTapped">
+                        <Grid RightTapped="Processo_RightTapped" AllowDrop="False" DragEnter="OnDragEnter" DragStarting="OnDragStarting" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="200" />
@@ -53,14 +53,53 @@
                                 <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind DataDeCriacaoFormatada}" Grid.Column="4" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind DataDaAudienciaFormatada}" Grid.Column="5" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" />
+                            <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind NumeroProcesso}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind Reclamante.Nome}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind Reclamante.CpfFormatado}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind Reclamado.Nome}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind DataDeCriacaoFormatada}" Grid.Column="4" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind DataDeCriacaoFormatada}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind DataDaAudienciaFormatada}" Grid.Column="5" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind DataDaAudienciaFormatada}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind Motivo.Nome}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+
+                            <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="{x:Bind Status}" Placement="Mouse"/>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
                         </Grid>
                     </DataTemplate>
                 </TreeView.ItemTemplate>
