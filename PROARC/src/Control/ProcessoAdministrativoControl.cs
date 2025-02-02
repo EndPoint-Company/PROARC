@@ -186,6 +186,22 @@ namespace PROARC.src.Control
             return true;
         }
 
+        //mudar futuramente quando as criacoes de processo com mais de um reclamado estejam ajustadas
+        public static async Task<Reclamado> GetReclamadoFromRelacao(int processo_id)
+        {
+            var request = new { action = "get_reclamado_from_relacao_by_processo_id", processo_id };
+            string response = await SendRequestAsync(request);
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            int numero = root.GetProperty("reclamados")[0][0].GetInt32();
+
+            Reclamado reclamado = await ReclamadoControl.GetAsync(numero);
+
+            return reclamado;
+
+        }
+
         public static async Task<bool> DeleteAsync(int id)
         {
             var request = new { action = "remove_processo_by_id", id };

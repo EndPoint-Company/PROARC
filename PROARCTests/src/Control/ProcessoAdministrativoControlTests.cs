@@ -37,5 +37,11 @@ namespace PROARC.src.Control.Tests
             Assert.Fail();
 
         }
+
+        [TestMethod()]
+        public async Task GetReclamadoFromRelacaoTest()
+        {
+           Console.WriteLine(await ProcessoAdministrativoControl.GetReclamadoFromRelacao(34));
+        }
     }
 }
