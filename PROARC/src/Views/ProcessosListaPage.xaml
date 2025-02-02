@@ -38,10 +38,10 @@
             </Grid>
 
             <!-- TreeView -->
-            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="False">
+            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
                 <TreeView.ItemTemplate>
                     <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                        <Grid RightTapped="Processo_RightTapped">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="200" />
@@ -53,6 +53,7 @@
                                 <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
 
+                            <!-- Dados -->
                             <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" />
                             <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
                             <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" />
