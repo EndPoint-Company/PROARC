@@ -18,47 +18,87 @@ namespace PROARC.src.Control
 {
     public class ProcessoAdministrativoControl
     {
+        public class ProcessoAdministrativoDto
+        {
+            public int processo_id { get; set; }
+            public MotivoDto? motivo { get; set; }
+            public ReclamanteDto reclamante { get; set; }
+            public List<ReclamadoDto>? reclamados { get; set; }
+            public string titulo_processo { get; set; }
+            public string status_processo { get; set; }
+            public string path_processo { get; set; }
+            public int ano { get; set; }
+            public DateTime? data_audiencia { get; set; }
+            public DateTime? created_at { get; set; }
+        }
+
+        public class MotivoDto
+        {
+            public int motivo_id { get; set; }
+            public string nome { get; set; }
+        }
+
+        public class ReclamanteDto
+        {
+            public int reclamante_id { get; set; }
+            public string nome { get; set; }
+            public string rg { get; set; }
+            public string cpf { get; set; }
+        }
+
+        public class ReclamadoDto
+        {
+            public int reclamado_id { get; set; }
+            public string nome { get; set; }
+            public string? cpf { get; set; }
+            public string? cnpj { get; set; }
+            public short? numero_rua { get; set; }
+            public string? email { get; set; }
+            public string? rua { get; set; }
+            public string? bairro { get; set; }
+            public string? cidade { get; set; }
+            public string? uf { get; set; }
+        }
+
         public static async Task<List<ProcessoAdministrativo>?> GetAllAsync()
         {
-            var request = new { action = "get_all_processos" };
+            var request = new { action = "new_get_all_processos" };
+            string response = await NetworkControl.SendRequestAsync(request);
 
-            string response = await SendRequestAsync(request);
-            var jo = JObject.Parse(response);
-            Console.WriteLine(jo);
-
-            List<ProcessoAdministrativo> processos = new List<ProcessoAdministrativo>();
-            var list = JsonConvert.DeserializeObject<List<List<object>>>((string)jo.Values().FirstOrDefault<JToken>());
-            foreach (List<object> b in list)
+            try
             {
-                ProcessoAdministrativo processo = new ProcessoAdministrativo();
-
-                Motivo? motivo = await MotivoControl.GetAsync(Convert.ToInt32(b[1]));
-                processo.Motivo = motivo;
-
-                Reclamante? reclamante = await ReclamanteControl.GetAsync(Convert.ToInt32(b[2]));
-                processo.Reclamante = reclamante;
-
-                processo.Titulo = (string)b[3];
-
-                processo.Status = (string)b[4];
-
-                processo.CaminhoDoProcesso = (string)b[5];
-
-                processo.Ano = Convert.ToInt16(b[6]);
-
-                try
+                var jsonResponse = JsonConvert.DeserializeObject<Dictionary<string, List<ProcessoAdministrativoDto>>>(response);
+                if (jsonResponse != null && jsonResponse.TryGetValue("processos", out var processosDto))
                 {
-                    processo.DataDaAudiencia = DateTime.Parse((string)b[7], CultureInfo.InvariantCulture);
-                }
-                catch (Exception)
-                {
-                    processo.DataDaAudiencia = null;
-                }
+                    var processos = processosDto.Select(p => new ProcessoAdministrativo(
+                        p.path_processo,
+                        p.titulo_processo,
+                        (short)p.ano,
+                        p.status_processo,
+                        p.motivo != null ? new Motivo(p.motivo.nome) : null,
+                        p.reclamados?.FirstOrDefault() != null ? new Reclamado(
+                            p.reclamados.First().nome,
+                            p.reclamados.First().numero_rua,
+                            p.reclamados.First().rua,
+                            p.reclamados.First().bairro,
+                            p.reclamados.First().email,
+                            p.reclamados.First().cidade,
+                            p.reclamados.First().uf,
+                            p.reclamados.First().cnpj,
+                            p.reclamados.First().cpf) : null,
+                        new Reclamante(p.reclamante.nome, p.reclamante.cpf, p.reclamante.rg),
+                        p.data_audiencia,
+                        p.created_at)).ToList();
 
-                processos.Add(processo);
+                    return processos;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao desserializar JSON: {ex.Message}");
             }
 
-            return processos;
+            return null;
         }
 
         public static async Task<ProcessoAdministrativo?> GetAsync(int id)

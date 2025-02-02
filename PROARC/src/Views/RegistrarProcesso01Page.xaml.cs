@@ -217,14 +217,21 @@ namespace PROARC.src.Views
             };
         }
 
-
-
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(NumeroProcesso))
+            string nProcesso;
+            short anoProcesso;
+
+            if (!inputNProcesso.IsReadOnly && !string.IsNullOrWhiteSpace(inputNProcesso.Text))
+            {
+                nProcesso = inputNProcesso.Text;
+                anoProcesso = short.Parse(inputAnoProcesso.Text);
+            }
+            else
             {
                 int count = await ProcessoAdministrativoControl.CountAsync();
-                NumeroProcesso = (count + 1).ToString();
+                nProcesso = (count + 1).ToString();
+                anoProcesso = 2025;
             }
 
             if (!CamposPreenchidos())
@@ -260,20 +267,6 @@ namespace PROARC.src.Views
 
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
-
-            string nProcesso;
-            short anoProcesso;
-
-            if (btnProcessoAntigo.IsEnabled)
-            {
-                nProcesso = inputNProcesso.Text;
-                anoProcesso = short.Parse(inputAnoProcesso.Text);
-            }
-            else
-            {
-                nProcesso = NumeroProcesso;
-                anoProcesso = 2025;
-            }
 
             bool success = await ProcessoAdministrativoControl.InsertAsync(
                 new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
@@ -311,7 +304,8 @@ namespace PROARC.src.Views
                    !string.IsNullOrWhiteSpace(inputInstituicao.Text) &&
                    !string.IsNullOrWhiteSpace(inputCnpjCpfReclamado.Text) &&
                    cbMotivo.SelectedItem != null &&
-                   calendario.Date != null;
+                   calendario.Date != null &&
+                   GetSelectedRadioButton() != "Nenhum status selecionado";
         }
 
         private async void ShowError(string mensagemErro)
@@ -326,7 +320,6 @@ namespace PROARC.src.Views
 
             await dialog.ShowAsync();
         }
-
 
         private string GetSelectedRadioButton()
         {
