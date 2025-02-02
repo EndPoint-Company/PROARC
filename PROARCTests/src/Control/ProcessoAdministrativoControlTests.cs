@@ -21,7 +21,7 @@ namespace PROARC.src.Control.Tests
             for (int i = 0; i < lista.Count; i++)
             {
                 ProcessoAdministrativo? listas = lista[i];
-                //Console.WriteLine(listas);
+                Console.WriteLine(listas);
             }
         }
 

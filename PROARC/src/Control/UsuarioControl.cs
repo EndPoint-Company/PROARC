@@ -19,7 +19,7 @@ namespace PROARC.src.Control
                 return false;
             }
 
-            var ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9999);
+            var ipEndPoint = new IPEndPoint(IPAddress.Parse("34.151.193.77"), 9999);
 
             using TcpClient client = new();
             await client.ConnectAsync(ipEndPoint);
