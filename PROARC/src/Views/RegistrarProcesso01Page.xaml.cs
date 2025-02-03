@@ -17,105 +17,102 @@ using Microsoft.UI;
 using PROARC.src.Models.Tipos;
 using static PROARC.src.Control.MotivoControl;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Navigation;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace PROARC.src.Views
 {
     public sealed partial class RegistrarProcesso01Page : Page, INotifyPropertyChanged
     {
         private string numeroProcesso;
-
+        private string anoProcesso;
         private List<string> arquivosSelecionados = new();
+
         public string NumeroProcesso
         {
             get => numeroProcesso;
-            set
-            {
-                numeroProcesso = value;
-                OnPropertyChanged(nameof(NumeroProcesso));
-            }
+            set => SetProperty(ref numeroProcesso, value);
         }
 
-        private string anoProcesso;
         public string AnoProcesso
         {
             get => anoProcesso;
-            set
-            {
-                anoProcesso = value;
-                OnPropertyChanged(nameof(AnoProcesso));
-            }
+            set => SetProperty(ref anoProcesso, value);
         }
 
-        public object DragDropEffects { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public RegistrarProcesso01Page()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             DataContext = this;
             CarregarMotivosAsync();
             ConfigureShadows();
             calendario.Date = DateTime.Now.Date;
-            ProcessoNovo_Click(btnProcessoNovo, null);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        private async Task CarregarMotivosAsync()
+        private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
-            List<Motivo> motivos = await MotivoControl.GetAllAsync();
-            cbMotivo.ItemsSource = motivos;
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
         }
+        private async Task CarregarMotivosAsync()
+         => cbMotivo.ItemsSource = await MotivoControl.GetAllAsync();
 
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
-        {
-            ConfigurarEstadoProcesso(isNovoProcesso: true);
-        }
+        => ConfigurarEstadoProcesso(true);
 
         private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
-        {
-            ConfigurarEstadoProcesso(isNovoProcesso: false);
-        }
+            => ConfigurarEstadoProcesso(false);
 
 
         private void ConfigurarEstadoProcesso(bool isNovoProcesso)
         {
             radio_agRealizacaoAudiencia.IsChecked = isNovoProcesso;
+            AtualizarEstilosBotoes(isNovoProcesso);
+            AjustarCamposProcesso(isNovoProcesso);
+        }
 
+        private void AtualizarEstilosBotoes(bool isNovoProcesso)
+        {
             btnProcessoNovo.Background = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.DarkBlue : Microsoft.UI.Colors.White);
             btnProcessoNovo.Foreground = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.DarkBlue);
 
             btnProcessoAntigo.Background = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.DarkBlue);
             btnProcessoAntigo.Foreground = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.DarkBlue : Microsoft.UI.Colors.White);
             btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
+        }
 
+        private async void AjustarCamposProcesso(bool isNovoProcesso)
+        {
             inputNProcesso.IsReadOnly = isNovoProcesso;
             inputAnoProcesso.IsReadOnly = isNovoProcesso;
-
             MainStackPanel.Opacity = isNovoProcesso ? 0.4 : 1;
 
             if (isNovoProcesso)
             {
-                DefinirNovoProcesso();
-                calendario.MinDate = DateTimeOffset.Now;
+                await DefinirNovoProcesso();
             }
             else
             {
                 NumeroProcesso = string.Empty;
                 AnoProcesso = string.Empty;
-
                 calendario.ClearValue(CalendarDatePicker.MinDateProperty);
             }
         }
 
-        private async void DefinirNovoProcesso()
+        private async Task DefinirNovoProcesso()
         {
             int count = await ProcessoAdministrativoControl.CountAsync();
             NumeroProcesso = (count + 1).ToString();
-            AnoProcesso = "2025";
+            AnoProcesso = DateTime.Now.Year.ToString();
         }
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -219,19 +216,10 @@ namespace PROARC.src.Views
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            string nProcesso;
-            short anoProcesso;
-
-            if (!inputNProcesso.IsReadOnly && !string.IsNullOrWhiteSpace(inputNProcesso.Text))
-            {
-                nProcesso = inputNProcesso.Text;
-                anoProcesso = short.Parse(inputAnoProcesso.Text);
-            }
-            else
+            if (string.IsNullOrEmpty(NumeroProcesso))
             {
                 int count = await ProcessoAdministrativoControl.CountAsync();
-                nProcesso = (count + 1).ToString();
-                anoProcesso = 2025;
+                NumeroProcesso = (count + 1).ToString();
             }
 
             if (!CamposPreenchidos())
@@ -268,6 +256,20 @@ namespace PROARC.src.Views
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
 
+            string nProcesso;
+            short anoProcesso;
+
+            if (btnProcessoAntigo.IsEnabled)
+            {
+                nProcesso = inputNProcesso.Text;
+                anoProcesso = short.Parse(inputAnoProcesso.Text);
+            }
+            else
+            {
+                nProcesso = NumeroProcesso;
+                anoProcesso = 2025;
+            }
+
             bool success = await ProcessoAdministrativoControl.InsertAsync(
                 new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
                 new(motivo),
@@ -288,7 +290,7 @@ namespace PROARC.src.Views
 
                 await successDialog.ShowAsync();
 
-                Frame.Navigate(typeof(RegistrarProcesso01Page));
+                Frame.Navigate(typeof(RegistrarProcesso01Page), true);
             }
             else
             {
@@ -297,16 +299,11 @@ namespace PROARC.src.Views
         }
 
         private bool CamposPreenchidos()
-        {
-            return !string.IsNullOrWhiteSpace(inputNome.Text) &&
-                   !string.IsNullOrWhiteSpace(inputCpfReclamante.Text) &&
-                   !string.IsNullOrWhiteSpace(inputRgReclamante.Text) &&
-                   !string.IsNullOrWhiteSpace(inputInstituicao.Text) &&
-                   !string.IsNullOrWhiteSpace(inputCnpjCpfReclamado.Text) &&
-                   cbMotivo.SelectedItem != null &&
-                   calendario.Date != null &&
-                   GetSelectedRadioButton() != "Nenhum status selecionado";
-        }
+        => new[] { inputNome, inputCpfReclamante, inputRgReclamante, inputInstituicao, inputCnpjCpfReclamado }
+            .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
+            && cbMotivo.SelectedItem != null
+            && calendario.Date != null
+            && GetSelectedRadioButton() != "Nenhum status selecionado";
 
         private async void ShowError(string mensagemErro)
         {
@@ -569,6 +566,16 @@ namespace PROARC.src.Views
         private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
         {
             MainContainer.Children.Add(CriarSecaoReclamado());
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (e.Parameter is bool isNovoProcesso)
+            {
+                ConfigurarEstadoProcesso(isNovoProcesso);
+            }
         }
     }
 }

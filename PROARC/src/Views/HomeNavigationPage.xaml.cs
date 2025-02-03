@@ -19,7 +19,7 @@ namespace PROARC.src.Views
             {
                 string tag = selectedItem.Tag as string;
 
-                // Navegar para a p·gina correspondente
+                // Navegar para a p√°gina correspondente
                 switch (tag)
                 {
                     
@@ -32,7 +32,7 @@ namespace PROARC.src.Views
                         args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "SamplePage3":
-                        contentFrame.Navigate(typeof(RegistrarProcesso01Page));
+                        contentFrame.Navigate(typeof(RegistrarProcesso01Page), true);
                         args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "SamplePage4":
