@@ -48,7 +48,7 @@ namespace PROARC.src.Views
                 this.InitializeComponent();
                 this.DataContext = this;
 
-                _ = CarregarProcessosPeriodicamente();                
+                _ = CarregarProcessosPeriodicamente();
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace PROARC.src.Views
                     }
 
                     // Espera um intervalo de tempo, antes de verificar novamente
-                    await Task.Delay(10000); 
+                    await Task.Delay(10000);
                 }
             }
             catch (Exception ex)
@@ -167,5 +167,10 @@ namespace PROARC.src.Views
         {
             Frame.Navigate(typeof(RegistrarProcesso01Page));
         }
+
+
+
+      
+
     }
 }
