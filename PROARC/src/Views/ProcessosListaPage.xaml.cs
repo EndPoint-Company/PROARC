@@ -153,6 +153,15 @@ namespace PROARC.src.Views
                 menuFlyout.ShowAt(element, e.GetPosition(element));
             }
         }
+        private void OnDragStarting(UIElement sender, DragStartingEventArgs args)
+        {
+            args.Cancel = true; // Cancela qualquer tentativa de arrasto
+        }
+
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            e.Handled = true; // Evita que o evento de arrasto se propague
+        }
 
         private void EditarProcesso(ProcessoAdministrativo processo)
         {
