@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Navigation;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Windows.UI.Popups;
 
 namespace PROARC.src.Views
 {
@@ -216,6 +217,9 @@ namespace PROARC.src.Views
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
+            NumeroProcesso = inputNProcesso.Text.Trim();
+            AnoProcesso = inputAnoProcesso.Text.Trim();
+
             if (string.IsNullOrEmpty(NumeroProcesso))
             {
                 int count = await ProcessoAdministrativoControl.CountAsync();
@@ -256,19 +260,8 @@ namespace PROARC.src.Views
             string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
 
-            string nProcesso;
-            short anoProcesso;
-
-            if (btnProcessoAntigo.IsEnabled)
-            {
-                nProcesso = inputNProcesso.Text;
-                anoProcesso = short.Parse(inputAnoProcesso.Text);
-            }
-            else
-            {
-                nProcesso = NumeroProcesso;
-                anoProcesso = 2025;
-            }
+            string nProcesso = NumeroProcesso;
+            short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
 
             bool success = await ProcessoAdministrativoControl.InsertAsync(
                 new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
@@ -297,6 +290,7 @@ namespace PROARC.src.Views
                 ShowError("Falha ao cadastrar o processo. Tente novamente.");
             }
         }
+
 
         private bool CamposPreenchidos()
         => new[] { inputNome, inputCpfReclamante, inputRgReclamante, inputInstituicao, inputCnpjCpfReclamado }
