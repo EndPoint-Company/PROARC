@@ -38,17 +38,12 @@
             </Grid>
 
             <!-- TreeView -->
-<<<<<<< HEAD
+
             <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="False" CanReorderItems="False" >
                 <TreeView.ItemTemplate>
                     <DataTemplate x:DataType="models:ProcessoAdministrativo">
                         <Grid RightTapped="Processo_RightTapped" AllowDrop="False" DragEnter="OnDragEnter" DragStarting="OnDragStarting" >
-=======
-            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
-                <TreeView.ItemTemplate>
-                    <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                        <Grid>
->>>>>>> 09eeb55675bd8e773a5ef11140ef8fe2d6cc9b7e
+
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="200" />
@@ -60,7 +55,6 @@
                                 <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
 
-<<<<<<< HEAD
                             <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                 <ToolTipService.ToolTip>
                                     <ToolTip Content="{x:Bind NumeroProcesso}" Placement="Mouse"/>
@@ -103,23 +97,12 @@
                                 </ToolTipService.ToolTip>
                             </TextBlock>
 
-                            <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                                <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                 <ToolTipService.ToolTip>
                                     <ToolTip Content="{x:Bind Status}" Placement="Mouse"/>
                                 </ToolTipService.ToolTip>
-                            </TextBlock>
-=======
-                            <!-- Dados -->
-                            <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind DataDeCriacaoFormatada}" Grid.Column="4" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind DataDaAudienciaFormatada}" Grid.Column="5" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" />
->>>>>>> 09eeb55675bd8e773a5ef11140ef8fe2d6cc9b7e
-                        </Grid>
+                                                </TextBlock>
+                                        </Grid>
                     </DataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
