@@ -22,17 +22,22 @@ namespace PROARC.src.Views
                 // Navegar para a página correspondente
                 switch (tag)
                 {
+                    
                     case "SamplePage1":
                         contentFrame.Navigate(typeof(HomePage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "SamplePage2":
                         contentFrame.Navigate(typeof(ProcessosListaPage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "SamplePage3":
                         contentFrame.Navigate(typeof(RegistrarProcesso01Page));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "SamplePage4":
                         Frame.Navigate(typeof(LoginPage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
                 }
             }
