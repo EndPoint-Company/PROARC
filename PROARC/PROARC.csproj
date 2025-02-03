@@ -86,16 +86,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="src\Views\RegistrarProcesso03Page.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="src\Views\RegistrarProcesso02Page.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="src\Views\RegistrarProcesso01Page.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

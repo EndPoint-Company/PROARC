@@ -20,8 +20,8 @@ namespace PROARC.src.Models.Arquivos
 
 
         // Propriedades formatadas para exibição
-        public string DataDeCriacaoFormatada => DataDeCriacao?.ToString("dd/MM/yyyy");  
-        public string DataDaAudienciaFormatada => DataDaAudiencia?.ToString("dd/MM/yyyy") ?? "N/A";
+        public string DataDeCriacaoFormatada => this.dataDeCriacao?.ToString("dd/MM/yyyy") ?? "Erro";  
+        public string DataDaAudienciaFormatada => this.dataDaAudiencia?.ToString("dd/MM/yyyy") ?? "N/A";
 
         public string NumeroProcesso
         {
