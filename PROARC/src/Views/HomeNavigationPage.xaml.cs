@@ -29,7 +29,7 @@ namespace PROARC.src.Views
                         contentFrame.Navigate(typeof(ProcessosListaPage));
                         break;
                     case "SamplePage3":
-                        contentFrame.Navigate(typeof(RegistrarProcesso01Page));
+                        contentFrame.Navigate(typeof(RegistrarProcesso01Page), true);
                         break;
                     case "SamplePage4":
                         Frame.Navigate(typeof(LoginPage));

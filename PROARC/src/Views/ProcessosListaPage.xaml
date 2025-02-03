@@ -9,70 +9,73 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Border CornerRadius="10" Margin="50, 0">
-        <StackPanel Spacing="10" Padding="40">
-            <!-- Cabeçalho -->
-            <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border CornerRadius="10" Margin="50, 0">
+            <StackPanel Spacing="10" Padding="40">
+                <!-- Cabeçalho -->
+                <TextBlock Text="Lista de Processos" FontSize="24" FontWeight="Bold" />
 
-            <!-- Títulos -->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="250" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="150" />
-                    <ColumnDefinition Width="150" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="200" />
-                </Grid.ColumnDefinitions>
+                <!-- Títulos -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="N° Processo" Grid.Column="0" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="Reclamante" Grid.Column="1" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="CPF do Reclamante" Grid.Column="2" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="Reclamado" Grid.Column="3" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="Criado" Grid.Column="4" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="Audiência" Grid.Column="5" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="Motivo" Grid.Column="6" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                <TextBlock Text="Status" Grid.Column="7" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-            </Grid>
+                    <TextBlock Text="N° Processo" Grid.Column="0" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Reclamante" Grid.Column="1" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="CPF do Reclamante" Grid.Column="2" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Reclamado" Grid.Column="3" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Criado" Grid.Column="4" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Audiência" Grid.Column="5" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Motivo" Grid.Column="6" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Status" Grid.Column="7" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                </Grid>
 
-            <!-- TreeView -->
-            <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
-                <TreeView.ItemTemplate>
-                    <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="250" />
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="150" />
-                                <ColumnDefinition Width="150" />
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="200" />
-                            </Grid.ColumnDefinitions>
+                <!-- TreeView -->
+                <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="True">
+                    <TreeView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ProcessoAdministrativo">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="200" />
+                                </Grid.ColumnDefinitions>
 
-                            <!-- Dados -->
-                            <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind DataDeCriacaoFormatada}" Grid.Column="4" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind DataDaAudienciaFormatada}" Grid.Column="5" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" />
-                            <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" />
-                        </Grid>
-                    </DataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-            <ProgressRing
-                x:Name="carregando"
-                IsActive="False"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Visibility="Collapsed"
-                Margin="0, 0, 0, 10"/>
-        </StackPanel>
-    </Border>
+                                <!-- Dados -->
+                                <TextBlock Text="{x:Bind NumeroProcesso}" Grid.Column="0" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind Reclamante.Nome}" Grid.Column="1" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind Reclamante.CpfFormatado}" Grid.Column="2" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind Reclamado.Nome}" Grid.Column="3" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind DataDeCriacaoFormatada}" Grid.Column="4" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind DataDaAudienciaFormatada}" Grid.Column="5" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind Motivo.Nome}" Grid.Column="6" FontSize="16" Margin="5" />
+                                <TextBlock Text="{x:Bind Status}" Grid.Column="7" FontSize="16" Margin="5" />
+                            </Grid>
+                        </DataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+                <ProgressRing
+                    x:Name="carregando"
+                    IsActive="False"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed"
+                    Margin="0, 0, 0, 10"/>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
 </Page>
