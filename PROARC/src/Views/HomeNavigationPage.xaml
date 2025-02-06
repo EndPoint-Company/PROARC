@@ -24,31 +24,31 @@
                     IsPaneToggleButtonVisible="False">
 
         <NavigationView.MenuItems>
-            <NavigationViewItem Content="Início" Tag="SamplePage1" x:Name="SamplePage1Item">
+            <NavigationViewItem Content="Início" Tag="HomePage" x:Name="HomePageItem">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Home" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="Lista de Processos" Tag="SamplePage2" x:Name="SamplePage2Item">
+            <NavigationViewItem Content="Lista de Reclamações" Tag="ListPageGeral" x:Name="ListPageGeralItem">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Save" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="Cadastrar Processo" Tag="SamplePage3">
+            <NavigationViewItem Content="Cadastrar Reclamação" Tag="CadastrarPageGeral" x:Name="CadastrarPageGeralItem">
                 <NavigationViewItem.Icon>
                     <SymbolIcon Symbol="Add"/>
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="Document options" Icon="Page2" ToolTipService.ToolTip="Document options" SelectsOnInvoked="False">
+            <NavigationViewItem Content="Enel" Icon="Page2" ToolTipService.ToolTip="Enel" SelectsOnInvoked="False">
                 <NavigationViewItem.MenuItems>
-                    <NavigationViewItem Content="Create new" Icon="NewFolder" ToolTipService.ToolTip="Create new" Tag="SamplePage5"/>
-                    <NavigationViewItem Content="Upload file" Icon="OpenLocal" ToolTipService.ToolTip="Upload file" Tag="SamplePage6"/>
+                    <NavigationViewItem Content="Lista de Reclamaçõe" Icon="Save" ToolTipService.ToolTip="Lista de Reclamações" Tag="ListPageEnel"/>
+                    <NavigationViewItem Content="Cadastrar Reclamação" Icon="Add" ToolTipService.ToolTip="Cadastrar Reclamação" Tag="CadastrarPageEnel"/>
                 </NavigationViewItem.MenuItems>
             </NavigationViewItem>
         </NavigationView.MenuItems>
 
         <NavigationView.FooterMenuItems>
-            <NavigationViewItem Content="Sair" Tag="SamplePage4" Icon="Back" />
+            <NavigationViewItem Content="Sair" Tag="LoginPage" Icon="Back" />
         </NavigationView.FooterMenuItems>
 
         <Frame x:Name="contentFrame" />
