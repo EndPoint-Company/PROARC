@@ -23,19 +23,19 @@ namespace PROARC.src.Views
                 switch (tag)
                 {
                     
-                    case "SamplePage1":
+                    case "HomePage":
                         contentFrame.Navigate(typeof(HomePage));
                         args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage2":
+                    case "ListPageGeral":
                         contentFrame.Navigate(typeof(ProcessosListaPage));
                         args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage3":
+                    case "CadastrarPageGeral":
                         contentFrame.Navigate(typeof(RegistrarProcesso01Page), true);
                         args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage4":
+                    case "LoginPage":
                         Frame.Navigate(typeof(LoginPage));
                         args.SelectedItemContainer.IsSelected = false;
                         break;
