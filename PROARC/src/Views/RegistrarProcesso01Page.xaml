@@ -203,7 +203,7 @@
                                     <TextBox x:Name="inputCnpjCpfReclamado" MaxLength="14" TextChanged="OnCpfTextChanged" PlaceholderText="Insira o CNPJ/CPF" Width="280" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="E-mail" FontSize="14"/>
+                                    <TextBlock Text="E-mail *" FontSize="14"/>
                                     <TextBox x:Name="inputEmail" PlaceholderText="Insira o E-mail" Width="250" />
                                 </StackPanel>
                             </StackPanel>

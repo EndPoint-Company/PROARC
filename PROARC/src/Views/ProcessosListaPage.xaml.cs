@@ -48,7 +48,7 @@ namespace PROARC.src.Views
                 this.InitializeComponent();
                 this.DataContext = this;
 
-                _ = CarregarProcessosPeriodicamente();                
+                _ = CarregarProcessosPeriodicamente();
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace PROARC.src.Views
                     }
 
                     // Espera um intervalo de tempo, antes de verificar novamente
-                    await Task.Delay(10000); 
+                    await Task.Delay(10000);
                 }
             }
             catch (Exception ex)
@@ -153,10 +153,24 @@ namespace PROARC.src.Views
                 menuFlyout.ShowAt(element, e.GetPosition(element));
             }
         }
+        private void OnDragStarting(UIElement sender, DragStartingEventArgs args)
+        {
+            args.Cancel = true; // Cancela qualquer tentativa de arrasto
+        }
+
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            e.Handled = true; // Evita que o evento de arrasto se propague
+        }
 
         private void EditarProcesso(ProcessoAdministrativo processo)
         {
             Frame.Navigate(typeof(RegistrarProcesso01Page));
         }
+
+
+
+      
+
     }
 }

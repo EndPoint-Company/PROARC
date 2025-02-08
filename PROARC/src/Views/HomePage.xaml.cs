@@ -14,14 +14,14 @@ namespace PROARC.src.Views
         {
             // Navega para outra página (por exemplo, uma página de cadastro de processos)
             // Exemplo de navegação, caso você tenha uma página chamada 'CadastroProcessoPage':
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
+            Frame.Navigate(typeof(RegistrarProcesso01Page), true);
         }
 
         // Manipulador de clique para o botão "Cadastrar Processo Antigo"
         private void CadastrarProcessoAntigoButton_Click(object sender, RoutedEventArgs e)
         {
-            // Similar ao anterior, navegar para outra página
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
+            // Passando um parâmetro indicando que se trata de um processo antigo
+            Frame.Navigate(typeof(RegistrarProcesso01Page), false); // false indica que não é um novo processo
         }
 
         // Manipulador de clique para o botão "Listar Processos"
