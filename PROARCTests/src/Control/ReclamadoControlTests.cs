@@ -17,7 +17,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetReclamadoByIdAsyncTest()
         {
-           // Console.WriteLine(await ReclamadoControl.GetReclamadoByIdAsync(3));
+            Console.WriteLine(await ReclamadoControl.GetAsync(1));
         }
 
         [TestMethod()]
@@ -27,35 +27,36 @@ namespace PROARC.src.Control.Tests
 
             foreach (Reclamado abacates in abacate)
             {
-                Console.WriteLine(abacates.ToString());
+                Console.WriteLine(abacates.ToString() + "\n");
             }
         }
 
         [TestMethod()]
-        public async Task AddReclamadoAsyncTest()
+        public async Task InsertAsyncTest()
         {
             //certo
-           //await ReclamadoControl.AddReclamadoAsync(new Reclamado("marco pinto", 123, "guaraci", "centro", "marcosvbitor@gmail.com", "ipubi", "pe", null, null));
+            await ReclamadoControl.InsertAsync(new Reclamado("balde de lixo", "12312312318", null, 12342, "guaraci", "centro", "ipubas", "ce", "12312312", "12312323410", "cabecinha@gmail.com"));
         }
 
         [TestMethod()]
         public async Task UpdateReclamadoByIdAsyncTest()
-        {
-            //await ReclamadoControl.UpdateReclamadoByIdAsync(5, new Reclamado("marco pinto segundo", 1234, "guaracis", "centros", "marcosvbitor@gmaisl.com", "ipubis", "pe", null, null));
+        {   
+            //certo
+            //await ReclamadoControl.UpdateAsync(3, new Reclamado("balde de lixo", "12312312318", null, 12342, "guaraci", "centro", "ipubas", "ce", "12312312", "12312323410", "cabecinha@gmail.com"));
         }
 
         [TestMethod()]
         public async Task RemoveReclamadoByIdAsyncTest()
         {
             //certo
-            //await ReclamadoControl.RemoveReclamadoByIdAsync(10);
+            await ReclamadoControl.DeleteAsync(3);
         }
 
         [TestMethod()]
         public async Task CountReclamadosAsyncTest()
         {
             //certo
-           //Console.WriteLine( await ReclamadoControl.CountReclamadosAsync());
+           Console.WriteLine( await ReclamadoControl.CountAsync());
         }
     }
 }

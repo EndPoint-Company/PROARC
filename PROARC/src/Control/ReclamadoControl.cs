@@ -16,23 +16,26 @@ namespace PROARC.src.Control
 
             var request = new { action = "get_reclamado_by_id", id };
             string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
 
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("reclamado", out JsonElement reclamadoElement) && reclamadoElement.GetArrayLength() == 9)
+            if (root.TryGetProperty("reclamado", out JsonElement reclamadoElement) && reclamadoElement.GetArrayLength() == 11)
             {
                 string nome = reclamadoElement[0].GetString() ?? string.Empty;
                 string? cpf = reclamadoElement[1].GetString() ?? string.Empty;
                 string? cnpj = reclamadoElement[2].GetString() ?? string.Empty;
-                short? numeroRua = reclamadoElement[3].GetInt16();
-                string? email = reclamadoElement[4].GetString() ?? string.Empty;
-                string? rua = reclamadoElement[5].GetString() ?? string.Empty;
-                string? bairro = reclamadoElement[6].GetString() ?? string.Empty;
-                string? cidade = reclamadoElement[7].GetString() ?? string.Empty;
-                string? estado = reclamadoElement[8].GetString() ?? string.Empty;
+                short? numero = reclamadoElement[3].GetInt16();
+                string? logradouro = reclamadoElement[4].GetString() ?? string.Empty;
+                string? bairro = reclamadoElement[5].GetString() ?? string.Empty;
+                string? cidade = reclamadoElement[6].GetString() ?? string.Empty;
+                string? uf = reclamadoElement[7].GetString() ?? string.Empty;
+                string? cep = reclamadoElement[8].GetString() ?? string.Empty;
+                string? telefone = reclamadoElement[9].GetString() ?? string.Empty;
+                string? email = reclamadoElement[10].GetString() ?? string.Empty;
 
-                return new Reclamado(nome, numeroRua, rua, bairro, email, cidade, estado, cnpj, cpf);
+                return new Reclamado(nome, cpf, cnpj, numero, logradouro, bairro, cidade, uf, cep, telefone, email);
             }
 
             return null;
@@ -59,14 +62,16 @@ namespace PROARC.src.Control
                         string nome = item[1].GetString() ?? string.Empty;
                         string? cpf = item[2].GetString();
                         string? cnpj = item[3].GetString();
-                        short numeroRua = item[4].GetInt16();
-                        string email = item[5].GetString() ?? string.Empty;
-                        string rua = item[6].GetString() ?? string.Empty;
-                        string bairro = item[7].GetString() ?? string.Empty;
-                        string cidade = item[8].GetString() ?? string.Empty;
-                        string estado = item[9].GetString() ?? string.Empty;
+                        short numero = item[4].GetInt16();
+                        string logradouro = item[5].GetString() ?? string.Empty;
+                        string bairro = item[6].GetString() ?? string.Empty;
+                        string cidade = item[7].GetString() ?? string.Empty;
+                        string uf = item[8].GetString() ?? string.Empty;
+                        string cep = item[9].GetString() ?? string.Empty;
+                        string telefone = item[10].GetString() ?? string.Empty;
+                        string email = item[11].GetString() ?? string.Empty;
 
-                        reclamados.Add(new Reclamado(nome, numeroRua, rua, bairro, email, cidade, estado, cnpj, cpf));
+                        reclamados.Add(new Reclamado(nome, cpf, cnpj, numero, logradouro, bairro, cidade, uf, cep, telefone, email));
                     }
                 }
             }
@@ -78,8 +83,7 @@ namespace PROARC.src.Control
 
         public static async Task InsertAsync(Reclamado reclamado)
         {
-            var request = new { action = "add_reclamado", reclamado };
-            Console.WriteLine(request);
+            var request = new { action = "add_reclamado", reclamado };          
             await SendRequestAsync(request);
         }
 

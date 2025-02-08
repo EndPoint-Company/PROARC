@@ -23,13 +23,13 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetMotivoAsyncTest1()
         {
-            Console.WriteLine((await MotivoControl.GetAsync(7)).Nome);
+            Console.WriteLine((await MotivoControl.GetAsync(2)).Nome);
         }
 
         [TestMethod()]
         public async Task GetIdMotivoAsyncTest()
         {
-            int? abacaxi = await MotivoControl.GetIdAsync("Atraso na entrega");
+            int? abacaxi = await MotivoControl.GetIdAsync("Cobrança indevida");
             Console.WriteLine(abacaxi);
         }
 
@@ -47,19 +47,19 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task AddMotivoAsyncTest()
         {
-            await MotivoControl.InsertAsync(new Motivo("juros splashsticos"));
+            await MotivoControl.InsertAsync(new Motivo("juros abusivos"));
         }
 
         [TestMethod()]
         public async Task UpdateMotivoAsyncTest()
         {
-            await MotivoControl.UpdateAsync("Atraso na entrega", "juros capistropolicos");
+            await MotivoControl.UpdateAsync("juros bananasticos", "Atraso na entrega");
         }
 
         [TestMethod()]
         public async Task RemoveMotivoAsyncTest()
         {
-            await MotivoControl.DeketeAsync("Juros abusivos");
+            await MotivoControl.DeketeAsync("juros abusivos");
         }
 
         [TestMethod()]
