@@ -151,8 +151,8 @@ namespace PROARC.src.Control
             var request = new { action = "add_processo", processo };
 
             try
-            {
-                string response = await SendRequestAsync(request);
+            { 
+               string response = await SendRequestAsync(request);
 
                 return true;
             }
@@ -164,7 +164,7 @@ namespace PROARC.src.Control
 
         public static async Task<bool> UpdateAsync
             (int id, int motivo_id, int reclamante_id,
-            string titulo_processo, short ano, Status status_processo,
+            string titulo_processo, short ano, string status_processo,
             string path_processo, string data_audiencia)
         {
             var request = new

@@ -15,53 +15,53 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetReclamanteByIdAsyncTest()
         {
-            //Console.WriteLine(await ReclamanteControl.GetReclamanteByIdAsync(1));
+            //Console.WriteLine(await ReclamanteControl.GetAsync(1));
         }
 
         [TestMethod()]
         public async Task GetReclamanteByCpfAsyncTest()
         {
-            //Console.WriteLine(await ReclamanteControl.GetReclamanteByCpfAsync("12345678901"));
+            //Console.WriteLine(await ReclamanteControl.GetReclamanteByCpfAsync("55566677788"));
         }
 
         [TestMethod()]
         public async Task GetReclamanteByRgAsyncTest()
         {
-            //Console.WriteLine(await ReclamanteControl.GetReclamanteByRgAsync("10366083"));
+            //Console.WriteLine(await ReclamanteControl.GetReclamanteByRgAsync("123456789"));
         }
 
         [TestMethod()]
         public async Task GetAllReclamantesAsyncTest()
         {
-            //List<Reclamante> reclamantes = await ReclamanteControl.GetAllReclamantesAsync();
-            // foreach (var reclamante in reclamantes)
-            //{
-            //    Console.WriteLine(reclamante);
-            //}
+            List<Reclamante> reclamantes = await ReclamanteControl.GetAllAsync();
+             foreach (var reclamante in reclamantes)
+            {
+                Console.WriteLine(reclamante + "\n");
+            }
         }
 
         [TestMethod()]
         public async Task AddReclamanteAsyncTest()
         {
-           // await ReclamanteControl.AddReclamanteAsync(new Reclamante ("cabisbaixo", "70934922403", "10366083"));
+            await ReclamanteControl.InsertAsync(new Reclamante ("cabisbaixo", "70934922403", null, "12312312319", "marcoscabs@gmail.com"));
         }
 
         [TestMethod()]
         public async Task UpdateReclamanteByIdAsyncTest()
         {
-            //await ReclamanteControl.UpdateReclamanteByIdAsync(3,new Reclamante("jeferson", null, "1029312"));
+            await ReclamanteControl.UpdateAsync(4,new Reclamante("jonathan cabecao", "70934922403", null, "12312312319", "marcoscabs@gmail.com"));
         }
 
         [TestMethod()]
         public async Task RemoveReclamanteByIdAsyncTest()
         {
-           // await ReclamanteControl.RemoveReclamanteByIdAsync(10);
+           await ReclamanteControl.DeleteAsync(4);
         }
 
         [TestMethod()]
         public async Task CountReclamantesAsyncTest()
         {
-           // Console.WriteLine(await ReclamanteControl.CountReclamantesAsync());
+           Console.WriteLine(await ReclamanteControl.CountAsync());
         }
     }
 }

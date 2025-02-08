@@ -1,5 +1,4 @@
-﻿
-using PROARC.src.Models;
+﻿using PROARC.src.Models;
 using System;
 using System.Collections.Generic;
 using static PROARC.src.Control.NetworkControl;
@@ -23,8 +22,10 @@ namespace PROARC.src.Control
                 string nome = reclamanteElement[1].GetString() ?? string.Empty;
                 string? rg = reclamanteElement[2].GetString();
                 string? cpf = reclamanteElement[3].GetString();
+                string? telefone = reclamanteElement[4].GetString();
+                string? email = reclamanteElement[5].GetString();
 
-                return new Reclamante(nome, cpf, rg);
+                return new Reclamante(nome, cpf, rg, telefone, email);
             }
 
             return null;
@@ -42,9 +43,11 @@ namespace PROARC.src.Control
             {
                 string nome = reclamanteElement[1].GetString() ?? string.Empty;
                 string? rg = reclamanteElement[2].GetString();
-                string? cpfFromResponse = reclamanteElement[3].GetString();
+                string? cpf2 = reclamanteElement[3].GetString();
+                string? telefone = reclamanteElement[4].GetString();
+                string? email = reclamanteElement[5].GetString();
 
-                return new Reclamante(nome, cpfFromResponse, rg);
+                return new Reclamante(nome, cpf2, rg, telefone, email);
             }
 
             return null;
@@ -61,10 +64,12 @@ namespace PROARC.src.Control
             if (root.TryGetProperty("reclamante", out JsonElement reclamanteElement) && reclamanteElement.ValueKind == JsonValueKind.Array)
             {
                 string nome = reclamanteElement[1].GetString() ?? string.Empty;
-                string? rgFromResponse = reclamanteElement[2].GetString();
+                string? rg2 = reclamanteElement[2].GetString();
                 string? cpf = reclamanteElement[3].GetString();
+                string? telefone = reclamanteElement[4].GetString();
+                string? email = reclamanteElement[5].GetString();
 
-                return new Reclamante(nome, cpf, rgFromResponse);
+                return new Reclamante(nome, cpf, rg2, telefone, email);
             }
 
             return null;
@@ -89,8 +94,10 @@ namespace PROARC.src.Control
                         string nome = item[1].GetString() ?? string.Empty;
                         string? rg = item[2].GetString();
                         string? cpf = item[3].GetString();
+                        string? telefone = item[2].GetString();
+                        string? email = item[2].GetString();
 
-                        reclamantes.Add(new Reclamante(nome, cpf, rg));
+                        reclamantes.Add(new Reclamante(nome, cpf, rg, telefone, email));
                     }
                 }
             }

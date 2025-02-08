@@ -13,7 +13,7 @@ namespace PROARC.src.Models.Arquivos
         private short ano;
         private string status;
         private Motivo? motivo;
-        private Reclamado? reclamado;
+        private Reclamado? reclamados;
         private Reclamante? reclamante;
         private DateTime? dataDaAudiencia;
         private DateTime? dataDeCriacao;
@@ -53,7 +53,7 @@ namespace PROARC.src.Models.Arquivos
             this.ano = ano;
             this.motivo = motivo;
             this.reclamante = reclamante;
-            this.reclamado = reclamado;
+            this.reclamados = reclamado;
             this.dataDaAudiencia = dataDaAudiencia;
             this.status = status;
             this.dataDeCriacao = dataDeCriacao;
@@ -67,7 +67,7 @@ namespace PROARC.src.Models.Arquivos
                    $"Ano: {ano}\n" +
                    $"Status: {status}\n" +
                    $"Motivo: {motivo?.ToString() ?? "Não definido"}\n" +
-                   $"Reclamado: {reclamado?.ToString() ?? "Não definido"}\n" +
+                   $"Reclamado: {reclamados?.ToString() ?? "Não definido"}\n" +
                    $"Reclamante: {reclamante?.ToString() ?? "Não definido"}\n" +
                    $"Data da Audiência: {dataDaAudiencia?.ToString("dd/MM/yyyy") ?? "Não definida"}\n" +
                    $"Data da criacao: {dataDeCriacao?.ToString("dd/MM/yyyy") ?? "Não definida"}\n";
@@ -77,7 +77,7 @@ namespace PROARC.src.Models.Arquivos
         public string Titulo { get => this.titulo; set { this.titulo = value; } }
         public short Ano { get => this.ano; set { this.ano = value; } }
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
-        public Reclamado? Reclamado { get => this.reclamado; set { this.reclamado = value; } }
+        public Reclamado? Reclamado { get => this.reclamados; set { this.reclamados = value; } }
         public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
         public string CaminhoDoProcesso { get => this.caminhoDoProcesso; set { this.caminhoDoProcesso = value; } }
         public DateTime? DataDaAudiencia { get => this.dataDaAudiencia; set { this.dataDaAudiencia = value; } }
