@@ -34,15 +34,10 @@
                     <SymbolIcon Symbol="Save" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem Content="Cadastrar Reclamação" Tag="CadastrarPageGeral" x:Name="CadastrarPageGeralItem">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Add"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="Enel" Icon="Page2" ToolTipService.ToolTip="Enel" SelectsOnInvoked="False">
+            <NavigationViewItem Content="Enel" Icon="Add" ToolTipService.ToolTip="Enel" SelectsOnInvoked="False">
                 <NavigationViewItem.MenuItems>
-                    <NavigationViewItem Content="Lista de Reclamaçõe" Icon="Save" ToolTipService.ToolTip="Lista de Reclamações" Tag="ListPageEnel"/>
-                    <NavigationViewItem Content="Cadastrar Reclamação" Icon="Add" ToolTipService.ToolTip="Cadastrar Reclamação" Tag="CadastrarPageEnel"/>
+                    <NavigationViewItem Content="Reclamações Gerais" Icon="Globe" ToolTipService.ToolTip="Reclamações Gerais" Tag="CadastrarPageGeral"/>
+                    <NavigationViewItem Content="Reclamações Enel" Icon="FourBars" ToolTipService.ToolTip="Reclamações Enel" Tag="CadastrarPageEnel"/>
                 </NavigationViewItem.MenuItems>
             </NavigationViewItem>
         </NavigationView.MenuItems>
