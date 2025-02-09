@@ -11,7 +11,7 @@ namespace PROARC.src.Control
     {
         public static async Task<Reclamante?> GetAsync(int id)
         {
-            var request = new { action = "get_reclamante_by_id", id };
+            var request = new { action = "get_reclamante_por_id", id };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -33,7 +33,7 @@ namespace PROARC.src.Control
 
         public static async Task<Reclamante?> GetReclamanteByCpfAsync(string cpf)
         {
-            var request = new { action = "get_reclamante_by_cpf", cpf };
+            var request = new { action = "get_reclamante_por_cpf", cpf };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -55,7 +55,7 @@ namespace PROARC.src.Control
 
         public static async Task<Reclamante?> GetReclamanteByRgAsync(string rg)
         {
-            var request = new { action = "get_reclamante_by_rg", rg };
+            var request = new { action = "get_reclamante_por_rg", rg };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -107,19 +107,19 @@ namespace PROARC.src.Control
 
         public static async Task InsertAsync(Reclamante reclamante)
         {
-            var request = new { action = "add_reclamante", reclamante };
+            var request = new { action = "insert_reclamante", reclamante };
             await SendRequestAsync(request);
         }
 
         public static async Task UpdateAsync(int id, Reclamante reclamante)
         {
-            var request = new { action = "update_reclamante_by_id", id, reclamante };
+            var request = new { action = "update_reclamante_por_id", id, reclamante };
             await SendRequestAsync(request);
         }
 
         public static async Task DeleteAsync(int id)
         {
-            var request = new { action = "remove_reclamante_by_id", id };
+            var request = new { action = "delete_reclamante_por_id", id };
             await SendRequestAsync(request);
         }
 

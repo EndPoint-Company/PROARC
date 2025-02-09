@@ -59,7 +59,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task RemoveMotivoAsyncTest()
         {
-            await MotivoControl.DeketeAsync("juros abusivos");
+            await MotivoControl.DeleteAsync("juros abusivos");
         }
 
         [TestMethod()]

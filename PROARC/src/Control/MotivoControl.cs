@@ -15,7 +15,7 @@ namespace PROARC.src.Control
     {
         public static async Task<Motivo?> GetAsync(string nome)
         {
-            var request = new { action = "get_motivo_by_nome", nome };
+            var request = new { action = "get_motivo_por_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -32,7 +32,7 @@ namespace PROARC.src.Control
 
         public static async Task<Motivo?> GetAsync(int id)
         {
-            var request = new { action = "get_motivo_by_id", id };
+            var request = new { action = "get_motivo_por_id", id };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -50,7 +50,7 @@ namespace PROARC.src.Control
 
         public static async Task<int?> GetIdAsync(string nome)
         {
-            var request = new { action = "get_id_motivo_by_nome", nome };
+            var request = new { action = "get_id_motivo_por_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
@@ -94,13 +94,13 @@ namespace PROARC.src.Control
 
         public static async Task InsertAsync(Motivo motivo)
         {
-            var request = new { action = "add_motivo", motivo };
+            var request = new { action = "insert_motivo", motivo };
             await SendRequestAsync(request);
         }
 
-        public static async Task DeketeAsync(string nome)
+        public static async Task DeleteAsync(string nome)
         {
-            var request = new { action = "remove_motivo_by_nome", nome };
+            var request = new { action = "delete_motivo_by_nome", nome };
             await SendRequestAsync(request);
         }
 
