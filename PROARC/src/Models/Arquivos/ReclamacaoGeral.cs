@@ -10,16 +10,21 @@ namespace PROARC.src.Models.Arquivos
     public class ReclamacaoGeral : Reclamacao
     {
         private DateTime? dataAudiencia;
-        private string? conciliadora;
+        private string? conciliador;
 
-       public ReclamacaoGeral
-            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, List<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador, DateTime? dataAudiencia, string? conciliadora)
+        public ReclamacaoGeral()
+        {
+        }
+
+        public ReclamacaoGeral
+            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, LinkedList<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador, DateTime? dataAudiencia, string? conciliador)
             : base(motivo, reclamante, procurador, reclamados, titulo, situacao, caminhoDir, dataAbertura, criador)
         {
             this.dataAudiencia = dataAudiencia;
-            this.conciliadora = conciliadora;
+            this.conciliador = conciliador;
         }
+
         public DateTime? DataAudiencia { get => this.dataAudiencia; set { this.dataAudiencia = value; } }
-        public string? Conciliadora { get => this.conciliadora; set { this.conciliadora = value; } }
+        public string? Conciliador { get => this.conciliador; set { this.conciliador = value; } }
     }
 }

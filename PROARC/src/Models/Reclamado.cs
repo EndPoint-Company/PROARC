@@ -20,7 +20,12 @@ namespace PROARC.src.Models
         private string? cep;
         private string? telefone;
         private string? email;
-        
+        private object numeroAddr;
+        private object logradouroAddr;
+        private object bairroAddr;
+        private object cidadeAddr;
+        private object ufAddr;
+        private DateTime dateTime;
 
         public Reclamado(string nome = null, string cpf = null, string cnpj = null,
                          short? numero = null, string logradouro = null, string bairro = null, string cidade = null,
@@ -55,6 +60,22 @@ namespace PROARC.src.Models
             this.cep = cep;
         }
 
+        public Reclamado(string nome, string? cpf, string? cnpj, object numeroAddr, object logradouroAddr, object bairroAddr, object cidadeAddr, object ufAddr, string? telefone, string? email, string? cep, DateTime dateTime)
+        {
+            this.nome = nome;
+            this.cpf = cpf;
+            this.cnpj = cnpj;
+            this.numeroAddr = numeroAddr;
+            this.logradouroAddr = logradouroAddr;
+            this.bairroAddr = bairroAddr;
+            this.cidadeAddr = cidadeAddr;
+            this.ufAddr = ufAddr;
+            this.telefone = telefone;
+            this.email = email;
+            this.cep = cep;
+            this.dateTime = dateTime;
+        }
+
         public override string ToString()
         {
             return $"Nome: {this.nome}\n" + 
@@ -81,6 +102,9 @@ namespace PROARC.src.Models
         public string? Cpf { get => cpf; set => cpf = value; }
         public string? Telefone { get => telefone; set => telefone = value; }
         public string? Email { get => email; set => email = value; }
-        public string? Cep{ get => cep; set => cep = value; }
+        public string? Cep
+        {
+            get => cep; set => cep = value;
+        }
     }
 }

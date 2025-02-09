@@ -14,8 +14,12 @@ namespace PROARC.src.Models.Arquivos
         private string? contatoEnelEmail;
         private string? observacao;
 
+        public ReclamacaoEnel()
+        {
+        }
+
         public ReclamacaoEnel
-            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, List<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador, string? atendente, string? contatoEnelTelefone, string? contatoEnelEmail, string? observacao)
+            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, LinkedList<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador, string? atendente, string? contatoEnelTelefone, string? contatoEnelEmail, string? observacao)
             : base(motivo, reclamante, procurador, reclamados, titulo, situacao, caminhoDir, dataAbertura, criador)
         {
             this.atendente = atendente;

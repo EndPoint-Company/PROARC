@@ -13,7 +13,7 @@ namespace PROARC.src.Models.Arquivos
         private Motivo? motivo;
         private Reclamante? reclamante;
         private Procurador? procurador;
-        private List<Reclamado>? reclamados;
+        private LinkedList<Reclamado>? reclamados;
         private string titulo;
         private string situacao;
         private string caminhoDir;
@@ -21,8 +21,10 @@ namespace PROARC.src.Models.Arquivos
         private string criador;
         private DateTime? dataCriacao;
 
+        public Reclamacao() { }
+
         public Reclamacao
-            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, List<Reclamado>? reclamados,
+            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, LinkedList<Reclamado>? reclamados,
             string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador
             , DateTime? dataCriacao = null)
         {
@@ -41,7 +43,7 @@ namespace PROARC.src.Models.Arquivos
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
         public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
         public Procurador? Procurador { get => this.procurador; set { this.procurador = value; } }
-        public List<Reclamado>? Reclamados { get => this.reclamados; set { this.reclamados = value; } }
+        public LinkedList<Reclamado>? Reclamados { get => this.reclamados; set { this.reclamados = value; } }
         public string Titulo { get => this.titulo; set { this.titulo = value; } }
         public string Situacao { get => this.situacao; set { this.situacao = value; } }
         public string CaminhoDir { get => this.caminhoDir; set { this.caminhoDir = value; } }
