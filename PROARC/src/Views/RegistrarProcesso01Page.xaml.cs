@@ -21,6 +21,7 @@ using Microsoft.UI.Xaml.Navigation;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Windows.UI.Popups;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace PROARC.src.Views
 {
@@ -67,6 +68,7 @@ namespace PROARC.src.Views
         private async Task CarregarMotivosAsync()
          => cbMotivo.ItemsSource = await MotivoControl.GetAllAsync();
 
+
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         => ConfigurarEstadoProcesso(true);
 
@@ -100,14 +102,37 @@ namespace PROARC.src.Views
             if (isNovoProcesso)
             {
                 await DefinirNovoProcesso();
+                calendario.MinDate = DateTimeOffset.Now;
             }
             else
             {
                 NumeroProcesso = string.Empty;
                 AnoProcesso = string.Empty;
                 calendario.ClearValue(CalendarDatePicker.MinDateProperty);
+                calendario.Date = null;
             }
         }
+
+        private void SelecionarHora_Click(object sender, RoutedEventArgs e)
+        {
+            var timePickerFlyout = new TimePickerFlyout();
+
+            if (sender is Button botao)
+            {
+                timePickerFlyout.Placement = FlyoutPlacementMode.Bottom;
+                timePickerFlyout.Time = DateTime.Now.TimeOfDay;
+
+                // Quando o usuário selecionar um horário, o nome do botão será atualizado
+                timePickerFlyout.Closed += (s, args) =>
+                {
+                    botao.Content = $"{timePickerFlyout.Time.Hours:D2}:{timePickerFlyout.Time.Minutes:D2}";
+                };
+
+                timePickerFlyout.ShowAt(botao);
+            }
+        }
+
+
 
         private async Task DefinirNovoProcesso()
         {
@@ -216,80 +241,203 @@ namespace PROARC.src.Views
         }
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
+{
+    // Resetando estilos de erro
+    ResetErrorStyles();
+
+    NumeroProcesso = inputNProcesso.Text.Trim();
+    AnoProcesso = inputAnoProcesso.Text.Trim();
+
+    if (string.IsNullOrEmpty(NumeroProcesso))
+    {
+        int count = await ProcessoAdministrativoControl.CountAsync();
+        NumeroProcesso = (count + 1).ToString();
+    }
+
+    if (!CamposPreenchidos())
+    {
+        ShowError("Preencha todos os campos obrigatórios antes de continuar.");
+        HighlightEmptyFields(); // 🔴 Adiciona bordas vermelhas nos campos vazios
+        return;
+    }
+
+    string motivo = cbMotivo.SelectedItem?.ToString();
+
+    string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
+    var reclamado = new Reclamado(
+        inputInstituicao.Text ?? "null",
+        short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
+        inputRua.Text ?? "null",
+        inputBairro.Text ?? "null",
+        inputEmail.Text ?? "null",
+        inputCidade.Text ?? "null",
+        inputUf.Text ?? "null",
+        cpfLimpo1,
+        cpfLimpo1
+    );
+
+    string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
+    var reclamante = new Reclamante(
+        inputNome.Text ?? "null",
+        cpfLimpo,
+        inputRgReclamante.Text ?? "null"
+    );
+
+    string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
+    DateTime? dataSelecionada = calendario.Date?.DateTime;
+
+    string dataFormatada = dataSelecionada.HasValue
+        ? dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")
+        : "0001-01-01 00:00:00.000";
+
+    string caminhoPasta = $"dir/folder{NumeroProcesso}";
+
+    string nProcesso = NumeroProcesso;
+    short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
+
+    bool success = await ProcessoAdministrativoControl.InsertAsync(
+        new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
+        new(motivo),
+        reclamado,
+        reclamante,
+        DateTime.Parse(dataFormatada))
+    );
+
+    if (success)
+    {
+        var successDialog = new ContentDialog
         {
-            NumeroProcesso = inputNProcesso.Text.Trim();
-            AnoProcesso = inputAnoProcesso.Text.Trim();
+            Title = "Sucesso",
+            Content = "O processo foi cadastrado com sucesso!",
+            CloseButtonText = "OK",
+            XamlRoot = this.Content.XamlRoot
+        };
 
-            if (string.IsNullOrEmpty(NumeroProcesso))
-            {
-                int count = await ProcessoAdministrativoControl.CountAsync();
-                NumeroProcesso = (count + 1).ToString();
-            }
+        await successDialog.ShowAsync();
 
-            if (!CamposPreenchidos())
-            {
-                ShowError("Preencha todos os campos obrigatórios antes de continuar.");
-                return;
-            }
-
-            string motivo = cbMotivo.SelectedItem?.ToString();
-
-            string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
-            var reclamado = new Reclamado(
-                inputInstituicao.Text ?? "null",
-                short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
-                inputRua.Text ?? "null",
-                inputBairro.Text ?? "null",
-                inputEmail.Text ?? "null",
-                inputCidade.Text ?? "null",
-                inputUf.Text ?? "null",
-                cpfLimpo1,
-                cpfLimpo1
-            );
-
-            string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
-            var reclamante = new Reclamante(
-                inputNome.Text ?? "null",
-                cpfLimpo,
-                inputRgReclamante.Text ?? "null"
-            );
-
-            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
-            DateTime? dataSelecionada = calendario.Date?.DateTime;
-
-            string dataFormatada = dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            string caminhoPasta = $"dir/folder{NumeroProcesso}";
-
-            string nProcesso = NumeroProcesso;
-            short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
-
-            bool success = await ProcessoAdministrativoControl.InsertAsync(
-                new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
-                new(motivo),
-                reclamado,
-                reclamante,
-                DateTime.Parse(dataFormatada))
-            );
-
-            if (success)
-            {
-                var successDialog = new ContentDialog
-                {
-                    Title = "Sucesso",
-                    Content = "O processo foi cadastrado com sucesso!",
-                    CloseButtonText = "OK",
-                    XamlRoot = this.Content.XamlRoot
-                };
-
-                await successDialog.ShowAsync();
-
-                Frame.Navigate(typeof(RegistrarProcesso01Page), true);
-            }
-            else
-            {
-                ShowError("Falha ao cadastrar o processo. Tente novamente.");
+        Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+    }
+    else
+    {
+        ShowError("Falha ao cadastrar o processo. Tente novamente.");
             }
         }
+
+
+        private void HighlightEmptyFields()
+        {
+            HighlightField(null, inputNProcesso, TextBlockNProcesso);
+            HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
+            HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
+            HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
+            HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
+            HighlightField(TextBlockReclamado, inputRua, TextBlockRua);
+            HighlightField(TextBlockReclamado, inputBairro, TextBlockBairro);
+            HighlightField(TextBlockReclamado, inputNumero, TextBlockNumero);
+            HighlightField(TextBlockReclamado, inputCidade, TextBlockCidade);
+            HighlightField(TextBlockReclamado, inputUf, TextBlockUf);
+            HighlightField(TextBlockReclamado, inputCep, TextBlockCep);
+
+            // 🟢 Validação do Motivo (ComboBox)
+            if (cbMotivo.SelectedItem == null)
+            {
+                cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
+                TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
+            }
+
+            // 🟢 Validação do Status (Se nenhum RadioButton foi selecionado)
+            if (!IsStatusSelected())
+            {
+                StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
+                TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
+                TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
+
+                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
+
+                TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
+                radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
+                radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
+            }
+        }
+
+        private void HighlightField(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
+        {
+            if (string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                textBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                textBox.PlaceholderForeground = new SolidColorBrush(Colors.Red);
+                textBlock.Foreground = new SolidColorBrush(Colors.Red);
+
+                if (titulo != null)
+                {
+                    titulo.Foreground = new SolidColorBrush(Colors.Red);
+                }
+            }
+        }
+
+        // 🔵 Método para Resetar os Estilos de Erro
+        private void ResetErrorStyles()
+        {
+            ResetFieldStyle(inputNProcesso, TextBlockNProcesso);
+            ResetFieldStyle(inputAnoProcesso, TextBlockAnoProcesso);
+            ResetFieldStyle(inputNome, TextBlockNome, TextBlockReclamante);
+            ResetFieldStyle(inputCpfReclamante, TextBlockCpfReclamante, TextBlockReclamante);
+            ResetFieldStyle(inputRua, TextBlockRua, TextBlockReclamado);
+            ResetFieldStyle(inputBairro, TextBlockBairro, TextBlockReclamado);
+            ResetFieldStyle(inputNumero, TextBlockNumero, TextBlockReclamado);
+            ResetFieldStyle(inputCidade, TextBlockCidade, TextBlockReclamado);
+            ResetFieldStyle(inputUf, TextBlockUf, TextBlockReclamado);
+            ResetFieldStyle(inputCep, TextBlockCep, TextBlockReclamado);
+
+            // 🔵 Resetando o ComboBox do Motivo
+            cbMotivo.BorderBrush = new SolidColorBrush(Colors.Gray);
+            TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Black);
+
+            // 🔵 Resetando a Seção de Status
+            StatusSection.BorderBrush = new SolidColorBrush(Colors.Transparent);
+            TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
+            TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
+
+            radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agResposta.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Black);
+
+            TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Black);
+            radio_atendido.Foreground = new SolidColorBrush(Colors.Black);
+            radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        // 🔵 Método Genérico para Resetar o Estilo de um Campo
+        private void ResetFieldStyle(TextBox textBox, TextBlock textBlock, TextBlock? titulo = null)
+        {
+            textBox.BorderBrush = new SolidColorBrush(Colors.Gray);
+            textBox.PlaceholderForeground = new SolidColorBrush(Colors.DarkGray);
+            textBlock.Foreground = new SolidColorBrush(Colors.Black);
+
+            if (titulo != null)
+            {
+                titulo.Foreground = new SolidColorBrush(Colors.Black);
+            }
+        }
+
+        // ✅ Verifica se algum RadioButton do Status foi selecionado
+        private bool IsStatusSelected()
+        {
+            return radio_agRealizacaoAudiencia.IsChecked == true ||
+                   radio_agResposta.IsChecked == true ||
+                   radio_agEnvioNotificacao.IsChecked == true ||
+                   radio_agDocumentacao.IsChecked == true ||
+                   radio_atendido.IsChecked == true ||
+                   radio_naoAtendido.IsChecked == true;
+        }
+
+
+
+
 
 
         private bool CamposPreenchidos()
