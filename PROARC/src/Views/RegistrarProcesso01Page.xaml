@@ -21,20 +21,20 @@
         <ScrollViewer>
             <StackPanel Padding="20" Spacing="32" Margin="0,0,0, 40">
                 <!-- Título -->
-                <TextBlock Text="CADASTRAR PROCESSO ADMINISTRATIVO" 
+                <TextBlock Text="CADASTRAR RECLAMAÇÃO" 
                            FontSize="32" 
                            FontWeight="Bold" 
                            Margin="160,40, 160, 0" />
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160, 0" Spacing="10">
                     <Button x:Name="btnProcessoNovo" 
-                        Content="Processo Novo" 
+                        Content="Reclamação Nova" 
                         Padding="20,10" 
                         Background="#003366" 
                         Foreground="White" 
                         Click="ProcessoNovo_Click" />
                     <Button x:Name="btnProcessoAntigo" 
-                        Content="Processo Antigo" 
+                        Content="Reclamação Antiga" 
                         Padding="20,10" 
                         Background="White" 
                         BorderBrush="#005BC1" 
@@ -50,9 +50,9 @@
                         <StackPanel x:Name="MainStackPanel" Orientation="Horizontal" Opacity="1">
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                             <StackPanel Orientation="Horizontal">
-                                <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="200" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Orientation="Horizontal">
+                                <StackPanel Padding="40" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Height="186" Orientation="Horizontal">
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock x:Name="TextBlockNProcesso" Text="N° Processo" FontSize="18" FontWeight="Bold" />
+                                        <TextBlock x:Name="TextBlockNProcesso" Text="N° Reclamação" FontSize="18" FontWeight="Bold" />
                                         <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
@@ -68,31 +68,34 @@
                             <!-- Seção Motivo -->
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-                                <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="200" CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}" Width="376">
+                                <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="186" CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}" Width="376">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock x:Name="TextBlockMotivo" Text="Motivo" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Grid.Column="0" />
-                                        <Button Content="Novo Motivo" Grid.Column="1" Click="OnNovoMotivoClick" Background="#003366" Foreground="White"/>
                                     </Grid>
-                                    <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" />
+                                        <Button Content="Novo Motivo" Grid.Column="1" Click="OnNovoMotivoClick" Background="#003366" Foreground="White" Margin="10,0,0,0"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
 
                             <!-- Seção Audiência -->
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-                                <StackPanel Padding="40" Height="200" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="376" 
-                x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
+                                <StackPanel Padding="40" Height="186" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="376" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
                                     <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
-                                    
-                                    <!-- Seletor de Data -->
-                                    <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" />
 
-                                    <!-- Botão que abre o TimePickerFlyout -->
-                                    <Button x:Name="btnSelecionarHora" Content="Escolher Horário" Click="SelecionarHora_Click" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <!-- Seletor de Data -->
+                                        <CalendarDatePicker x:Name="calendario" PlaceholderText="Escolha a data" />
+
+                                        <!-- Botão que abre o TimePickerFlyout -->
+                                        <Button x:Name="btnSelecionarHora" Content="Escolher Horário" Click="SelecionarHora_Click" Margin="10,0,0,0"/>
+                                    </StackPanel>
 
                                 </StackPanel>
                             </StackPanel>
@@ -100,12 +103,13 @@
 
                     </StackPanel>
 
+                    <!-- Seção Status -->
                     <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
                         <!-- Barra lateral azul -->
-                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" Height="404"/>
 
                         <!-- Conteúdo da seção Status -->
-                        <StackPanel Padding="40" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="638">
+                        <StackPanel Padding="40" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="638"  Height="404">
                             <!-- Título -->
                             <TextBlock x:Name="TextBlockStatus" Text="Status" FontSize="18" FontWeight="Bold" />
 
@@ -113,6 +117,7 @@
                             <StackPanel>
                                 <TextBlock x:Name="TextBlockTramitacao" Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
+                                    <RadioButton x:Name="radio_agFazerNotificacao" Content="Aguardando fazer notificação" GroupName="StatusGroup"/>
                                     <RadioButton x:Name="radio_agRealizacaoAudiencia" Content="Aguardando realização da audiência" GroupName="StatusGroup"/>
                                     <RadioButton x:Name="radio_agResposta" Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
                                     <RadioButton x:Name="radio_agEnvioNotificacao" Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
@@ -339,6 +344,7 @@
 
                     </StackPanel>
                 </StackPanel>
+                
                 
                 <!-- Botão de Continuar -->
                 <Button 
