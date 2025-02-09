@@ -50,7 +50,7 @@ namespace PROARC.src.Control
 
         public static async Task<int?> GetIdAsync(string nome)
         {
-            var request = new { action = "get_id_motivo_por_nome", nome };
+            var request = new { action = "get_motivo_id_por_nome", nome };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);

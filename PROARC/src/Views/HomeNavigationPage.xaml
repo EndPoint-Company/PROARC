@@ -31,7 +31,7 @@
             </NavigationViewItem>
             <NavigationViewItem Content="Lista de Reclamações" Tag="ListPageGeral" x:Name="ListPageGeralItem">
                 <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Save" />
+                    <FontIcon Glyph="&#xF0E3;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
             <NavigationViewItem Content="Enel" Icon="Add" ToolTipService.ToolTip="Enel" SelectsOnInvoked="False">
@@ -43,7 +43,11 @@
         </NavigationView.MenuItems>
 
         <NavigationView.FooterMenuItems>
-            <NavigationViewItem Content="Sair" Tag="LoginPage" Icon="Back" />
+            <NavigationViewItem Content="Sair" Tag="LoginPage">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xF3B1;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
         </NavigationView.FooterMenuItems>
 
         <Frame x:Name="contentFrame" />

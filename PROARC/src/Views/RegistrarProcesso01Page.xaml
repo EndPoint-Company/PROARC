@@ -111,7 +111,7 @@
                         <!-- Conteúdo da seção Status -->
                         <StackPanel Padding="40" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="638"  Height="404">
                             <!-- Título -->
-                            <TextBlock x:Name="TextBlockStatus" Text="Status" FontSize="18" FontWeight="Bold" />
+                            <TextBlock x:Name="TextBlockStatus" Text="Situação" FontSize="18" FontWeight="Bold" />
 
                             <!-- Status: Em tramitação -->
                             <StackPanel>

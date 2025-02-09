@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models.Arquivos
 {
-    public class Reclamacao
+    public abstract class Reclamacao
     {
         private Motivo? motivo;
         private Reclamante? reclamante;
@@ -19,10 +19,12 @@ namespace PROARC.src.Models.Arquivos
         private string caminhoDir;
         private DateOnly? dataAbertura;
         private string criador;
-
+        private DateTime? dataCriacao;
 
         public Reclamacao
-            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, List<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador)
+            (Motivo? motivo, Reclamante? reclamante, Procurador? procurador, List<Reclamado>? reclamados,
+            string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador
+            , DateTime? dataCriacao = null)
         {
             this.motivo = motivo;
             this.reclamante = reclamante;
@@ -33,7 +35,9 @@ namespace PROARC.src.Models.Arquivos
             this.caminhoDir = caminhoDir;
             this.dataAbertura = dataAbertura;
             this.criador = criador;
+            this.dataCriacao = dataCriacao;
         }
+
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }
         public Reclamante? Reclamante { get => this.reclamante; set { this.reclamante = value; } }
         public Procurador? Procurador { get => this.procurador; set { this.procurador = value; } }
@@ -43,7 +47,7 @@ namespace PROARC.src.Models.Arquivos
         public string CaminhoDir { get => this.caminhoDir; set { this.caminhoDir = value; } }
         public DateOnly? DataAbertura { get => this.dataAbertura; set { this.dataAbertura = value; } }
         public string Criador { get => this.criador; set { this.criador = value; } }
-
+        public DateTime? DataCriacao { get => this.dataCriacao; set { this.dataCriacao = value; } }
     }
 
 }
