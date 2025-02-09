@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Windows.UI.Popups;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Windows.Globalization;
 
 namespace PROARC.src.Views
 {
@@ -78,7 +79,7 @@ namespace PROARC.src.Views
 
         private void ConfigurarEstadoProcesso(bool isNovoProcesso)
         {
-            radio_agRealizacaoAudiencia.IsChecked = isNovoProcesso;
+            radio_agFazerNotificacao.IsChecked = isNovoProcesso;
             AtualizarEstilosBotoes(isNovoProcesso);
             AjustarCamposProcesso(isNovoProcesso);
         }
@@ -121,6 +122,7 @@ namespace PROARC.src.Views
             {
                 timePickerFlyout.Placement = FlyoutPlacementMode.Bottom;
                 timePickerFlyout.Time = DateTime.Now.TimeOfDay;
+                timePickerFlyout.ClockIdentifier = "24HourClock";
 
                 // Quando o usuário selecionar um horário, o nome do botão será atualizado
                 timePickerFlyout.Closed += (s, args) =>
@@ -352,6 +354,7 @@ namespace PROARC.src.Views
                 TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
                 TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
 
+                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
                 radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
                 radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
                 radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
@@ -401,6 +404,7 @@ namespace PROARC.src.Views
             TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
             TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
 
+            radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Black);
             radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Black);
             radio_agResposta.Foreground = new SolidColorBrush(Colors.Black);
             radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Black);
@@ -427,7 +431,8 @@ namespace PROARC.src.Views
         // ✅ Verifica se algum RadioButton do Status foi selecionado
         private bool IsStatusSelected()
         {
-            return radio_agRealizacaoAudiencia.IsChecked == true ||
+            return radio_agFazerNotificacao.IsChecked == true ||
+                   radio_agRealizacaoAudiencia.IsChecked == true ||
                    radio_agResposta.IsChecked == true ||
                    radio_agEnvioNotificacao.IsChecked == true ||
                    radio_agDocumentacao.IsChecked == true ||
@@ -462,6 +467,8 @@ namespace PROARC.src.Views
 
         private string GetSelectedRadioButton()
         {
+            if (radio_agFazerNotificacao.IsChecked == true)
+                return "Aguardando fazer notificação";
             if (radio_agRealizacaoAudiencia.IsChecked == true)
                 return "Aguardando realização da audiência";
             if (radio_agResposta.IsChecked == true)
