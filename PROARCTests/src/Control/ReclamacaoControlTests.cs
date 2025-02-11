@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PROARC.src.Models.Arquivos;
+
 
 namespace PROARC.src.Control.Tests
 {
@@ -14,7 +16,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task DeleteAsyncTest()
         {
-            await ReclamacaoControl.DeleteAsync("REC-6717");
+            await ReclamacaoControl.DeleteAsync("REC-5058");
         }
 
         [TestMethod()]
@@ -26,7 +28,18 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAsyncTest()
         {
-            Console.WriteLine(await ReclamacaoControl.GetAsync("titulo234"));
+            Reclamacao reclamacao = await ReclamacaoControl.GetAsync("teste");
+            Console.WriteLine(reclamacao);
+        }       
+        
+        [TestMethod()]
+        public async Task GetNRowsTest()
+        {
+            LinkedList<Reclamacao> abacate = await ReclamacaoControl.GetNRows(10, 0);
+            foreach (Reclamacao reclamacao in abacate)
+            {
+                Console.WriteLine(reclamacao+"\n");
+            }
         }
     }
 }
