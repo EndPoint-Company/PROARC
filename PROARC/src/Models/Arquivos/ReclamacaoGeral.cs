@@ -24,6 +24,28 @@ namespace PROARC.src.Models.Arquivos
             this.conciliador = conciliador;
         }
 
+        public override string ToString()
+        {
+            return $"Título: {Titulo}\n" +
+                   $"Reclamante - {Reclamante}\n" +
+                   $"Reclamado - {reclamadosString()}\n" +
+                   $"Situação: {Situacao}\n" +
+                   $"Criador: {Criador}\n" +
+                   $"Data de Abertura: {DataAbertura?.ToString() ?? "N/A"}\n" +
+                   $"Data da Audiência: {DataAudiencia?.ToString() ?? "N/A"}\n" +
+                   $"Conciliador: {Conciliador ?? "N/A"}";
+        }
+
+        public string reclamadosString()
+        {
+            string reclamados = "";
+            foreach (Reclamado r in Reclamados)
+            {
+                reclamados += r.ToString() + "\n";
+            }
+            return reclamados;
+        }
+
         public DateTime? DataAudiencia { get => this.dataAudiencia; set { this.dataAudiencia = value; } }
         public string? Conciliador { get => this.conciliador; set { this.conciliador = value; } }
     }

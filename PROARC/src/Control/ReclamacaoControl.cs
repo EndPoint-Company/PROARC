@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Azure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
 using static PROARC.src.Control.NetworkControl;
 using System.Text.Json.Serialization;
 using PROARC.src.Models.Tipos;
 using PROARC.src.Models;
-using System.Text.Json;
-using static PROARC.src.Control.ProcessoAdministrativoControl;
 using Newtonsoft.Json.Linq;
 
 namespace PROARC.src.Control
@@ -27,6 +27,7 @@ namespace PROARC.src.Control
             {
                 jsonToken = JToken.Parse(jsonToken.Value<string>());
             }
+            
 
             JArray reclamacoesArray = (JArray)jsonToken["reclamacoes"];
 
@@ -125,5 +126,129 @@ namespace PROARC.src.Control
 
             return reclamacoes;
         }
+        public static async Task<Reclamacao> GetAsync(string titulo)
+        {
+            var request = new { action = "get_reclamacao_por_titulo", titulo };
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
+            JToken jsonToken = JToken.Parse(response);
+
+            if (jsonToken.Type == JTokenType.String)
+            {
+                jsonToken = JToken.Parse(jsonToken.Value<string>());
+            }
+
+            JArray reclamacoesArray = (JArray)jsonToken["reclamacoes"];
+            if (reclamacoesArray.Count == 0)
+                return null;
+
+            JObject recl = (JObject)reclamacoesArray[0];
+            JToken reclamanteToken = recl.GetValue("reclamante");
+            JToken procuradorToken = recl.GetValue("procurador");
+            JToken motivoToken = recl.GetValue("motivo");
+            JArray reclamadosToken = (JArray)recl.GetValue("reclamados");
+            JToken esp = recl.GetValue("reclamacoes_geral");
+            JToken enel = recl.GetValue("reclamacoes_enel");
+
+            Motivo motivo = new((string)motivoToken["nome"]);
+
+            var reclamanteObj = reclamanteToken.First as JProperty;
+            Reclamante reclamante = new(
+                (string?)reclamanteObj?.Value?["nome"] ?? "",               
+                (string?)reclamanteObj?.Value?["cpf"] ?? "",
+                (string?)reclamanteObj?.Value?["rg"] ?? "",
+                (string?)reclamanteObj?.Value?["telefone"] ?? "",
+                (string?)reclamanteObj?.Value["email"] ?? ""
+            );
+
+            Procurador procurador = new(
+                (string?)procuradorToken?["nome"] ?? "",
+                (string?)procuradorToken?["cpf"] ?? "",
+                (string?)procuradorToken?["rg"] ?? "",
+                (string?)procuradorToken?["telefone"] ?? "",
+                (string?)procuradorToken?["email"] ?? ""
+            );
+
+            LinkedList<Reclamado> reclamados = new();
+            foreach (JObject obj in reclamadosToken)
+            {
+                reclamados.AddLast(new Reclamado(
+                    (string)obj["nome"],
+                    (string?)obj["cpf"] ?? "",
+                    (string?)obj["cnpj"] ?? "",
+                    (short)obj["numero_addr"],
+                    (string)obj["logradouro_addr"],
+                    (string)obj["bairro_addr"],
+                    (string)obj["cidade_addr"],
+                    (string)obj["uf_addr"],
+                    (string)obj["cep"],
+                    (string)obj["telefone"],
+                    (string)obj["email"]
+                ));
+            }
+
+            if (esp.HasValues)
+            {
+                ReclamacaoGeral reclamacao = new()
+                {
+                    Motivo = motivo,
+                    Reclamante = reclamante,
+                    Procurador = procurador,
+                    Reclamados = reclamados,
+                    Titulo = (string)recl["titulo"],
+                    Situacao = (string)recl["situacao"],
+                    CaminhoDir = (string)recl["caminho_dir"],
+                    Criador = (string)recl["criador"],
+                    DataCriacao = (DateTime)recl["created_at"],
+                    DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
+                    Conciliador = (string?)esp["conciliador"] ?? ""
+                };
+                return reclamacao;
+            }
+            else
+            {
+                ReclamacaoEnel reclamacao = new()
+                {
+                    Motivo = motivo,
+                    Reclamante = reclamante,
+                    Procurador = procurador,
+                    Reclamados = reclamados,
+                    Titulo = (string)recl["titulo"],
+                    Situacao = (string)recl["situacao"],
+                    CaminhoDir = (string)recl["caminho_dir"],
+                    Criador = (string)recl["criador"],
+                    DataCriacao = (DateTime)recl["created_at"],
+                    DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
+                    Atendente = (string?)enel?["atendente"] ?? "",
+                    ContatoEnelEmail = (string?)enel?["contato_enel_email"] ?? "",
+                    ContatoEnelTelefone = (string?)enel?["contato_enel_telefone"] ?? "",
+                    Observacao = (string?)enel?["observacao"] ?? ""
+                };
+                return reclamacao;
+            }
+        }
+
+        public static async Task DeleteAsync(string titulo)
+        {
+            var request = new { action = "delete_reclamacao_por_titulo", titulo };
+            await SendRequestAsync(request);
+        }
+
+        public static async Task<int> CountAsync()
+        {
+            var request = new { action = "count_reclamacoes" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+
+            return 0;
+        }
+
     }
 }

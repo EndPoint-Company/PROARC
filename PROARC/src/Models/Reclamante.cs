@@ -38,7 +38,7 @@
 
         public override string ToString()
         {
-            return $"Nome: {Nome}, rg: {Rg}, cpf: {Cpf}, telefone: {telefone}, email: {email}";
+            return $"Nome: {Nome}, rg: {Rg}, cpf: {Cpf}, telefone: {Telefone}, email: {Email}";
         }
 
         public string Nome { get => this.nome; set { this.nome = value; } }

@@ -27,6 +27,18 @@ namespace PROARC.src.Models.Arquivos
             this.contatoEnelEmail = contatoEnelEmail;
             this.observacao = observacao;
         }
+        public override string ToString()
+        {
+            return $"Título: {Titulo}\n" +
+                   $"Reclamante - {Reclamante}\n" +
+                   $"Situação: {Situacao}\n" +
+                   $"Criador: {Criador}\n" +
+                   $"Data de Abertura: {DataAbertura?.ToString() ?? "N/A"}\n" +
+                   $"Atendente: {Atendente ?? "N/A"}\n" +
+                   $"Contato Enel - Telefone: {ContatoEnelTelefone ?? "N/A"}\n" +
+                   $"Contato Enel - Email: {ContatoEnelEmail ?? "N/A"}\n" +
+                   $"Observação: {Observacao ?? "N/A"}";
+        }
 
         public string? Atendente { get => this.atendente; set { this.atendente = value; } }
         public string? ContatoEnelTelefone { get => this.contatoEnelTelefone; set { this.contatoEnelTelefone = value; } }
