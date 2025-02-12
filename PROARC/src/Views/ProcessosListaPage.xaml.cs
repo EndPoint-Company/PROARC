@@ -55,6 +55,8 @@ namespace PROARC.src.Views
             _ = CarregarProcessos();
         }
 
+        private int _totalProcessos = 0; // Guarda o total de processos disponíveis
+
         private async Task CarregarProcessos()
         {
             if (_isLoading) return;
@@ -66,6 +68,12 @@ namespace PROARC.src.Views
             try
             {
                 Debug.WriteLine($"🔄 Buscando processos... Página {_paginaAtual}");
+
+                // Primeiro, pegamos o total de processos se ainda não tivermos essa informação
+                if (_totalProcessos == 0)
+                {
+                    _totalProcessos = await ReclamacaoControl.CountAsync(); // Método fictício que retorna o total
+                }
 
                 var processos = await ReclamacaoControl.GetNRows(_limit, _offset);
 
@@ -95,26 +103,37 @@ namespace PROARC.src.Views
                 carregando.IsActive = false;
                 carregando.Visibility = Visibility.Collapsed;
                 _isLoading = false;
+
+                AtualizarEstadoDosBotoes();
             }
+        }
+
+        private void AtualizarEstadoDosBotoes()
+        {
+            // Se a página for 1, desativa o botão "Página Anterior"
+            BotaoPaginaAnterior.IsEnabled = _paginaAtual > 1;
+
+            // Se não houver mais processos para exibir, desativa o botão "Próxima Página"
+            BotaoProximaPagina.IsEnabled = _offset + _limit < _totalProcessos;
         }
 
         private async void ProximaPagina_Click(object sender, RoutedEventArgs e)
         {
-            if (_isLoading) return; // Evita múltiplas chamadas simultâneas
+            if (_isLoading || _offset + _limit >= _totalProcessos) return; // Impede ir além da última página
 
             _paginaAtual++;
-            _offset = (_paginaAtual - 1) * _limit; // Ajusta corretamente o offset
-            OnPropertyChanged(nameof(PaginaAtual)); // Atualiza a UI com o número da página
+            _offset = (_paginaAtual - 1) * _limit;
+            OnPropertyChanged(nameof(PaginaAtual));
             await CarregarProcessos();
         }
 
         private async void PaginaAnterior_Click(object sender, RoutedEventArgs e)
         {
-            if (_paginaAtual > 1) // Garante que a página nunca seja menor que 1
+            if (_paginaAtual > 1)
             {
                 _paginaAtual--;
-                _offset = (_paginaAtual - 1) * _limit; // Ajusta corretamente o offset
-                OnPropertyChanged(nameof(PaginaAtual)); // Atualiza a UI com o número da página
+                _offset = (_paginaAtual - 1) * _limit;
+                OnPropertyChanged(nameof(PaginaAtual));
                 await CarregarProcessos();
             }
         }

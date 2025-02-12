@@ -139,9 +139,9 @@
                 Margin="0, 0, 0, 10"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Button Content="Anterior" Click="PaginaAnterior_Click" />
+                    <Button x:Name="BotaoPaginaAnterior" Content="Anterior" Click="PaginaAnterior_Click" />
                     <TextBlock Text="{x:Bind PaginaAtual, Mode=OneWay}" FontSize="18" VerticalAlignment="Center"/>
-                    <Button Content="Próximo" Click="ProximaPagina_Click" />
+                    <Button x:Name="BotaoProximaPagina" Content="Próximo" Click="ProximaPagina_Click" />
                 </StackPanel>
 
             </StackPanel>
