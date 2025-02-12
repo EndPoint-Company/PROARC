@@ -228,6 +228,13 @@ namespace PROARC.src.Control
             }
         }
 
+        public static async Task InsertAsync(Reclamacao reclamacao)
+        {
+            var request = new { action = "insert_reclamacao", reclamacao };
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
+        }
+
         public static async Task DeleteAsync(string titulo)
         {
             var request = new { action = "delete_reclamacao_por_titulo", titulo };

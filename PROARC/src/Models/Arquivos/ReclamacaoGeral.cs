@@ -28,7 +28,7 @@ namespace PROARC.src.Models.Arquivos
         {
             return $"Título: {Titulo}\n" +
                    $"Reclamante - {Reclamante}\n" +
-                   $"Reclamado - {reclamadosString()}\n" +
+                   $"Reclamados - {reclamadosString()}\n" +
                    $"Situação: {Situacao}\n" +
                    $"Criador: {Criador}\n" +
                    $"Data de Abertura: {DataAbertura?.ToString() ?? "N/A"}\n" +
@@ -38,12 +38,7 @@ namespace PROARC.src.Models.Arquivos
 
         public string reclamadosString()
         {
-            string reclamados = "";
-            foreach (Reclamado r in Reclamados)
-            {
-                reclamados += r.ToString() + "\n";
-            }
-            return reclamados;
+            return string.Join("\n-", Reclamados);
         }
 
         public DateTime? DataAudiencia { get => this.dataAudiencia; set { this.dataAudiencia = value; } }

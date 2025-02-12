@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
+using PROARC.src.Models;
+using PROARC.src.Models.Tipos;
 
 
 namespace PROARC.src.Control.Tests
@@ -30,16 +32,30 @@ namespace PROARC.src.Control.Tests
         {
             Reclamacao reclamacao = await ReclamacaoControl.GetAsync("teste");
             Console.WriteLine(reclamacao);
-        }       
-        
+        }
+
         [TestMethod()]
         public async Task GetNRowsTest()
         {
             LinkedList<Reclamacao> abacate = await ReclamacaoControl.GetNRows(10, 0);
             foreach (Reclamacao reclamacao in abacate)
             {
-                Console.WriteLine(reclamacao+"\n");
+                Console.WriteLine(reclamacao + "\n");
             }
+        }
+
+        [TestMethod()]
+        public async Task InsertAsyncTest()
+        {
+            LinkedList<Reclamado> reclamados = new();
+            Reclamado reclamado1 = new Reclamado("João Silva", "12345678900", null, 123, "Rua das Flores", "Centro", "São Paulo", "SP", "0100000", "98765432111", "joao@email.com");
+            Reclamado reclamado2 = new Reclamado("Mercado dois irmaos", null, "12345678000199", 456, "Avenida Paulista", "Bela Vista", "São Paulo", "SP", "01310000", "11912345678", "mercado@empresa.com");
+
+            reclamados.AddFirst(reclamado1);
+            reclamados.AddFirst(reclamado2);
+
+            ReclamacaoGeral rec = new ReclamacaoGeral(new Motivo("Atraso na entrega"), new Reclamante("Marcos Vitor", "12345678900",null), null, reclamados, "titulots", "Aberto", "C:\\Users\\marco\\Documents\\Reclamações", DateOnly.FromDateTime(DateTime.Now), "Marcos Vitor", DateTime.Now, "advogada");
+            await ReclamacaoControl.InsertAsync(rec);
         }
     }
 }
