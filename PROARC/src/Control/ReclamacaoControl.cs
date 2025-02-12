@@ -93,6 +93,7 @@ namespace PROARC.src.Control
                     reclamacao.Procurador = procurador;
                     reclamacao.Reclamados = reclamados;
                     reclamacao.Titulo = (string)recl["titulo"];
+                    reclamacao.Situacao = (string)recl["situacao"];
                     reclamacao.CaminhoDir = (string)recl["caminho_dir"];
                     reclamacao.Criador = (string)recl["criador"];
                     reclamacao.DataCriacao = (DateTime)recl["created_at"];
@@ -111,6 +112,7 @@ namespace PROARC.src.Control
                     reclamacao.Procurador = procurador;
                     reclamacao.Reclamados = reclamados;
                     reclamacao.Titulo = (string)recl["titulo"];
+                    reclamacao.Situacao = (string)recl["situacao"];
                     reclamacao.CaminhoDir = (string)recl["caminho_dir"];
                     reclamacao.Criador = (string)recl["criador"];
                     reclamacao.DataCriacao = (DateTime)recl["created_at"];
@@ -228,11 +230,15 @@ namespace PROARC.src.Control
             }
         }
 
-        public static async Task InsertAsync(Reclamacao reclamacao)
+        public static async Task InsertAsync(ReclamacaoGeral reclamacao)
+        {
+            var request = new { action = "insert_reclamacao", reclamacao };
+            string response = await SendRequestAsync(request);           
+        }
+        public static async Task InsertAsync(ReclamacaoEnel reclamacao)
         {
             var request = new { action = "insert_reclamacao", reclamacao };
             string response = await SendRequestAsync(request);
-            Console.WriteLine(response);
         }
 
         public static async Task DeleteAsync(string titulo)
@@ -244,6 +250,37 @@ namespace PROARC.src.Control
         public static async Task<int> CountAsync()
         {
             var request = new { action = "count_reclamacoes" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+
+            return 0;
+        }
+
+        public static async Task<int> CountGAsync()
+        {
+            var request = new { action = "count_reclamacoes_geral" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+
+            return 0;
+        }
+        public static async Task<int> CountEAsync()
+        {
+            var request = new { action = "count_reclamacoes_enel" };
             string response = await SendRequestAsync(request);
 
             using JsonDocument doc = JsonDocument.Parse(response);
