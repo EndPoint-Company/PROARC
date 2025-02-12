@@ -30,7 +30,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAsyncTest()
         {
-            Reclamacao reclamacao = await ReclamacaoControl.GetAsync("teste");
+            Reclamacao reclamacao = await ReclamacaoControl.GetAsync("titus");
             Console.WriteLine(reclamacao);
         }
 
@@ -48,14 +48,28 @@ namespace PROARC.src.Control.Tests
         public async Task InsertAsyncTest()
         {
             LinkedList<Reclamado> reclamados = new();
+            LinkedList<Reclamado> reclamaenel = new();
+            
             Reclamado reclamado1 = new Reclamado("João Silva", "12345678900", null, 123, "Rua das Flores", "Centro", "São Paulo", "SP", "0100000", "98765432111", "joao@email.com");
             Reclamado reclamado2 = new Reclamado("Mercado dois irmaos", null, "12345678000199", 456, "Avenida Paulista", "Bela Vista", "São Paulo", "SP", "01310000", "11912345678", "mercado@empresa.com");
-
+            reclamaenel.AddFirst(reclamado2);
             reclamados.AddFirst(reclamado1);
             reclamados.AddFirst(reclamado2);
+            ReclamacaoEnel recenel = new ReclamacaoEnel(new Motivo("Atraso na entrega"), new Reclamante("lorax", "12345678950", null),null,reclamaenel,"testenel9","situacao","caminhodir258", DateOnly.FromDateTime(DateTime.Now),"marquin",null,null,null,null);
+            ReclamacaoGeral recgeral = new ReclamacaoGeral(new Motivo("Atraso na entrega"), new Reclamante("Marcos Vitor", "12345678900", null), null, reclamados, "titus", "Aberto", "C:\\Users\\marco\\Documents\\Rec", DateOnly.FromDateTime(DateTime.Now), "Marcos Vitor", DateTime.Now, "advogada");
+            await ReclamacaoControl.InsertAsync(recenel);
+        }
 
-            ReclamacaoGeral rec = new ReclamacaoGeral(new Motivo("Atraso na entrega"), new Reclamante("Marcos Vitor", "12345678900",null), null, reclamados, "titulots", "Aberto", "C:\\Users\\marco\\Documents\\Reclamações", DateOnly.FromDateTime(DateTime.Now), "Marcos Vitor", DateTime.Now, "advogada");
-            await ReclamacaoControl.InsertAsync(rec);
+        [TestMethod()]
+        public async Task CountGAsyncTest()
+        {
+            Console.WriteLine(await ReclamacaoControl.CountGAsync());
+        }
+
+        [TestMethod()]
+        public async Task CountEAsyncTest()
+        {
+            Console.WriteLine(await ReclamacaoControl.CountEAsync());
         }
     }
 }
