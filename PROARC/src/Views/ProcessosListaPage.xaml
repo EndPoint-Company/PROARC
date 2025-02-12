@@ -26,58 +26,58 @@
             <ThemeShadow x:Name="SharedShadow" />
         </Grid.Resources>
         <ScrollViewer>
-            
 
-        <!-- Estilos Comuns -->
 
-                <StackPanel Spacing="10" Padding="40">
-                    <!-- Cabeçalho -->
-                    <TextBlock Text="PROCESSOS ADMINISTRATIVOS" FontSize="32" FontWeight="Bold" Margin="40,40, 160, 0" />
+            <!-- Estilos Comuns -->
 
-                    <!-- Títulos -->
-                    <Grid Margin="0,40,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="250" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="150" />
-                            <ColumnDefinition Width="150" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="200" />
-                        </Grid.ColumnDefinitions>
+            <StackPanel Spacing="10" Padding="40">
+                <!-- Cabeçalho -->
+                <TextBlock Text="PROCESSOS ADMINISTRATIVOS" FontSize="32" FontWeight="Bold" Margin="40,40, 160, 0" />
 
-                        <TextBlock Text="N° Processo" Grid.Column="0" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="Reclamante" Grid.Column="1" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="CPF do Reclamante" Grid.Column="2" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="Reclamado" Grid.Column="3" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="Criado" Grid.Column="4" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="Audiência" Grid.Column="5" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="Motivo" Grid.Column="6" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                        <TextBlock Text="Status" Grid.Column="7" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
-                    </Grid>
+                <!-- Títulos -->
+                <Grid Margin="0,40,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
 
-                    <!-- TreeView -->
+                    <TextBlock Text="N° Processo" Grid.Column="0" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Reclamante" Grid.Column="1" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="CPF do Reclamante" Grid.Column="2" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Reclamado" Grid.Column="3" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Criado" Grid.Column="4" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Audiência" Grid.Column="5" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Motivo" Grid.Column="6" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                    <TextBlock Text="Status" Grid.Column="7" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+                </Grid>
 
-                    <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="False" CanReorderItems="False" >
-                        <TreeView.ItemTemplate>
-                            <DataTemplate x:DataType="models:ProcessoAdministrativo">
-                                <Grid RightTapped="Processo_RightTapped" AllowDrop="False" DragEnter="OnDragEnter" DragStarting="OnDragStarting" >
+                <!-- TreeView -->
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="200" />
-                                        <ColumnDefinition Width="200" />
-                                        <ColumnDefinition Width="250" />
-                                        <ColumnDefinition Width="200" />
-                                        <ColumnDefinition Width="150" />
-                                        <ColumnDefinition Width="150" />
-                                        <ColumnDefinition Width="200" />
-                                        <ColumnDefinition Width="200" />
-                                    </Grid.ColumnDefinitions>
+                <TreeView ItemsSource="{Binding Processos}" CanDragItems="False" AllowDrop="False" CanReorderItems="False" >
+                    <TreeView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Reclamacao">
+                            <Grid RightTapped="Processo_RightTapped" AllowDrop="False" DragEnter="OnDragEnter" DragStarting="OnDragStarting" >
 
-                                <TextBlock Text="{x:Bind NumeroProcesso, Converter={StaticResource NullToNAConverter}}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="200" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{x:Bind Titulo, Converter={StaticResource NullToNAConverter}}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
     <ToolTipService.ToolTip>
-        <ToolTip Content="{x:Bind NumeroProcesso}" Placement="Mouse"/>
+        <ToolTip Content="{x:Bind Titulo}" Placement="Mouse"/>
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
@@ -93,21 +93,21 @@
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind Reclamado.Nome, Converter={StaticResource NullToNAConverter}}" Grid.Column="3" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind DataAbertura, Converter={StaticResource NullToNAConverter}}" Grid.Column="3" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
     <ToolTipService.ToolTip>
-        <ToolTip Content="{x:Bind Reclamado.Nome}" Placement="Mouse"/>
+        <ToolTip Content="{x:Bind DataAbertura}" Placement="Mouse"/>
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind DataDeCriacaoFormatada, Converter={StaticResource NullToNAConverter}}" Grid.Column="4" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind DataCriacao, Converter={StaticResource NullToNAConverter}}" Grid.Column="4" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
     <ToolTipService.ToolTip>
-        <ToolTip Content="{x:Bind DataDeCriacaoFormatada}" Placement="Mouse"/>
+        <ToolTip Content="{x:Bind DataCriacao}" Placement="Mouse"/>
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind DataDaAudienciaFormatada, Converter={StaticResource NullToNAConverter}}" Grid.Column="5" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind DataAbertura, Converter={StaticResource NullToNAConverter}}" Grid.Column="5" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
     <ToolTipService.ToolTip>
-        <ToolTip Content="{x:Bind DataDaAudienciaFormatada}" Placement="Mouse"/>
+        <ToolTip Content="{x:Bind DataAbertura}" Placement="Mouse"/>
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
@@ -117,24 +117,34 @@
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind Status, Converter={StaticResource NullToNAConverter}}" Grid.Column="7" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind Situacao, Converter={StaticResource NullToNAConverter}}" Grid.Column="7" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
     <ToolTipService.ToolTip>
-        <ToolTip Content="{x:Bind Status}" Placement="Mouse"/>
+        <ToolTip Content="{x:Bind Situacao}" Placement="Mouse"/>
     </ToolTipService.ToolTip>
                                 </TextBlock>
 
                             </Grid>
-                            </DataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                    <ProgressRing
+                        </DataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+
+
+                <ProgressRing
                 x:Name="carregando"
                 IsActive="False"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Visibility="Collapsed"
                 Margin="0, 0, 0, 10"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Button Content="Anterior" Click="PaginaAnterior_Click" />
+                    <TextBlock Text="{x:Bind PaginaAtual, Mode=OneWay}" FontSize="18" VerticalAlignment="Center"/>
+                    <Button Content="Próximo" Click="ProximaPagina_Click" />
                 </StackPanel>
+
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Page>

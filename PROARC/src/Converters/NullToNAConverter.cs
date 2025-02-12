@@ -10,7 +10,7 @@ namespace PROARC.src.Converters
             // Se for nulo ou uma string vazia, retorna "N/A"
             if (value == null || (value is string str && string.IsNullOrEmpty(str)))
             {
-                return "N/A";
+                return value ?? "N/A";
             }
 
             // Se for uma string com mais de 20 caracteres, corta a string e adiciona "..."
