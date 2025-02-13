@@ -247,6 +247,13 @@ namespace PROARC.src.Control
             await SendRequestAsync(request);
         }
 
+        public static async Task UpdateSituacaoAsync(string titulo, string situacao)
+        {
+            var request = new { action = "update_situacao_reclamacao_por_titulo", titulo, situacao };
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
+        }
+
         public static async Task<int> CountAsync()
         {
             var request = new { action = "count_reclamacoes" };
