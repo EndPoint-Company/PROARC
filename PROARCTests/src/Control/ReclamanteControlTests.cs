@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PROARC.src.Control;
 using PROARC.src.Models;
-using PROARC.src.Models.Tipos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,63 +13,55 @@ namespace PROARC.src.Control.Tests
     public class ReclamanteControlTests
     {
         [TestMethod()]
-        public void GetReclamanteIdTest()
+        public async Task GetReclamanteByIdAsyncTest()
         {
-            //Console.WriteLine(ReclamanteControl.GetReclamanteId("10"));
+            //Console.WriteLine(await ReclamanteControl.GetAsync(1));
         }
 
         [TestMethod()]
-        public void GetReclamanteTest()
+        public async Task GetReclamanteByCpfAsyncTest()
         {
-            // Console.WriteLine(ReclamanteControl.GetReclamante(1));
+            //Console.WriteLine(await ReclamanteControl.GetReclamanteByCpfAsync("55566677788"));
         }
 
         [TestMethod()]
-        public void AddReclamanteTest()
+        public async Task GetReclamanteByRgAsyncTest()
         {
-            // Reclamante reclamante = new Reclamante("João", "123456789", "987654321");
-            // ReclamanteControl.AddReclamante(reclamante);
-
+            //Console.WriteLine(await ReclamanteControl.GetReclamanteByRgAsync("123456789"));
         }
 
         [TestMethod()]
-        public void AtualizarReclamanteTest()
+        public async Task GetAllReclamantesAsyncTest()
         {
-            // ReclamanteControl.AtualizarReclamante("10", "João arcondicionado", "11", "11");
-        }
-
-        [TestMethod()]
-        public void RemoverReclamanteTest()
-        {
-            //ReclamanteControl.RemoverReclamante("11");
-        }
-
-        [TestMethod()]
-        public void GetAllReclamanteTest()
-        {
-
-            try
+            List<Reclamante> reclamantes = await ReclamanteControl.GetAllAsync();
+             foreach (var reclamante in reclamantes)
             {
-                LinkedList<Reclamante>? reclamantes = ReclamanteControl.GetAllReclamante();
+                Console.WriteLine(reclamante + "\n");
+            }
+        }
 
-                if (reclamantes != null && reclamantes.Count > 0)
-                {
-                    Console.WriteLine("Lista de Reclamantes:");
-                    foreach (Reclamante reclamante in reclamantes)
-                    {
-                        Console.WriteLine($"Nome: {reclamante.Nome}, RG: {reclamante.Rg}, CPF: {reclamante.Cpf}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Nenhum reclamante encontrado ou houve um erro na consulta.");
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Erro ao buscar reclamantes: {e.Message}");
-            }
-          
+        [TestMethod()]
+        public async Task AddReclamanteAsyncTest()
+        {
+            await ReclamanteControl.InsertAsync(new Reclamante ("cabisbaixo", "70934922403", null, "12312312319", "marcoscabs@gmail.com"));
+        }
+
+        [TestMethod()]
+        public async Task UpdateReclamanteByIdAsyncTest()
+        {
+            await ReclamanteControl.UpdateAsync(4,new Reclamante("jonathan cabecao", "70934922403", null, "12312312319", "marcoscabs@gmail.com"));
+        }
+
+        [TestMethod()]
+        public async Task RemoveReclamanteByIdAsyncTest()
+        {
+           await ReclamanteControl.DeleteAsync(4);
+        }
+
+        [TestMethod()]
+        public async Task CountReclamantesAsyncTest()
+        {
+           Console.WriteLine(await ReclamanteControl.CountAsync());
         }
     }
 }

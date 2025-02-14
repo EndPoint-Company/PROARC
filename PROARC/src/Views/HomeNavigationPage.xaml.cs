@@ -19,20 +19,25 @@ namespace PROARC.src.Views
             {
                 string tag = selectedItem.Tag as string;
 
-                // Navegar para a p·gina correspondente
+                // Navegar para a p√°gina correspondente
                 switch (tag)
                 {
-                    case "SamplePage1":
+                    
+                    case "HomePage":
                         contentFrame.Navigate(typeof(HomePage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage2":
+                    case "ListPageGeral":
                         contentFrame.Navigate(typeof(ProcessosListaPage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage3":
-                        contentFrame.Navigate(typeof(RegistrarProcesso01Page));
+                    case "CadastrarPageGeral":
+                        contentFrame.Navigate(typeof(RegistrarProcesso01Page), true);
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage4":
+                    case "LoginPage":
                         Frame.Navigate(typeof(LoginPage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
                 }
             }

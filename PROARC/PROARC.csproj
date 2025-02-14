@@ -18,11 +18,13 @@
 	<PropertyGroup Label="Globals">
 		<AppxPackage>false</AppxPackage>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="src\Converters\Class1.cs" />
+	</ItemGroup>
 
   <ItemGroup>
 	  <Content Include="Assets\proarc-white-logo.ico" />
 	  <Content Include="Assets\bannerHome.png" />
-	  
   </ItemGroup>
 
   <ItemGroup>
@@ -83,16 +85,6 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="src\Views\ProcessosListaPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="src\Views\RegistrarProcesso03Page.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="src\Views\RegistrarProcesso02Page.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

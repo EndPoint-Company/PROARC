@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="PROARC.src.Views.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,74 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <Page.Resources>
-        <!-- Botão -->
-        <Style x:Key="LocalAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource AccentButtonStyle}">
-        </Style>
-        <Style TargetType="Button" BasedOn="{StaticResource LocalAccentButtonStyle}" />
-
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Padding" Value="8"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Grid>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal"/>
-                                    <VisualState x:Name="PointerOver">
-                                        <!-- Impede mudanças ao passar o mouse -->
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                                           Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                                           Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Gray"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Focused">
-                                        <!-- Impede mudanças ao clicar na caixinha -->
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                                           Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                                           Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Gray"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Border
-                                x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{TemplateBinding CornerRadius}">
-                                <ScrollViewer
-                                    x:Name="ContentElement"
-                                    Margin="0"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Stretch"/>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
-
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="1277" Height="687">
         <Grid.ColumnDefinitions>
@@ -89,9 +20,8 @@
                     <RowDefinition Height="180" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
-                    <Image Grid.Row="0"  Source="/Assets/proarc-logo-white-256x256.png" Margin="0, 0, 0, 20"/>
-                
+
+                <Image Grid.Row="0" Source="/Assets/proarc-logo-white-256x256.png" Margin="0, 0, 0, 20" />
                 <TextBlock 
                     Grid.Row="1"
                     Text="Bem-vindo de volta!" 
@@ -104,71 +34,81 @@
         </Border>
 
         <Border Background="#FFFFFF" Grid.Column="1" CornerRadius="0,20,20,0" Padding="30">
-            <Grid VerticalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <!-- Título -->
-                    <RowDefinition Height="Auto" />
-                    <!-- Caixa de senha -->
-                    <RowDefinition Height="Auto" />
-                    <!-- Checkbox -->
-                    <RowDefinition Height="Auto" />
-                    <!-- Botão -->
-                    <RowDefinition Height="*" />
-                    <!-- Espaçamento -->
-                </Grid.RowDefinitions>
-
-                <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0, 0, 0, 50">
+            <StackPanel VerticalAlignment="Center" Spacing="70" HorizontalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center" Spacing="5" Margin="0, 0, 0, -10">
                     <TextBlock 
-                            Text="PROARC" 
-                            FontSize="40" 
-                            FontWeight="Bold" 
-                            Foreground="#002B5B" 
-                            HorizontalAlignment="Center" />
+                        Text="PROARC" 
+                        FontSize="40" 
+                        FontWeight="Bold" 
+                        Foreground="#002B5B" 
+                        HorizontalAlignment="Center" />
                     <TextBlock 
-                            Text="LOGIN" 
-                            FontSize="16" 
-                            Foreground="#002B5B" 
-                            HorizontalAlignment="Center" />
+                        Text="LOGIN" 
+                        FontSize="16" 
+                        Foreground="#002B5B" 
+                        HorizontalAlignment="Center" />
                 </StackPanel>
 
-                <PasswordBox
-                    Grid.Row="1"
-                    Padding="10"
-                    Width="269" 
-                    PlaceholderText="Chave de acesso"
-                    Background="White"
-                    BorderBrush="LightGray"
-                    BorderThickness="1"
-                    CornerRadius="10"
-                    FontSize="16"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    PasswordChar="*"
-                    Margin="0, 50, 0, 0">
-                </PasswordBox>
+                <StackPanel Spacing="10">
+                    <Grid Width="269" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ProgressRing
+                            x:Name="carregando"
+                            IsActive="False"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed"
+                            Margin="0, 0, 0, 10"/>
 
-                <CheckBox 
-                    Grid.Row="2" 
-                    Content="Lembre de mim" 
-                    FontSize="14" 
-                    Foreground="#002B5B" 
-                    HorizontalAlignment="Left"
-                    Margin="90, 3, 0, 50"/>
+                        <Border
+                            x:Name="ErrorPanel"
+                            Background="#FFE6E6"
+                            Height="42"
+                            BorderBrush="#FFB3B3"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="10"
+                            Visibility="Collapsed">
+                            <TextBlock
+                                x:Name="ErrorText"
+                                Text="Senha incorreta. Tente novamente."
+                                FontSize="14"
+                                Foreground="#FF3333"
+                                HorizontalAlignment="Center" />
+                        </Border>
+                    </Grid>
+
+                    <PasswordBox
+                        Name="CaixaSenha"
+                        Padding="10"
+                        Width="269"
+                        PlaceholderText="Chave de acesso"
+                        Background="White"
+                        BorderBrush="LightGray"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        FontSize="16"
+                        PasswordChar="*"
+                        KeyDown="PasswordBox_KeyDown" />
+
+                    <CheckBox 
+                        Content="Lembre de mim" 
+                        FontSize="14" 
+                        Foreground="#002B5B" 
+                        HorizontalAlignment="Left" />
+                </StackPanel>
 
                 <Button 
                     x:Name="LoginButton"
                     Click="LoginButton_Click"
-                    Grid.Row="3"
                     Content="Entrar" 
                     Background="#002B5B" 
                     Foreground="#FFFF" 
-                    FontSize="20"  
-                    CornerRadius="12" 
+                    FontSize="18"  
+                    CornerRadius="10" 
                     Width="269" 
-                    Height="40"
+                    Height="40" 
                     HorizontalAlignment="Center" />
-            </Grid>
+            </StackPanel>
         </Border>
     </Grid>
 </Page>

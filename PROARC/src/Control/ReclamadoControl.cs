@@ -1,73 +1,77 @@
-﻿using PROARC.src.Control.Database;
+﻿
 using PROARC.src.Models;
+using PROARC.src.Models.Tipos;
+using static PROARC.src.Control.NetworkControl;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PROARC.src.Control
 {
     public static class ReclamadoControl
     {
-        public static Reclamado? GetReclamado(int id)
+        public static async Task<Reclamado?> GetAsync(int id)
         {
-            string sql = $"use ProArc; SELECT nome, cpf, cnpj, numero_rua, email, rua, bairro, cidade, uf FROM Reclamados WHERE reclamado_id = {id}";
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
 
-            if (reader.Count >= 9)
+            var request = new { action = "get_reclamado_por_id", id };
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("reclamado", out JsonElement reclamadoElement) && reclamadoElement.GetArrayLength() == 11)
             {
-                string nome = reader[0];
-                string cpf = reader[1];
-                string cnpj = reader[2];
-                string email = reader[4];
-                string rua = reader[5];
-                string bairro = reader[6];
-                string cidade = reader[7];
-                string uf = reader[8];
+                string nome = reclamadoElement[0].GetString() ?? string.Empty;
+                string? cpf = reclamadoElement[1].GetString() ?? string.Empty;
+                string? cnpj = reclamadoElement[2].GetString() ?? string.Empty;
+                short? numero = reclamadoElement[3].GetInt16();
+                string? logradouro = reclamadoElement[4].GetString() ?? string.Empty;
+                string? bairro = reclamadoElement[5].GetString() ?? string.Empty;
+                string? cidade = reclamadoElement[6].GetString() ?? string.Empty;
+                string? uf = reclamadoElement[7].GetString() ?? string.Empty;
+                string? cep = reclamadoElement[8].GetString() ?? string.Empty;
+                string? telefone = reclamadoElement[9].GetString() ?? string.Empty;
+                string? email = reclamadoElement[10].GetString() ?? string.Empty;
 
-                if (!short.TryParse(reader[3], out short numeroRua))
-                {
-                    return null;
-                }
-
-                return new Reclamado(nome, numeroRua, rua, bairro, email, cidade, uf, cnpj, cpf);
+                return new Reclamado(nome, cpf, cnpj, numero, logradouro, bairro, cidade, uf, cep, telefone, email);
             }
 
             return null;
         }
 
-        public static int? GetReclamadoId(string cpf, string nome)
+        public static async Task<List<Reclamado>> GetAllAsync()
         {
-            string sql = $"USE ProArc; SELECT reclamado_id FROM Reclamados WHERE cpf = '{cpf}' AND nome = '{nome}'";
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "get_all_reclamados" };
+            string response = await SendRequestAsync(request);
 
-            if (reader.Count >= 1)
+            List<Reclamado> reclamados = new();
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            JsonElement root = doc.RootElement;
+            
+            if (root.TryGetProperty("reclamados", out JsonElement reclamadosArray) && reclamadosArray.ValueKind == JsonValueKind.Array)
             {
-                int idReclamado = int.Parse(reader[0]);
-                return idReclamado;
-            }
-
-            return null;
-        }
-
-        public static LinkedList<Reclamado>? GetAllReclamados()
-        {
-            LinkedList<Reclamado> reclamados = new();
-            string sql = "use ProArc; SELECT reclamado_id FROM Reclamados";
-
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-
-            if (reader.Count == 0)
-            {
-                return null;
-            }
-
-            foreach (string idStr in reader)
-            {
-                if (int.TryParse(idStr, out int id))
+                foreach (JsonElement item in reclamadosArray.EnumerateArray())
                 {
-                    Reclamado? reclamado = GetReclamado(id);
-                    if (reclamado != null)
+                    
+                    if (item.ValueKind == JsonValueKind.Array)
                     {
-                        reclamados.AddLast(reclamado);
+                        int id = item[0].GetInt32();
+                        string nome = item[1].GetString() ?? string.Empty;
+                        string? cpf = item[2].GetString();
+                        string? cnpj = item[3].GetString();
+                        short numero = item[4].GetInt16();
+                        string logradouro = item[5].GetString() ?? string.Empty;
+                        string bairro = item[6].GetString() ?? string.Empty;
+                        string cidade = item[7].GetString() ?? string.Empty;
+                        string uf = item[8].GetString() ?? string.Empty;
+                        string cep = item[9].GetString() ?? string.Empty;
+                        string telefone = item[10].GetString() ?? string.Empty;
+                        string email = item[11].GetString() ?? string.Empty;
+
+                        reclamados.Add(new Reclamado(nome, cpf, cnpj, numero, logradouro, bairro, cidade, uf, cep, telefone, email));
                     }
                 }
             }
@@ -75,33 +79,40 @@ namespace PROARC.src.Control
             return reclamados;
         }
 
-        public static void AddReclamado(Reclamado reclamado)
+
+
+        public static async Task InsertAsync(Reclamado reclamado)
         {
-            if (reclamado == null)
-            {
-                throw new Exception("Insira um reclamado valido.");
-            }
-
-            string sql = $"use ProArc; INSERT INTO Reclamados(nome, cpf, cnpj, numero_rua, email, rua, bairro, cidade, uf) VALUES('{reclamado.Nome}', '{reclamado.Cpf}', '{reclamado.Cnpj}', {reclamado.NumeroDaRua}, '{reclamado.Email}', '{reclamado.Rua}', '{reclamado.Bairro}', '{reclamado.Cidade}', '{reclamado.Estado}')";
-
-            DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "insert_reclamado", reclamado };          
+            await SendRequestAsync(request);
         }
 
-        public static void RemoverReclamado(int id)
+        public static async Task UpdateAsync(int id, Reclamado reclamado)
         {
-            string sql = $"use ProArc; DELETE FROM Reclamados WHERE reclamado_id = '{id}' ";
-            DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "update_reclamado_por_id", id, reclamado };
+            await SendRequestAsync(request);
         }
 
-        public static void AtualizarReclamado(int id, Reclamado reclamado)
+        public static async Task DeleteAsync(int id)
         {
-            if (reclamado == null)
+            var request = new { action = "delete_reclamado_por_id", id };
+            await SendRequestAsync(request);
+        }
+
+        public static async Task<int> CountAsync()
+        {
+            var request = new { action = "count_reclamados" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
             {
-                throw new Exception("Reclamado inválido.");
+                return countElement.GetInt32();
             }
 
-            string sql = $"use ProArc; UPDATE Reclamados SET nome = '{reclamado.Nome}', cpf = '{reclamado.Cpf}', cnpj = '{reclamado.Cnpj}', numero_rua = {reclamado.NumeroDaRua}, email = '{reclamado.Email}', rua = '{reclamado.Rua}', bairro = '{reclamado.Bairro}', cidade = '{reclamado.Cidade}', uf = '{reclamado.Estado}' WHERE reclamado_id = {id}";
-            DatabaseOperations.QuerySqlCommand(sql);
+            return 0;
         }
     }
 }

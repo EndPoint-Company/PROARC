@@ -1,145 +1,129 @@
 ﻿using System;
 using System.Collections.Generic;
-using PROARC.src.Control.Database;
+using static PROARC.src.Control.NetworkControl;
 using PROARC.src.Models.Tipos;
+using System.Linq;
+using System.Text.Json;
+using System.Text;
+using System.Threading.Tasks;
+using PROARC.src.Models;
+using Newtonsoft.Json.Linq;
 
 namespace PROARC.src.Control
 {
-    public static class MotivoControl
+    public class MotivoControl
     {
-        public static Motivo? GetMotivo(string nome)
+        public static async Task<Motivo?> GetAsync(string nome)
         {
-            string sql = $"use ProArc; SELECT nome, descricao FROM Motivos WHERE nome = '{nome}'";
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "get_motivo_por_nome", nome };
+            string response = await SendRequestAsync(request);
 
-            if (reader.Count >= 2)
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
-                string nomeMotivo = reader[0];
-                string descricao = reader[1];
-                return new Motivo(nomeMotivo, descricao);
+                string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;      
+                return new Motivo(nomeMotivo);
             }
 
             return null;
         }
 
-        public static int? GetMotivoId(string nome)
+        public static async Task<Motivo?> GetAsync(int id)
         {
-            string sql = $"use ProArc; SELECT motivo_id FROM Motivos WHERE nome = '{nome}'";
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "get_motivo_por_id", id };
+            string response = await SendRequestAsync(request);
 
-            if (reader.Count >= 1)
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("motivo", out JsonElement motivoElement) && motivoElement.GetArrayLength() == 1)
             {
-                return int.Parse(reader[0]);
+                string nomeMotivo = motivoElement[0].GetString() ?? string.Empty;
+
+                return new Motivo(nomeMotivo);
             }
 
             return null;
         }
 
-        public static Motivo? GetMotivo(int id)
+        public static async Task<int?> GetIdAsync(string nome)
         {
-            string sql = $"use ProArc; SELECT nome, descricao FROM Motivos WHERE motivo_id = {id}";
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "get_motivo_id_por_nome", nome };
+            string response = await SendRequestAsync(request);
 
-            if (reader.Count >= 2)
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+            string rootstring = root.ToString();
+
+            List<char> reader = rootstring.ToList();
+            String numero = string.Empty;
+
+            foreach (char ch in reader)
             {
-                string nomeMotivo = reader[0];
-                string descricao = reader[1];
-                return new Motivo(nomeMotivo, descricao);
-            }
-
-            return null;
-        }
-
-        public static LinkedList<Motivo>? GetAllMotivos()
-        {
-            LinkedList<Motivo> motivos = new();
-            string sql = "USE ProArc; SELECT nome, descricao FROM Motivos";
-
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-            string nome = string.Empty;
-            string descricao = string.Empty;
-            bool isNome = true;
-
-            foreach (string linha in reader)
-            {
-                if (isNome)
+                if (char.IsDigit(ch))
                 {
-                    nome = linha;
-                    isNome = false;
+                    numero += ch;
                 }
-                else
+            }
+
+            return int.Parse(numero);
+        }
+
+        public static async Task<List<Motivo>> GetAllAsync()
+        {
+            var request = new { action = "get_all_motivos" };
+
+            string response = await SendRequestAsync(request);
+            JObject jsonResponse = JObject.Parse(response);
+
+            List<Motivo> motivos = new List<Motivo>();
+
+            foreach (JToken motivosList in jsonResponse.Values())
+            {
+                foreach (var motivoNome in motivosList.Values())
                 {
-                    descricao = linha;
-                    motivos.AddLast(new Motivo(nome, descricao));
-                    isNome = true;
+                    Motivo motivo = new((string)motivoNome);
+                    motivos.Add(motivo);
                 }
             }
 
             return motivos;
         }
 
-        public static LinkedList<string>? GetAllMotivosToString()
+        public static async Task InsertAsync(Motivo motivo)
         {
-            LinkedList<string> motivos = new();
-            string sql = "USE ProArc; SELECT nome FROM Motivos";
-            List<string> reader = DatabaseOperations.QuerySqlCommand(sql);
-
-            foreach (string linha in reader)
-            {
-                motivos.AddLast(linha);
-            }
-
-            return motivos;
+            var request = new { action = "insert_motivo", motivo };
+            await SendRequestAsync(request);
         }
 
-        public static void AddMotivo(Motivo motivo)
+        public static async Task DeleteAsync(string nome)
         {
-            if (motivo == null)
-            {
-                throw new Exception("Insira um motivo válido.");
-            }
-
-            DateTime dataCriacao = DateTime.Now;
-            string checkSql = $"use ProArc; SELECT COUNT(*) FROM Motivos WHERE nome = '{motivo.Nome}'";
-            List<string> checkReader = DatabaseOperations.QuerySqlCommand(checkSql);
-
-            if (checkReader.Count > 0 && checkReader[0] == "1")
-            {
-                return;
-            }
-
-            string insertSql = $"use ProArc; INSERT INTO Motivos (nome, descricao, data_criacao) VALUES ('{motivo.Nome}', '{motivo.Descricao}', '{dataCriacao}')";
-            DatabaseOperations.QuerySqlCommand(insertSql);
+            var request = new { action = "delete_motivo_by_nome", nome };
+            await SendRequestAsync(request);
         }
 
-        public static void RemoverMotivo(string nome)
+        public static async Task UpdateAsync(string nome, string? novoNome = null, string? novaDescricao = null)
         {
-            Motivo? toBeRemoved = GetMotivo(nome);
-
-            if (toBeRemoved == null)
-            {
-                throw new Exception("Motivo não encontrado no banco de dados.");
-            }
-
-            string sql = $"use ProArc; DELETE FROM Motivos WHERE nome = '{nome}'";
-            DatabaseOperations.QuerySqlCommand(sql);
+            var request = new { action = "update_motivo_by_id", nome, novoNome, novaDescricao };
+            await SendRequestAsync(request);
         }
 
-        public static void AtualizarMotivo(string nome, string? novoNome = null, string? novaDescricao = null)
+        public static async Task<int> CountAsync()
         {
-            if (string.IsNullOrWhiteSpace(novoNome) && string.IsNullOrWhiteSpace(novaDescricao))
+            var request = new { action = "count_motivos" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
             {
-                throw new Exception("Nome e descrição não podem ser nulos ou vazios.");
+                return countElement.GetInt32();
             }
 
-            Motivo? toBeUpdated = GetMotivo(nome);
-            if (toBeUpdated == null)
-            {
-                throw new Exception("Motivo não encontrado no banco de dados.");
-            }
-
-            string sql = $"use ProArc; UPDATE Motivos SET nome = '{novoNome}', descricao = '{novaDescricao}' WHERE nome = '{nome}'";
-            DatabaseOperations.QuerySqlCommand(sql);
+            return 0;
         }
     }
 }

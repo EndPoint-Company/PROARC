@@ -14,161 +14,523 @@ using System.Numerics;
 using Windows.Storage;
 using Microsoft.UI.Text;
 using Microsoft.UI;
+using PROARC.src.Models.Tipos;
+using static PROARC.src.Control.MotivoControl;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Navigation;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using Windows.UI.Popups;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Windows.Globalization;
 
 namespace PROARC.src.Views
 {
     public sealed partial class RegistrarProcesso01Page : Page, INotifyPropertyChanged
     {
         private string numeroProcesso;
+        private string anoProcesso;
         private List<string> arquivosSelecionados = new();
+
         public string NumeroProcesso
         {
             get => numeroProcesso;
-            set
-            {
-                numeroProcesso = value;
-                OnPropertyChanged(nameof(NumeroProcesso));
-            }
+            set => SetProperty(ref numeroProcesso, value);
         }
 
-        private string anoProcesso;
         public string AnoProcesso
         {
             get => anoProcesso;
-            set
-            {
-                anoProcesso = value;
-                OnPropertyChanged(nameof(AnoProcesso));
-            }
-        }
-
-        public object DragDropEffects { get; private set; }
-
-        public RegistrarProcesso01Page()
-        {
-            this.InitializeComponent();
-            DataContext = this;
-
-            ConfigureShadows();
+            set => SetProperty(ref anoProcesso, value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+
+        public RegistrarProcesso01Page()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            InitializeComponent();
+            DataContext = this;
+            CarregarMotivosAsync();
+            ConfigureShadows();
+            calendario.Date = DateTime.Now.Date;
         }
+
+        protected void OnPropertyChanged(string propertyName)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (!EqualityComparer<T>.Default.Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
+        }
+        private async Task CarregarMotivosAsync()
+         => cbMotivo.ItemsSource = await MotivoControl.GetAllAsync();
+
 
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
-        {
-
-            // Alterar estilo do bot„o "Processo Novo" para selecionado
-            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
-
-            // Alterar estilo do bot„o "Processo Antigo" para n„o selecionado
-            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue); // Cor "#005BC1"
-
-            // Permitir ediÁ„o dos campos
-            inputNProcesso.IsReadOnly = false;
-            inputAnoProcesso.IsReadOnly = false;
-
-            MainStackPanel.Opacity = 1; // Torna o painel totalmente visÌvel
-            NumeroProcesso = ""; // Limpa os campos
-            AnoProcesso = "";
-        }
+        => ConfigurarEstadoProcesso(true);
 
         private void ProcessoAntigo_Click(object sender, RoutedEventArgs e)
+            => ConfigurarEstadoProcesso(false);
+
+
+        private void ConfigurarEstadoProcesso(bool isNovoProcesso)
         {
+            radio_agFazerNotificacao.IsChecked = isNovoProcesso;
+            AtualizarEstilosBotoes(isNovoProcesso);
+            AjustarCamposProcesso(isNovoProcesso);
+        }
 
-            // Alterar estilo do bot„o "Processo Antigo" para selecionado
-            btnProcessoAntigo.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoAntigo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+        private void AtualizarEstilosBotoes(bool isNovoProcesso)
+        {
+            btnProcessoNovo.Background = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.DarkBlue : Microsoft.UI.Colors.White);
+            btnProcessoNovo.Foreground = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.DarkBlue);
 
-            // Alterar estilo do bot„o "Processo Novo" para n„o selecionado
-            btnProcessoNovo.Background = new SolidColorBrush(Microsoft.UI.Colors.White);
-            btnProcessoNovo.Foreground = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue); // Cor "#003366"
-            btnProcessoNovo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue); // Cor "#005BC1"
+            btnProcessoAntigo.Background = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.DarkBlue);
+            btnProcessoAntigo.Foreground = new SolidColorBrush(isNovoProcesso ? Microsoft.UI.Colors.DarkBlue : Microsoft.UI.Colors.White);
+            btnProcessoAntigo.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.CornflowerBlue);
+        }
 
-            // Tornar os campos somente leitura
-            inputNProcesso.IsReadOnly = true;
-            inputAnoProcesso.IsReadOnly = true;
+        private async void AjustarCamposProcesso(bool isNovoProcesso)
+        {
+            inputNProcesso.IsReadOnly = isNovoProcesso;
+            inputAnoProcesso.IsReadOnly = isNovoProcesso;
+            MainStackPanel.Opacity = isNovoProcesso ? 0.4 : 1;
 
-            MainStackPanel.Opacity = 0.4; // Define opacidade de 40%
-            NumeroProcesso = "12345"; // Preenche os campos com valores
-            AnoProcesso = "2023";
+            if (isNovoProcesso)
+            {
+                await DefinirNovoProcesso();
+                calendario.MinDate = DateTimeOffset.Now;
+            }
+            else
+            {
+                NumeroProcesso = string.Empty;
+                AnoProcesso = string.Empty;
+                calendario.ClearValue(CalendarDatePicker.MinDateProperty);
+                calendario.Date = null;
+            }
+        }
+
+        private void SelecionarHora_Click(object sender, RoutedEventArgs e)
+        {
+            var timePickerFlyout = new TimePickerFlyout();
+
+            if (sender is Button botao)
+            {
+                timePickerFlyout.Placement = FlyoutPlacementMode.Bottom;
+                timePickerFlyout.Time = DateTime.Now.TimeOfDay;
+                timePickerFlyout.ClockIdentifier = "24HourClock";
+
+                // Quando o usu√°rio selecionar um hor√°rio, o nome do bot√£o ser√° atualizado
+                timePickerFlyout.Closed += (s, args) =>
+                {
+                    botao.Content = $"{timePickerFlyout.Time.Hours:D2}:{timePickerFlyout.Time.Minutes:D2}";
+                };
+
+                timePickerFlyout.ShowAt(botao);
+            }
         }
 
 
+
+        private async Task DefinirNovoProcesso()
+        {
+            int count = await ProcessoAdministrativoControl.CountAsync();
+            NumeroProcesso = (count + 1).ToString();
+            AnoProcesso = DateTime.Now.Year.ToString();
+        }
 
         private void ProcuradorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            // Torna a seÁ„o "Procurador" visÌvel quando o checkbox est· marcado
             ProcuradorSection1.Visibility = Visibility.Visible;
         }
 
         private void ProcuradorCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            // Oculta a seÁ„o "Procurador" quando o checkbox est· desmarcado
             ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
 
-        private void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        private async void OnNovoMotivoClick(object sender, RoutedEventArgs e)
         {
-            if (inputNome.Text == "" || inputRgReclamante.Text == "")
+            var dialog = new ContentDialog
             {
-                return;
+                Title = "Adicionar Novo Motivo",
+                Content = CreateDialogContent(),
+                PrimaryButtonText = "Salvar",
+                CloseButtonText = "Cancelar",
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                var motivoTexto = ((TextBox)dialog.Content).Text;
+
+                if (!string.IsNullOrWhiteSpace(((TextBox)dialog.Content).Text))
+                {
+                    var motivosExistentes = await MotivoControl.GetAllAsync();
+
+                    if (motivosExistentes.Any(m => m.Nome.Equals(motivoTexto, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var errorDialog = new ContentDialog
+                        {
+                            Title = "Erro",
+                            Content = "Este motivo j√° existe.",
+                            CloseButtonText = "Ok",
+                            XamlRoot = this.Content.XamlRoot
+                        };
+                        await errorDialog.ShowAsync();
+                    }
+                    else
+                    {
+                        var motivo = new Motivo(motivoTexto, null);
+
+                        try
+                        {
+                            await MotivoControl.InsertAsync(motivo);
+                            await CarregarMotivosAsync();
+
+                            var successDialog = new ContentDialog
+                            {
+                                Title = "Sucesso",
+                                Content = "Motivo salvo com sucesso!",
+                                CloseButtonText = "Ok",
+                                XamlRoot = this.Content.XamlRoot
+                            };
+
+                            await successDialog.ShowAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            var errorDialog = new ContentDialog
+                            {
+                                Title = "Erro",
+                                Content = $"Falha ao salvar motivo: {ex.Message}",
+                                CloseButtonText = "Ok",
+                                XamlRoot = this.Content.XamlRoot
+                            };
+
+                            await errorDialog.ShowAsync();
+                        }
+                    }
+                }
+                else
+                {
+                    var errorDialog = new ContentDialog
+                    {
+                        Title = "Erro",
+                        Content = "O motivo n√£o pode estar vazio.",
+                        CloseButtonText = "Ok",
+                        XamlRoot = this.Content.XamlRoot
+                    };
+
+                    await errorDialog.ShowAsync();
+                }
             }
-
-            Dictionary<string, object> dicionarioObjetos = new();
-            Reclamante reclamante = new(inputNome.Text,
-                                        inputCpfReclamante.Text,
-                                        inputRgReclamante.Text);
-
-            ReclamanteControl.AddReclamante(reclamante);
-
-            dicionarioObjetos.Add("Reclamante", reclamante);
-
-            Frame.Navigate(typeof(RegistrarProcesso02Page), dicionarioObjetos);
         }
 
 
-        // Bot„o para abrir o seletor de arquivos
+        private UIElement CreateDialogContent()
+        {
+            return new TextBox
+            {
+                PlaceholderText = "Digite o motivo"
+            };
+        }
+
+        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
+{
+    // Resetando estilos de erro
+    ResetErrorStyles();
+
+    NumeroProcesso = inputNProcesso.Text.Trim();
+    AnoProcesso = inputAnoProcesso.Text.Trim();
+
+    if (string.IsNullOrEmpty(NumeroProcesso))
+    {
+        int count = await ProcessoAdministrativoControl.CountAsync();
+        NumeroProcesso = (count + 1).ToString();
+    }
+
+    if (!CamposPreenchidos())
+    {
+        ShowError("Preencha todos os campos obrigat√≥rios antes de continuar.");
+        HighlightEmptyFields(); // üî¥ Adiciona bordas vermelhas nos campos vazios
+        return;
+    }
+
+    string motivo = cbMotivo.SelectedItem?.ToString();
+
+    string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
+    var reclamado = new Reclamado(
+        inputInstituicao.Text ?? "null",
+        short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
+        inputRua.Text ?? "null",
+        inputBairro.Text ?? "null",
+        inputEmail.Text ?? "null",
+        inputCidade.Text ?? "null",
+        inputUf.Text ?? "null",
+        cpfLimpo1,
+        cpfLimpo1
+    );
+
+    string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
+    var reclamante = new Reclamante(
+        inputNome.Text ?? "null",
+        cpfLimpo,
+        inputRgReclamante.Text ?? "null"
+    );
+
+    string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
+    DateTime? dataSelecionada = calendario.Date?.DateTime;
+
+    string dataFormatada = dataSelecionada.HasValue
+        ? dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")
+        : "0001-01-01 00:00:00.000";
+
+    string caminhoPasta = $"dir/folder{NumeroProcesso}";
+
+    string nProcesso = NumeroProcesso;
+    short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
+
+    bool success = await ProcessoAdministrativoControl.InsertAsync(
+        new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
+        new(motivo),
+        reclamado,
+        reclamante,
+        DateTime.Parse(dataFormatada))
+    );
+
+    if (success)
+    {
+        var successDialog = new ContentDialog
+        {
+            Title = "Sucesso",
+            Content = "O processo foi cadastrado com sucesso!",
+            CloseButtonText = "OK",
+            XamlRoot = this.Content.XamlRoot
+        };
+
+        await successDialog.ShowAsync();
+
+        Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+    }
+    else
+    {
+        ShowError("Falha ao cadastrar o processo. Tente novamente.");
+            }
+        }
+
+
+        private void HighlightEmptyFields()
+        {
+            HighlightField(null, inputNProcesso, TextBlockNProcesso);
+            HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
+            HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
+            HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
+            HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
+            HighlightField(TextBlockReclamado, inputRua, TextBlockRua);
+            HighlightField(TextBlockReclamado, inputBairro, TextBlockBairro);
+            HighlightField(TextBlockReclamado, inputNumero, TextBlockNumero);
+            HighlightField(TextBlockReclamado, inputCidade, TextBlockCidade);
+            HighlightField(TextBlockReclamado, inputUf, TextBlockUf);
+            HighlightField(TextBlockReclamado, inputCep, TextBlockCep);
+
+            // üü¢ Valida√ß√£o do Motivo (ComboBox)
+            if (cbMotivo.SelectedItem == null)
+            {
+                cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
+                TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
+            }
+
+            // üü¢ Valida√ß√£o do Status (Se nenhum RadioButton foi selecionado)
+            if (!IsStatusSelected())
+            {
+                StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
+                TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
+                TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
+
+                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
+
+                TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
+                radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
+                radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
+            }
+        }
+
+        private void HighlightField(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
+        {
+            if (string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                textBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                textBox.PlaceholderForeground = new SolidColorBrush(Colors.Red);
+                textBlock.Foreground = new SolidColorBrush(Colors.Red);
+
+                if (titulo != null)
+                {
+                    titulo.Foreground = new SolidColorBrush(Colors.Red);
+                }
+            }
+        }
+
+        // üîµ M√©todo para Resetar os Estilos de Erro
+        private void ResetErrorStyles()
+        {
+            ResetFieldStyle(inputNProcesso, TextBlockNProcesso);
+            ResetFieldStyle(inputAnoProcesso, TextBlockAnoProcesso);
+            ResetFieldStyle(inputNome, TextBlockNome, TextBlockReclamante);
+            ResetFieldStyle(inputCpfReclamante, TextBlockCpfReclamante, TextBlockReclamante);
+            ResetFieldStyle(inputRua, TextBlockRua, TextBlockReclamado);
+            ResetFieldStyle(inputBairro, TextBlockBairro, TextBlockReclamado);
+            ResetFieldStyle(inputNumero, TextBlockNumero, TextBlockReclamado);
+            ResetFieldStyle(inputCidade, TextBlockCidade, TextBlockReclamado);
+            ResetFieldStyle(inputUf, TextBlockUf, TextBlockReclamado);
+            ResetFieldStyle(inputCep, TextBlockCep, TextBlockReclamado);
+
+            // üîµ Resetando o ComboBox do Motivo
+            cbMotivo.BorderBrush = new SolidColorBrush(Colors.Gray);
+            TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Black);
+
+            // üîµ Resetando a Se√ß√£o de Status
+            StatusSection.BorderBrush = new SolidColorBrush(Colors.Transparent);
+            TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
+            TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
+
+            radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agResposta.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Black);
+
+            TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Black);
+            radio_atendido.Foreground = new SolidColorBrush(Colors.Black);
+            radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        // üîµ M√©todo Gen√©rico para Resetar o Estilo de um Campo
+        private void ResetFieldStyle(TextBox textBox, TextBlock textBlock, TextBlock? titulo = null)
+        {
+            textBox.BorderBrush = new SolidColorBrush(Colors.Gray);
+            textBox.PlaceholderForeground = new SolidColorBrush(Colors.DarkGray);
+            textBlock.Foreground = new SolidColorBrush(Colors.Black);
+
+            if (titulo != null)
+            {
+                titulo.Foreground = new SolidColorBrush(Colors.Black);
+            }
+        }
+
+        // ‚úÖ Verifica se algum RadioButton do Status foi selecionado
+        private bool IsStatusSelected()
+        {
+            return radio_agFazerNotificacao.IsChecked == true ||
+                   radio_agRealizacaoAudiencia.IsChecked == true ||
+                   radio_agResposta.IsChecked == true ||
+                   radio_agEnvioNotificacao.IsChecked == true ||
+                   radio_agDocumentacao.IsChecked == true ||
+                   radio_atendido.IsChecked == true ||
+                   radio_naoAtendido.IsChecked == true;
+        }
+
+
+
+
+
+
+        private bool CamposPreenchidos()
+        => new[] { inputNome, inputCpfReclamante, inputRgReclamante, inputInstituicao, inputCnpjCpfReclamado }
+            .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
+            && cbMotivo.SelectedItem != null
+            && calendario.Date != null
+            && GetSelectedRadioButton() != "Nenhum status selecionado";
+
+        private async void ShowError(string mensagemErro)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Erro de Valida√ß√£o",
+                Content = mensagemErro,
+                CloseButtonText = "OK",
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            await dialog.ShowAsync();
+        }
+
+        private string GetSelectedRadioButton()
+        {
+            if (radio_agFazerNotificacao.IsChecked == true)
+                return "Aguardando fazer notifica√ß√£o";
+            if (radio_agRealizacaoAudiencia.IsChecked == true)
+                return "Aguardando realiza√ß√£o da audi√™ncia";
+            if (radio_agResposta.IsChecked == true)
+                return "Aguardando resposta da empresa";
+            if (radio_agEnvioNotificacao.IsChecked == true)
+                return "Aguardando envio da notifica√ß√£o";
+            if (radio_agDocumentacao.IsChecked == true)
+                return "Aguardando documenta√ß√£o";
+            if (radio_atendido.IsChecked == true)
+                return "Atendido";
+            if (radio_naoAtendido.IsChecked == true)
+                return "N√£o Atendido";
+
+            return "Nenhum status selecionado";
+        }
+
+
+        private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox == null) return;
+
+            string rawText = new string(textBox.Text.Where(char.IsDigit).ToArray());
+
+            if (rawText.Length > 3)
+                rawText = rawText.Insert(3, ".");
+            if (rawText.Length > 7)
+                rawText = rawText.Insert(7, ".");
+            if (rawText.Length > 11)
+                rawText = rawText.Insert(11, "-");
+
+            textBox.Text = rawText;
+            textBox.SelectionStart = textBox.Text.Length;
+        }
+
         private async void PickFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // Instancia o FileOpenPicker
             var picker = new FileOpenPicker
             {
                 ViewMode = PickerViewMode.Thumbnail,
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            // Adiciona os filtros de tipo de arquivo
-            picker.FileTypeFilter.Add("*"); // Permite qualquer arquivo
+            picker.FileTypeFilter.Add("*"); 
 
-            // Associa o FileOpenPicker ‡ janela do aplicativo
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
 
-            // Mostra o seletor de arquivos e espera a seleÁ„o
             var files = await picker.PickMultipleFilesAsync();
 
             if (files != null && files.Any())
             {
-                // Adiciona os arquivos selecionados ‡ lista
                 AdicionarArquivos(files.Select(file => file.Path));
             }
         }
 
-        // MÈtodo para adicionar arquivos ‡ lista visual
         private void AdicionarArquivos(IEnumerable<string> arquivos)
         {
             foreach (var arquivo in arquivos)
             {
                 var nomeArquivo = System.IO.Path.GetFileName(arquivo);
 
-                // Verifica se o arquivo j· foi adicionado
                 if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
                 {
                     ListaArquivos.Children.Add(new TextBlock
@@ -183,7 +545,6 @@ namespace PROARC.src.Views
             AtualizarMensagemNenhumArquivo();
         }
 
-        // Atualiza a mensagem de "Nenhum arquivo selecionado"
         private void AtualizarMensagemNenhumArquivo()
         {
             MensagemNenhumArquivo.Visibility = ListaArquivos.Children.OfType<TextBlock>().Any()
@@ -191,7 +552,6 @@ namespace PROARC.src.Views
                 : Visibility.Visible;
         }
 
-        // Suporte a Drag and Drop para arquivos
         private async void DragDropArea_Drop(object sender, Microsoft.UI.Xaml.DragEventArgs e)
         {
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
@@ -265,70 +625,106 @@ namespace PROARC.src.Views
 
         private StackPanel CriarSecaoReclamado()
         {
-            // Primeira linha de campos
-            var primeiraLinha = CriarLinhaCampos(
-                CriarCampo("InstituiÁ„o *", "Insira o nome da InstituiÁ„o", 300),
-                CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 250),
-                CriarCampo("E-mail", "Insira o E-mail", 250)
-            );
-
-            // Segunda linha de campos
-            var segundaLinha = CriarLinhaCampos(
-                CriarCampo("Rua", "Insira a rua", 300),
-                CriarCampo("Bairro", "Insira o bairro", 280),
-                CriarCampo("N˙mero", "Insira o n˙mero", 120),
-                CriarCampo("Cidade", "Insira a cidade", 180),
-                CriarCampo("UF", "Insira a UF", 100),
-                CriarCampo("CEP", "Insira o CEP", 150)
-            );
-
-            // SeÁ„o de Reclamado
-            var reclamadoSection = new StackPanel
-            {
-                Padding = new Thickness(40),
-                Spacing = 10,
-                Background = new SolidColorBrush(Colors.White),
-                CornerRadius = new CornerRadius(0, 10, 10, 0),
-                Width = 1478,
-                Shadow = new ThemeShadow(),
-                Children =
-        {
-            new TextBlock
-            {
-                Text = "Reclamado",
-                FontSize = 18,
-                FontWeight = FontWeights.Bold
-            },
-            primeiraLinha,
-            segundaLinha
-        }
-            };
-
-            // Adicionar a Translation para sombra
-            reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
-
-            // Container da seÁ„o
-            return new StackPanel
+            var reclamadoContainer = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
-                Margin = new Thickness(0, 32, 0, 0),
-                Children =
-        {
-            new StackPanel
+                Margin = new Thickness(0, 32, 0, 0)
+            };
+
+            reclamadoContainer.Children.Add(new StackPanel
             {
                 Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
                 Width = 10,
                 CornerRadius = new CornerRadius(10, 0, 0, 10)
-            },
-            reclamadoSection
-        }
+            });
+
+            var reclamadoSection = new Grid
+            {
+                Background = new SolidColorBrush(Colors.White),
+                CornerRadius = new CornerRadius(0, 10, 10, 0),
+                Width = 1478,
+                Padding = new Thickness(40),
+                Shadow = new ThemeShadow()
             };
+
+            reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
+
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); 
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); 
+            reclamadoSection.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            var removerBotao = new Button
+            {
+                Content = "X",
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 51, 102)),
+                Foreground = new SolidColorBrush(Colors.White),
+                Width = 35,
+                Height = 35,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                CornerRadius = new CornerRadius(5),
+                Margin = new Thickness(0, -20, -20, 0) 
+            };
+
+            removerBotao.Click += (s, e) =>
+            {
+                if (MainContainer.Children.Contains(reclamadoContainer))
+                {
+                    MainContainer.Children.Remove(reclamadoContainer);
+                }
+            };
+
+            Grid.SetRow(removerBotao, 0);
+            reclamadoSection.Children.Add(removerBotao);
+
+            var conteudoReclamado = new StackPanel
+            {
+                Spacing = 10
+            };
+
+            conteudoReclamado.Children.Add(new TextBlock
+            {
+                Text = "Reclamado",
+                FontSize = 18,
+                FontWeight = FontWeights.Bold
+            });
+
+            conteudoReclamado.Children.Add(CriarLinhaCampos(
+                CriarCampo("Institui√ß√£o *", "Insira o nome da Institui√ß√£o", 300),
+                CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 280),
+                CriarCampo("E-mail", "Insira o E-mail", 250)
+            ));
+
+            conteudoReclamado.Children.Add(CriarLinhaCampos(
+                CriarCampo("Rua", "Insira a rua", 300),
+                CriarCampo("Bairro", "Insira o bairro", 280),
+                CriarCampo("N√∫mero", "Insira o n√∫mero", 120),
+                CriarCampo("Cidade", "Insira a cidade", 180),
+                CriarCampo("UF", "Insira a UF", 100),
+                CriarCampo("CEP", "Insira o CEP", 150)
+            ));
+
+            Grid.SetRow(conteudoReclamado, 1);
+            reclamadoSection.Children.Add(conteudoReclamado);
+
+            reclamadoContainer.Children.Add(reclamadoSection);
+
+            return reclamadoContainer;
         }
 
         private void OnAddReclamadoClick(object sender, RoutedEventArgs e)
         {
-            // Adicionar uma nova seÁ„o ao MainContainer
             MainContainer.Children.Add(CriarSecaoReclamado());
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (e.Parameter is bool isNovoProcesso)
+            {
+                ConfigurarEstadoProcesso(isNovoProcesso);
+            }
         }
     }
 }

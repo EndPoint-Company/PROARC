@@ -9,52 +9,102 @@ namespace PROARC.src.Models
 {
     public class Reclamado
     {
-        private string nome;
-        private short? numeroDaRua;
-        private string? rua;
-        private string? email;
+        private string nome;       
+        private string? cpf;
+        private string? cnpj;
+        private short? numero;
+        private string? logradouro;
         private string? bairro;
         private string? cidade;
-        private string? estado;
-        private string? cnpj;
-        private string? cpf;
+        private string? uf;
+        private string? cep;
+        private string? telefone;
+        private string? email;
+        private object numeroAddr;
+        private object logradouroAddr;
+        private object bairroAddr;
+        private object cidadeAddr;
+        private object ufAddr;
+        private DateTime dateTime;
 
-        public Reclamado
-            (string nome, short? numeroDaRua = null, string? rua = null, string? bairro = null, string? email = null, string? cidade = null, 
-            string? estado = null, string? cnpj = null, string? cpf = null)
+        public Reclamado(string nome = null, string cpf = null, string cnpj = null,
+                         short? numero = null, string logradouro = null, string bairro = null, string cidade = null,
+                         string uf = null, string cep = null, string telefone = null, string email = null)
         {
-            this.nome = nome;
-            this.numeroDaRua = numeroDaRua;
-            this.rua = rua;
+            this.nome = nome;            
+            this.cpf = cpf;
+            this.cnpj = cnpj;
+            this.numero = numero;
+            this.logradouro = logradouro;
             this.bairro = bairro;
             this.cidade = cidade;
-            this.estado = estado;
-            this.cnpj = cnpj;
-            this.cpf = cpf;
+            this.uf = uf;
+            this.telefone = telefone;
             this.email = email;
+            this.cep = cep;
+        }
+        public Reclamado(string nome = null, short? numero = null, string cpf = null, string cnpj = null,
+                         string logradouro = null, string bairro = null, string cidade = null,
+                        string uf = null, string cep = null, string telefone = null, string email = null)
+        {
+            this.nome = nome;
+            this.cpf = cpf;
+            this.cnpj = cnpj;
+            this.numero = numero;
+            this.logradouro = logradouro;
+            this.bairro = bairro;
+            this.cidade = cidade;
+            this.uf = uf;
+            this.telefone = telefone;
+            this.email = email;
+            this.cep = cep;
+        }
+
+        public Reclamado(string nome, string? cpf, string? cnpj, object numeroAddr, object logradouroAddr, object bairroAddr, object cidadeAddr, object ufAddr, string? telefone, string? email, string? cep, DateTime dateTime)
+        {
+            this.nome = nome;
+            this.cpf = cpf;
+            this.cnpj = cnpj;
+            this.numeroAddr = numeroAddr;
+            this.logradouroAddr = logradouroAddr;
+            this.bairroAddr = bairroAddr;
+            this.cidadeAddr = cidadeAddr;
+            this.ufAddr = ufAddr;
+            this.telefone = telefone;
+            this.email = email;
+            this.cep = cep;
+            this.dateTime = dateTime;
         }
 
         public override string ToString()
         {
-            return $"Nome: {this.nome}\n" +
-           $"Número da Rua: {this.numeroDaRua}\n" +
-           $"Rua: {this.rua}\n" +
-           $"Bairro: {this.bairro}\n" +
-           $"Cidade: {this.cidade}\n" +
-           $"Estado: {this.estado}\n" +
-           $"RG: {this.cnpj}\n" +
-           $"CPF: {this.cpf}\n" +
-           $"Email: {this.email}";
+            return $"Nome: {this.nome}\n" + 
+                   $"Logradouro: {this.logradouro}\n" +
+                   $"Número: {this.numero}\n" +
+                   $"Bairro: {this.bairro}\n" +
+                   $"Cidade: {this.cidade}\n" +
+                   $"Estado: {this.uf}\n" +
+                   $"CEP: {this.cep}\n" +
+                   $"CNPJ: {this.cnpj}\n" +
+                   $"CPF: {this.cpf}\n" +
+                   $"Telefone: {this.telefone}\n" +
+                   $"Email: {this.email}";
         }
 
-        public string Nome { get => this.nome; set { this.nome = value; } }
-        public short? NumeroDaRua { get => this.numeroDaRua; set { this.numeroDaRua = value; } }
-        public string? Rua { get => this.rua; set { this.rua = value; } }
-        public string? Bairro { get => this.bairro; set { this.bairro = value; } }
-        public string? Cidade { get => this.cidade; set { this.cidade = value; } }
-        public string? Estado { get => this.estado; set { this.estado = value; } }       
-        public string? Cnpj { get => this.cnpj; set { this.cnpj = value; } }
-        public string? Cpf { get => this.cpf; set { this.cpf = value; } }
-        public string? Email { get => this.email; set { this.email = value; } }
+        public string Nome { get => nome; set => nome = value; }
+     
+        public string? Logradouro { get => logradouro; set => logradouro = value; }
+        public short? Numero { get => numero; set => numero = value; }
+        public string? Bairro { get => bairro; set => bairro = value; }
+        public string? Cidade { get => cidade; set => cidade = value; }
+        public string? Uf { get => uf; set => uf = value; }
+        public string? Cnpj { get => cnpj; set => cnpj = value; }
+        public string? Cpf { get => cpf; set => cpf = value; }
+        public string? Telefone { get => telefone; set => telefone = value; }
+        public string? Email { get => email; set => email = value; }
+        public string? Cep
+        {
+            get => cep; set => cep = value;
+        }
     }
 }
