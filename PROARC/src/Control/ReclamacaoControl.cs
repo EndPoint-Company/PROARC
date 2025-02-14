@@ -1,13 +1,10 @@
 ﻿using Azure;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
 using static PROARC.src.Control.NetworkControl;
-using System.Text.Json.Serialization;
 using PROARC.src.Models.Tipos;
 using PROARC.src.Models;
 using Newtonsoft.Json.Linq;
@@ -239,6 +236,19 @@ namespace PROARC.src.Control
         {
             var request = new { action = "insert_reclamacao", reclamacao };
             string response = await SendRequestAsync(request);
+        }
+
+        public static async Task UpdateAsync(string titulo, ReclamacaoEnel NovaReclamacao)
+        {
+            var request = new { action = "update_reclamacao", titulo, NovaReclamacao };
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);    
+        }
+        public static async Task UpdateAsync(string titulo, ReclamacaoGeral NovaReclamacao)
+        {
+            var request = new { action = "update_reclamacao", titulo, NovaReclamacao };
+            string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
         }
 
         public static async Task DeleteAsync(string titulo)

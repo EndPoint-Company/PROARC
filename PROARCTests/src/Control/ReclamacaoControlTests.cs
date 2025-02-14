@@ -77,5 +77,29 @@ namespace PROARC.src.Control.Tests
         {
             await ReclamacaoControl.UpdateSituacaoAsync("titus", "Fechado");
         }
+
+        [TestMethod()]
+        public async Task UpdateAsyncTest()
+        {
+            LinkedList<Reclamado> reclamadoenel = new();
+            Reclamado reclamado1 = new Reclamado("Enel", "12345606200", null, 123, "Rua das Flores", "Centro", "São Paulo", "SP", "0100000", "98235432111", "Enel@email.com");
+            reclamadoenel.AddFirst(reclamado1);
+
+            ReclamacaoEnel recenel = new ReclamacaoEnel(new Motivo("Cobrança indevida"), new Reclamante("João Santos", "11122233344", null), null, reclamadoenel, "teste21a9", "Ruim", "caminho219", DateOnly.FromDateTime(DateTime.Now), "marquin", null, null, null, null);
+
+            await ReclamacaoControl.UpdateAsync("teste21a9", recenel);
+        }
+
+        [TestMethod()]
+        public async Task UpdatetAsyncTest()
+        {
+            LinkedList<Reclamado> reclamados = new();
+            Reclamado reclamado1 = new Reclamado("João Silva", "12345678900", null, 123, "Rua das Flores", "Centro", "São Paulo", "SP", "0100000", "98765432111", "joao@email.com");
+            Reclamado reclamado2 = new Reclamado("Mercado dois irmaos", null, "12345678000199", 456, "Avenida Paulista", "Bela Vista", "São Paulo", "SP", "01310000", "11912345678", "mercado@empresa.com");
+            reclamados.AddFirst(reclamado1);
+            reclamados.AddFirst(reclamado2);
+            ReclamacaoGeral recgeral = new ReclamacaoGeral(new Motivo("Atraso na entrega"), new Reclamante("lorax", "12345678950", null), null, reclamados, "testeok", "Aberto", "C:\\Users\\marco\\Documents\\Rec12313", DateOnly.FromDateTime(DateTime.Now), "Marcos Vitor", DateTime.Now, "advogada");
+            await ReclamacaoControl.UpdateAsync("testeok", recgeral);
+        }
     }
 }
