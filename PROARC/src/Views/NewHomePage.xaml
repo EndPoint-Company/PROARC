@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="PROARC.src.Views.NewHomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PROARC.src.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel Padding="32">
+            <TextBlock Text="Bem-vindo ao PROARC" FontSize="24" FontWeight="Bold" />
+            <StackPanel Padding="32" Spacing="128">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Padding="16" Spacing="32">
+                    <FlipView MaxWidth="400" Height="270">
+                        <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="A"/>
+                        <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="B"/>
+                        <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="C"/>
+                        <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="D"/>
+                        <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="E"/>
+                    </FlipView>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Padding="32" Spacing="48">
+                    <Button Name="AcceptButton1" Height="64">
+                        <StackPanel>
+                            <SymbolIcon Symbol="Accept"/>
+                            <TextBlock Text="Accept"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="AcceptButton2" Height="64">
+                        <StackPanel>
+                            <SymbolIcon Symbol="Accept"/>
+                            <TextBlock Text="Accept"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="AcceptButton3" Height="64">
+                        <StackPanel>
+                            <SymbolIcon Symbol="Accept"/>
+                            <TextBlock Text="Accept"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="AcceptButton4" Height="64">
+                        <StackPanel>
+                            <SymbolIcon Symbol="Accept"/>
+                            <TextBlock Text="Accept"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="AcceptButton5" Height="64">
+                        <StackPanel>
+                            <SymbolIcon Symbol="Accept"/>
+                            <TextBlock Text="Accept"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="AcceptButton6" Height="64">
+                        <StackPanel>
+                            <SymbolIcon Symbol="Accept"/>
+                            <TextBlock Text="Accept"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

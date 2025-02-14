@@ -21,6 +21,9 @@
 	<ItemGroup>
 	  <Compile Remove="src\Converters\Class1.cs" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="src\Views\NewHomePage.xaml" />
+	</ItemGroup>
 
   <ItemGroup>
 	  <Content Include="Assets\proarc-white-logo.ico" />
@@ -46,6 +49,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="src\Views\NewHomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="src\CadastroJanela.xaml">
