@@ -24,6 +24,7 @@ using Windows.UI.Popups;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
 using System.Text.RegularExpressions;
+using PROARC.src.Models.Arquivos;
 
 namespace PROARC.src.Views
 {
@@ -138,7 +139,7 @@ namespace PROARC.src.Views
 
         private async Task DefinirNovoProcesso()
         {
-            int count = await ProcessoAdministrativoControl.CountAsync();
+            int count = await ReclamacaoControl.CountAsync();
             NumeroProcesso = (count + 1).ToString();
             AnoProcesso = DateTime.Now.Year.ToString();
         }
@@ -316,128 +317,229 @@ namespace PROARC.src.Views
             };
         }
 
-        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
-{
-    // Resetando estilos de erro
-    ResetErrorStyles();
 
-    NumeroProcesso = inputNProcesso.Text.Trim();
-    AnoProcesso = inputAnoProcesso.Text.Trim();
-
-    if (string.IsNullOrEmpty(NumeroProcesso))
-    {
-        int count = await ProcessoAdministrativoControl.CountAsync();
-        NumeroProcesso = (count + 1).ToString();
-    }
-
-    if (!CamposPreenchidos())
-    {
-        ShowError("Preencha todos os campos obrigatórios antes de continuar.");
-        HighlightEmptyFields(); // 🔴 Adiciona bordas vermelhas nos campos vazios
-        return;
-    }
-
-    string motivo = cbMotivo.SelectedItem?.ToString();
-
-    string cpfLimpo1 = new string(inputCnpjCpfReclamado.Text.Where(char.IsDigit).ToArray());
-    var reclamado = new Reclamado(
-        inputInstituicao.Text ?? "null",
-        short.TryParse(inputNumero.Text, out short numero) ? numero : (short?)null,
-        inputRua.Text ?? "null",
-        inputBairro.Text ?? "null",
-        inputEmail.Text ?? "null",
-        inputCidade.Text ?? "null",
-        inputUf.Text ?? "null",
-        cpfLimpo1,
-        cpfLimpo1
-    );
-
-    string cpfLimpo = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
-    var reclamante = new Reclamante(
-        inputNome.Text ?? "null",
-        cpfLimpo,
-        inputRgReclamante.Text ?? "null"
-    );
-
-    string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
-    DateTime? dataSelecionada = calendario.Date?.DateTime;
-
-    string dataFormatada = dataSelecionada.HasValue
-        ? dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")
-        : "0001-01-01 00:00:00.000";
-
-    string caminhoPasta = $"dir/folder{NumeroProcesso}";
-
-    string nProcesso = NumeroProcesso;
-    short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
-
-    bool success = await ProcessoAdministrativoControl.InsertAsync(
-        new(caminhoPasta, nProcesso, anoProcesso, GetSelectedRadioButton(),
-        new(motivo),
-        reclamado,
-        reclamante,
-        DateTime.Parse(dataFormatada))
-    );
-
-    if (success)
-    {
-        var successDialog = new ContentDialog
+        private LinkedList<Reclamado> CriarListaReclamados()
         {
-            Title = "Sucesso",
-            Content = "O processo foi cadastrado com sucesso!",
-            CloseButtonText = "OK",
-            XamlRoot = this.Content.XamlRoot
-        };
+            var listaReclamados = new LinkedList<Reclamado>();
 
-        await successDialog.ShowAsync();
+            // Primeiro reclamado (XAML)
+            string selectedTipoDocumento = comboBoxTipoDocumento?.SelectedItem?.ToString() ?? string.Empty;
+            string cpfCnpjXaml = selectedTipoDocumento == "CPF" ? inputCnpjCpfReclamado?.Text : null;
+            string cnpjXaml = selectedTipoDocumento == "CNPJ" ? inputCnpjCpfReclamado?.Text : null;
 
-        Frame.Navigate(typeof(RegistrarProcesso01Page), true);
-    }
-    else
-    {
-        ShowError("Falha ao cadastrar o processo. Tente novamente.");
+            var reclamadoXaml = new Reclamado(
+                nome: inputInstituicao?.Text ?? throw new ArgumentException("Nome não pode ser nulo"),
+                cpf: cpfCnpjXaml,
+                cnpj: cnpjXaml,
+                numero: short.TryParse(inputNumero?.Text, out short num) ? num : (short)0,
+                logradouro: inputRua?.Text ?? throw new ArgumentException("Rua não pode ser nula"),
+                bairro: inputBairro?.Text,
+                cidade: inputCidade?.Text ?? throw new ArgumentException("Cidade não pode ser nula"),
+                uf: inputUf?.Text ?? throw new ArgumentException("UF não pode ser nula"),
+                cep: inputCep?.Text ?? throw new ArgumentException("CEP não pode ser nulo"),
+                telefone: string.IsNullOrWhiteSpace(inputTelefoneReclamado?.Text) ? null : inputTelefoneReclamado.Text,
+                email: string.IsNullOrWhiteSpace(inputEmail?.Text) ? null : inputEmail.Text
+            );
+
+            listaReclamados.AddFirst(reclamadoXaml);
+
+            // Reclamados adicionados dinamicamente
+            foreach (var elemento in MainContainer.Children)
+            {
+                if (elemento is StackPanel reclamadoPanel)
+                {
+                    var campos = reclamadoPanel.Children;
+
+                    if (campos.Count < 12)
+                    {
+                        Console.WriteLine("Erro: Campos insuficientes no StackPanel.");
+                        continue;
+                    }
+
+                    string GetTextBoxValue(int index, bool isRequired = false)
+                    {
+                        if (index >= campos.Count)
+                        {
+                            Console.WriteLine($"Erro: Campo {index} não encontrado.");
+                            return isRequired ? throw new ArgumentException($"Campo {index} é obrigatório.") : null;
+                        }
+
+                        if (campos[index] is StackPanel panel && panel.Children.Count > 1 && panel.Children[1] is TextBox textBox)
+                        {
+                            string value = textBox.Text.Trim();
+                            return (isRequired && string.IsNullOrEmpty(value)) ? throw new ArgumentException($"O campo {index} é obrigatório.") : value;
+                        }
+
+                        Console.WriteLine($"Erro: Elemento {index} não é um StackPanel com TextBox.");
+                        return isRequired ? throw new ArgumentException($"O campo {index} é obrigatório.") : null;
+                    }
+
+                    string tipoSelecionado = string.Empty;
+                    if (campos[1] is StackPanel stackPanel && stackPanel.Children.Count > 1 && stackPanel.Children[1] is ComboBox tipoDocumentoComboBox)
+                    {
+                        tipoSelecionado = tipoDocumentoComboBox.SelectedItem?.ToString() ?? string.Empty;
+                    }
+
+                    string cpfDinamico = (tipoSelecionado == "CPF") ? GetTextBoxValue(2) : null;
+                    string cnpjDinamico = (tipoSelecionado == "CNPJ") ? GetTextBoxValue(3) : null;
+
+                    try
+                    {
+                        var novoReclamado = new Reclamado(
+                            nome: GetTextBoxValue(0, true), // Nome obrigatório
+                            cpf: cpfDinamico,               // Opcional
+                            cnpj: cnpjDinamico,             // Opcional
+                            numero: short.TryParse(GetTextBoxValue(5, true), out short numDinamico) ? numDinamico : throw new ArgumentException("Número inválido"),
+                            logradouro: GetTextBoxValue(4, true), // Rua obrigatória
+                            bairro: GetTextBoxValue(6),     // Opcional
+                            cidade: GetTextBoxValue(7, true), // Cidade obrigatória
+                            uf: GetTextBoxValue(8, true),   // UF obrigatória
+                            cep: GetTextBoxValue(9, true),  // CEP obrigatório
+                            telefone: GetTextBoxValue(10),  // Opcional
+                            email: GetTextBoxValue(11)      // Opcional
+                        );
+
+                        listaReclamados.AddLast(novoReclamado);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine($"Erro ao adicionar reclamado: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Erro: Elemento dentro de MainContainer não é um StackPanel.");
+                }
+            }
+
+            return listaReclamados;
+        }
+
+
+        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Resetando estilos de erro
+            ResetErrorStyles();
+
+            NumeroProcesso = inputNProcesso.Text.Trim();
+            AnoProcesso = inputAnoProcesso.Text.Trim();
+
+            if (string.IsNullOrEmpty(NumeroProcesso))
+            {
+                int count = await ReclamacaoControl.CountAsync();
+                NumeroProcesso = (count + 1).ToString();
+            }
+
+            if (!CamposPreenchidos())
+            {
+                ShowError("Preencha todos os campos obrigatórios antes de continuar.");
+                HighlightEmptyFields(); // 🔴 Adiciona bordas vermelhas nos campos vazios
+                return;
+            }
+
+            Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
+
+            string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
+
+            var reclamante = new Reclamante(
+                inputNome.Text,
+                cpfLimpoReclamante,
+                string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
+                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text,
+                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text
+            );
+
+            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
+            DateTime? dataSelecionada = calendario.Date?.DateTime;
+            string dataFormatada = dataSelecionada.HasValue
+                ? dataSelecionada.Value.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                : "0001-01-01 00:00:00.000";
+
+            string caminhoPasta = $"dir/folder{NumeroProcesso}";
+            string nProcesso = NumeroProcesso;
+            short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
+            string titulo = "G" + nProcesso + "/" + anoProcesso;
+
+            LinkedList<Reclamado> reclamados = CriarListaReclamados();
+
+            var reclamacao = new ReclamacaoGeral(
+                motivoSelecionado,
+                reclamante,
+                null, // Procurador opcional
+                reclamados,
+                titulo,
+                "Em andamento",
+                caminhoPasta,
+                DateOnly.FromDateTime(DateTime.Now),
+                "Sistema",
+                dataSelecionada,
+                null // Conciliador opcional
+            );
+
+            ButtonContinuar.IsEnabled = false;
+            bool success = await ReclamacaoControl.InsertAsync(reclamacao);
+            ButtonContinuar.IsEnabled = true;
+
+            if (success)
+            {
+                var successDialog = new ContentDialog
+                {
+                    Title = "Sucesso",
+                    Content = "O processo foi cadastrado com sucesso!",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot
+                };
+
+                await successDialog.ShowAsync();
+                Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+            }
+            else
+            {
+                ShowError("Falha ao cadastrar o processo. Tente novamente.");
             }
         }
 
 
+
         private void HighlightEmptyFields()
-        {
-            HighlightField(null, inputNProcesso, TextBlockNProcesso);
-            HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
-            HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
-            HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
-            HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
-            HighlightField(TextBlockReclamado, inputRua, TextBlockRua);
-            HighlightField(TextBlockReclamado, inputBairro, TextBlockBairro);
-            HighlightField(TextBlockReclamado, inputNumero, TextBlockNumero);
-            HighlightField(TextBlockReclamado, inputCidade, TextBlockCidade);
-            HighlightField(TextBlockReclamado, inputUf, TextBlockUf);
-            HighlightField(TextBlockReclamado, inputCep, TextBlockCep);
-
-            // 🟢 Validação do Motivo (ComboBox)
-            if (cbMotivo.SelectedItem == null)
             {
-                cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
-                TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
-            }
+                HighlightField(null, inputNProcesso, TextBlockNProcesso);
+                HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
+                HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
+                HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
+                HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
+                HighlightField(TextBlockReclamado, inputInstituicao, TextBlockInstituicao);
+                HighlightField(TextBlockReclamado, inputRua, TextBlockRua);
+                HighlightField(TextBlockReclamado, inputBairro, TextBlockBairro);
+                HighlightField(TextBlockReclamado, inputNumero, TextBlockNumero);
+                HighlightField(TextBlockReclamado, inputCidade, TextBlockCidade);
+                HighlightField(TextBlockReclamado, inputUf, TextBlockUf);
+                HighlightField(TextBlockReclamado, inputCep, TextBlockCep);
 
-            // 🟢 Validação do Status (Se nenhum RadioButton foi selecionado)
-            if (!IsStatusSelected())
-            {
-                StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
-                TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
-                TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
+                // 🟢 Validação do Motivo (ComboBox)
+                if (cbMotivo.SelectedItem == null)
+                {
+                    cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
+                    TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
+                }
 
-                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
+                // 🟢 Validação do Status (Se nenhum RadioButton foi selecionado)
+                if (!IsStatusSelected())
+                {
+                    StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
+                    TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
+                    TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
 
-                TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
-                radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
-                radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
-            }
+                    radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                    radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
+                    radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
+                    radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                    radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
+
+                    TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
+                    radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
+                    radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
+                }
         }
 
         private void HighlightField(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
@@ -462,6 +564,7 @@ namespace PROARC.src.Views
             ResetFieldStyle(inputAnoProcesso, TextBlockAnoProcesso);
             ResetFieldStyle(inputNome, TextBlockNome, TextBlockReclamante);
             ResetFieldStyle(inputCpfReclamante, TextBlockCpfReclamante, TextBlockReclamante);
+            ResetFieldStyle(inputInstituicao, TextBlockReclamado, TextBlockInstituicao);
             ResetFieldStyle(inputRua, TextBlockRua, TextBlockReclamado);
             ResetFieldStyle(inputBairro, TextBlockBairro, TextBlockReclamado);
             ResetFieldStyle(inputNumero, TextBlockNumero, TextBlockReclamado);
@@ -515,7 +618,7 @@ namespace PROARC.src.Views
         }
 
         private bool CamposPreenchidos()
-        => new[] { inputNome, inputCpfReclamante, inputRgReclamante, inputInstituicao, inputCnpjCpfReclamado }
+        => new[] { inputNome, inputCpfReclamante, inputInstituicao }
             .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
             && cbMotivo.SelectedItem != null
             && calendario.Date != null
@@ -634,16 +737,17 @@ namespace PROARC.src.Views
             ConciliadorSection.Translation = new Vector3(1, 1, 20);
         }
 
-        private TextBox CriarTextBox(string placeholder, double width)
+        private TextBox CriarTextBox(string placeholder, double width, bool isEnabled = true)
         {
             return new TextBox
             {
                 PlaceholderText = placeholder,
-                Width = width
+                Width = width,
+                IsEnabled = isEnabled
             };
         }
 
-        private StackPanel CriarCampo(string titulo, string placeholder, double width)
+        private StackPanel CriarCampo(string titulo, string placeholder, double width, bool isEnabled = true)
         {
             return new StackPanel
             {
@@ -655,7 +759,24 @@ namespace PROARC.src.Views
                 Text = titulo,
                 FontSize = 14
             },
-            CriarTextBox(placeholder, width)
+            CriarTextBox(placeholder, width, isEnabled)
+        }
+            };
+        }
+
+        private StackPanel CriarCampoComponente(string titulo, UIElement componente)
+        {
+            return new StackPanel
+            {
+                Orientation = Orientation.Vertical,
+                Children =
+        {
+            new TextBlock
+            {
+                Text = titulo,
+                FontSize = 14
+            },
+            componente
         }
             };
         }
@@ -700,8 +821,8 @@ namespace PROARC.src.Views
 
             reclamadoSection.Translation = new System.Numerics.Vector3(1, 1, 20);
 
-            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); 
-            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); 
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            reclamadoSection.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             reclamadoSection.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             var removerBotao = new Button
@@ -714,7 +835,7 @@ namespace PROARC.src.Views
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Top,
                 CornerRadius = new CornerRadius(5),
-                Margin = new Thickness(0, -20, -20, 0) 
+                Margin = new Thickness(0, -20, -20, 0)
             };
 
             removerBotao.Click += (s, e) =>
@@ -740,19 +861,40 @@ namespace PROARC.src.Views
                 FontWeight = FontWeights.Bold
             });
 
+            // Criando ComboBox para CPF/CNPJ
+            var comboBoxTipoDocumento = new ComboBox
+            {
+                PlaceholderText = "Selecione",
+                Width = 140,
+                FontSize = 14,
+                Padding = new Thickness(10)
+            };
+
+            comboBoxTipoDocumento.Items.Add(new ComboBoxItem { Content = "CPF", FontSize = 14 });
+            comboBoxTipoDocumento.Items.Add(new ComboBoxItem { Content = "CNPJ", FontSize = 14 });
+
+            var inputCnpjCpf = CriarTextBox("Insira CNPJ ou CPF", 188, false);
+
+            comboBoxTipoDocumento.SelectionChanged += (sender, e) =>
+            {
+                inputCnpjCpf.IsEnabled = comboBoxTipoDocumento.SelectedIndex != -1;
+            };
+
             conteudoReclamado.Children.Add(CriarLinhaCampos(
                 CriarCampo("Instituição *", "Insira o nome da Instituição", 300),
-                CriarCampo("CNPJ/CPF *", "Insira o CNPJ/CPF", 280),
-                CriarCampo("E-mail", "Insira o E-mail", 250)
+                CriarCampoComponente("Tipo de Documento", comboBoxTipoDocumento),
+                CriarCampoComponente("CNPJ/CPF *", inputCnpjCpf),
+                CriarCampo("E-mail", "Insira o E-mail", 250),
+                CriarCampo("Telefone", "Insira o Telefone", 250)
             ));
 
             conteudoReclamado.Children.Add(CriarLinhaCampos(
-                CriarCampo("Rua", "Insira a rua", 300),
-                CriarCampo("Bairro", "Insira o bairro", 280),
-                CriarCampo("Número", "Insira o número", 120),
-                CriarCampo("Cidade", "Insira a cidade", 180),
-                CriarCampo("UF", "Insira a UF", 100),
-                CriarCampo("CEP", "Insira o CEP", 150)
+                CriarCampo("Rua *", "Insira a rua", 300),
+                CriarCampo("Bairro *", "Insira o bairro", 280),
+                CriarCampo("Número *", "Insira o número", 120),
+                CriarCampo("Cidade *", "Insira a cidade", 180),
+                CriarCampo("UF *", "Insira a UF", 100),
+                CriarCampo("CEP *", "Insira o CEP", 150)
             ));
 
             Grid.SetRow(conteudoReclamado, 1);
@@ -767,6 +909,7 @@ namespace PROARC.src.Views
         {
             MainContainer.Children.Add(CriarSecaoReclamado());
         }
+
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

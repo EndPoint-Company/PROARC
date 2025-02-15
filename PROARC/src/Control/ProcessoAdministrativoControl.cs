@@ -60,46 +60,7 @@ namespace PROARC.src.Control
             public string? uf { get; set; }
         }
 
-        public static async Task<List<ProcessoAdministrativo>?> GetAllAsync()
-        {
-            var request = new { action = "new_get_all_processos" };
-            string response = await NetworkControl.SendRequestAsync(request);
-
-            try
-            {
-                var jsonResponse = JsonConvert.DeserializeObject<Dictionary<string, List<ProcessoAdministrativoDto>>>(response);
-                if (jsonResponse != null && jsonResponse.TryGetValue("processos", out var processosDto))
-                {
-                    var processos = processosDto.Select(p => new ProcessoAdministrativo(
-                        p.path_processo,
-                        p.titulo_processo,
-                        (short)p.ano,
-                        p.status_processo,
-                        p.motivo != null ? new Motivo(p.motivo.nome) : null,
-                        p.reclamados?.FirstOrDefault() != null ? new Reclamado(
-                            p.reclamados.First().nome,
-                            p.reclamados.First().numero_rua,
-                            p.reclamados.First().rua,
-                            p.reclamados.First().bairro,
-                            p.reclamados.First().email,
-                            p.reclamados.First().cidade,
-                            p.reclamados.First().uf,
-                            p.reclamados.First().cnpj,
-                            p.reclamados.First().cpf) : null,
-                        new Reclamante(p.reclamante.nome, p.reclamante.cpf, p.reclamante.rg),
-                        p.data_audiencia,
-                        p.created_at)).ToList();
-
-                    return processos;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao desserializar JSON: {ex.Message}");
-            }
-
-            return null;
-        }
+       
 
         public static async Task<ProcessoAdministrativo?> GetAsync(int id)
         {

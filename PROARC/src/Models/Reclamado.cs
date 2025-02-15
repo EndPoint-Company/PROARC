@@ -43,38 +43,7 @@ namespace PROARC.src.Models
             this.email = email;
             this.cep = cep;
         }
-        public Reclamado(string nome = null, short? numero = null, string cpf = null, string cnpj = null,
-                         string logradouro = null, string bairro = null, string cidade = null,
-                        string uf = null, string cep = null, string telefone = null, string email = null)
-        {
-            this.nome = nome;
-            this.cpf = cpf;
-            this.cnpj = cnpj;
-            this.numero = numero;
-            this.logradouro = logradouro;
-            this.bairro = bairro;
-            this.cidade = cidade;
-            this.uf = uf;
-            this.telefone = telefone;
-            this.email = email;
-            this.cep = cep;
-        }
-
-        public Reclamado(string nome, string? cpf, string? cnpj, object numeroAddr, object logradouroAddr, object bairroAddr, object cidadeAddr, object ufAddr, string? telefone, string? email, string? cep, DateTime dateTime)
-        {
-            this.nome = nome;
-            this.cpf = cpf;
-            this.cnpj = cnpj;
-            this.numeroAddr = numeroAddr;
-            this.logradouroAddr = logradouroAddr;
-            this.bairroAddr = bairroAddr;
-            this.cidadeAddr = cidadeAddr;
-            this.ufAddr = ufAddr;
-            this.telefone = telefone;
-            this.email = email;
-            this.cep = cep;
-            this.dateTime = dateTime;
-        }
+        
 
         public override string ToString()
         {
