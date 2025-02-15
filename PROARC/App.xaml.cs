@@ -56,7 +56,7 @@ namespace PROARC
 
             Frame rootFrame = new Frame();
             rootFrame.NavigationFailed += OnNavigationFailed;
-            rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+            rootFrame.Navigate(typeof(NewHomePage), args.Arguments);
 
             _mainWindow.Content = rootFrame;
             _mainWindow.Activate();
