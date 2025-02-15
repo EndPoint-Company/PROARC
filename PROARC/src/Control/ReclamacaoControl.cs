@@ -230,10 +230,19 @@ namespace PROARC.src.Control
             }
         }
 
-        public static async Task InsertAsync(ReclamacaoGeral reclamacao)
+        public static async Task<bool> InsertAsync(ReclamacaoGeral reclamacao)
         {
-            var request = new { action = "insert_reclamacao", reclamacao };
-            string response = await SendRequestAsync(request);           
+
+            try
+            {
+                var request = new { action = "insert_reclamacao", reclamacao };
+                string response = await SendRequestAsync(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
         public static async Task InsertAsync(ReclamacaoEnel reclamacao)
         {
