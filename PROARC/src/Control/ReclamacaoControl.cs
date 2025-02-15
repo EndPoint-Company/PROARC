@@ -24,13 +24,15 @@ namespace PROARC.src.Control
             {
                 jsonToken = JToken.Parse(jsonToken.Value<string>());
             }
-            
+
 
             JArray reclamacoesArray = (JArray)jsonToken["reclamacoes"];
 
+            if(reclamacoesArray == null) return null; 
+
             Console.WriteLine(res);
-            
-            foreach(JObject recl in reclamacoesArray)
+
+            foreach (JObject recl in reclamacoesArray)
             {
                 JToken reclamanteToken = recl.GetValue("reclamante");
                 JToken procuradorToken = recl.GetValue("procurador");
@@ -61,7 +63,7 @@ namespace PROARC.src.Control
 
                 LinkedList<Reclamado> reclamados = new LinkedList<Reclamado>();
 
-                foreach(JObject obj in reclamadosToken)
+                foreach (JObject obj in reclamadosToken)
                 {
                     Reclamado reclamado = new(
                         (string)obj["nome"],
@@ -120,11 +122,12 @@ namespace PROARC.src.Control
                     reclamacao.Observacao = (string)esp["observacao"];
 
                     reclamacoes.AddLast(reclamacao);
-                }      
+                }
             }
 
             return reclamacoes;
         }
+
         public static async Task<Reclamacao> GetAsync(string titulo)
         {
             var request = new { action = "get_reclamacao_por_titulo", titulo };

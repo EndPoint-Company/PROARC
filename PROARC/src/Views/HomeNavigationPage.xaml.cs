@@ -8,7 +8,7 @@ namespace PROARC.src.Views
         {
             this.InitializeComponent();
 
-            contentFrame.Navigate(typeof(NewHomePage));
+            contentFrame.Navigate(typeof(HomePage));
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -24,7 +24,7 @@ namespace PROARC.src.Views
                 {
                     
                     case "HomePage":
-                        contentFrame.Navigate(typeof(NewHomePage));
+                        contentFrame.Navigate(typeof(HomePage));
                         args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "ListPageGeral":

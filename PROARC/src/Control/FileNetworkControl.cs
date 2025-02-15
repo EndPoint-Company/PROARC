@@ -16,7 +16,7 @@ namespace PROARC.src.Control
     {
         public static void SendFile(string filePathClient)
         {
-            const string serverIp = "127.0.0.1";
+            const string serverIp = "192.168.18.169";
             const int serverPort = 6666;
 
             System.Net.Sockets.TcpClient TcpClient = new System.Net.Sockets.TcpClient(serverIp, serverPort);
