@@ -106,10 +106,10 @@
                     <!-- Seção Status -->
                     <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
                         <!-- Barra lateral azul -->
-                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" Height="404"/>
+                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10"/>
 
                         <!-- Conteúdo da seção Status -->
-                        <StackPanel Padding="40" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="638"  Height="404">
+                        <StackPanel Padding="40, 30" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="638" >
                             <!-- Título -->
                             <TextBlock x:Name="TextBlockStatus" Text="Situação" FontSize="18" FontWeight="Bold" />
 
@@ -137,68 +137,67 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Contêiner principal para Reclamante e Conciliador(a)-->
-                <StackPanel Orientation="Horizontal" Margin="160, 0">
-                    <!-- Contêiner principal para Reclamante -->
-                    <StackPanel Orientation="Horizontal">
-                        <!-- StackPanel adicional para a borda azul -->
-                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                <Grid Margin="160, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="32"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                        <!-- Seção Reclamante -->
-                        <StackPanel x:Name="ReclamanteSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Padding="40" Background="#FFF" Spacing="10" Width="1000">
-                            <TextBlock x:Name="TextBlockReclamante" Text="Reclamante" FontSize="18" FontWeight="Bold" />
+                    <!-- Seção Reclamante -->
+                    <Grid Grid.Column="0">
+                        <Border Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" HorizontalAlignment="Left"/>
 
-                            <!-- Primeira Linha -->
-                            <StackPanel Orientation="Horizontal" Spacing="20">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock x:Name="TextBlockNome" Text="Nome *" FontSize="14"/>
-                                    <TextBox x:Name="inputNome" PlaceholderText="Insira o nome completo" Width="300"/>
+                        <Border x:Name="ReclamanteSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}"
+                Padding="40" Background="#FFF" Width="1000" Margin="10, 0, 0, 0">
+                            <StackPanel Spacing="10">
+                                <TextBlock x:Name="TextBlockReclamante" Text="Reclamante" FontSize="18" FontWeight="Bold" />
+                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockNome" Text="Nome *" FontSize="14"/>
+                                        <TextBox x:Name="inputNome" PlaceholderText="Insira o nome completo" Width="300"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockCpfReclamante" Text="CPF *" FontSize="14"/>
+                                        <TextBox x:Name="inputCpfReclamante" TextChanged="OnCpfTextChanged" MaxLength="14" PlaceholderText="Insira o CPF" Width="188"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="RG" FontSize="14"/>
+                                        <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="188"/>
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock x:Name="TextBlockCpfReclamante" Text="CPF *" FontSize="14"/>
-                                    <TextBox x:Name="inputCpfReclamante" TextChanged="OnCpfTextChanged" MaxLength="14" PlaceholderText="Insira o CPF" Width="188"/>
+                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockEmailReclamante" Text="E-mail" FontSize="14"/>
+                                        <TextBox x:Name="inputEmailReclamante" PlaceholderText="Insira o e-mail completo" Width="300"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockCpfNumeroReclamante" Text="Telefone Celular" FontSize="14"/>
+                                        <TextBox x:Name="inputNumeroReclamante" PlaceholderText="Insira o número celular" Width="188"/>
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="RG" FontSize="14"/>
-                                    <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="188"/>
+                                <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10" Checked="ProcuradorCheckBox_Checked" Unchecked="ProcuradorCheckBox_Unchecked" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Seção Conciliador -->
+                    <Grid Grid.Column="2">
+                        <Border Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" HorizontalAlignment="Left"/>
+                        <Border x:Name="ConciliadorSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}"
+                Padding="40" Background="#FFF" Width="434" Margin="10, 0, 0, 0">
+                            <StackPanel Spacing="10">
+                                <TextBlock x:Name="TextBlockConciliador" Text="Conciliador(a)" FontSize="18" FontWeight="Bold" />
+                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockNomeConciliador" Text="Nome *" FontSize="14"/>
+                                        <TextBox x:Name="inputNomeConciliador" PlaceholderText="Insira o nome do(a) conciliador(a)" Width="300"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Spacing="20">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock x:Name="TextBlockEmailReclamante" Text="E-mail" FontSize="14"/>
-                                    <TextBox x:Name="inputEmailReclamante" PlaceholderText="Insira o e-mail completo" Width="300"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock x:Name="TextBlockCpfNumeroReclamante" Text="Telefone Celular" FontSize="14"/>
-                                    <TextBox x:Name="inputNumeroReclamante" PlaceholderText="Insira o número celular" Width="188"/>
-                                </StackPanel>
-                            </StackPanel>
-
-                            <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10" Checked="ProcuradorCheckBox_Checked" Unchecked="ProcuradorCheckBox_Unchecked" />
-                        </StackPanel>
-                    </StackPanel>
-
-
-                    <!-- Contêiner principal para os dois StackPanels -->
-                    <StackPanel Orientation="Horizontal" Margin="32, 0">
-                        <!-- StackPanel adicional para a borda azul -->
-                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-
-                        <!-- Seção Reclamante -->
-                        <StackPanel x:Name="ConciliadorSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}" Padding="40" Background="#FFF" Spacing="10" Width="434">
-                            <TextBlock x:Name="TextBlockConciliador" Text="Conciliador(a)" FontSize="18" FontWeight="Bold" />
-
-                            <!-- Primeira Linha -->
-                            <StackPanel Orientation="Horizontal" Spacing="20">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock x:Name="TextBlockNomeConciliador" Text="Nome *" FontSize="14"/>
-                                    <TextBox x:Name="inputNomeConciliador" PlaceholderText="Insira o nome do(a) conciliador(a)" Width="300"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
 
                 <!-- Contêiner principal para o StackPanel Procurador -->
                 <StackPanel Orientation="Horizontal" Margin="160, 0" x:Name="ProcuradorSection1" Visibility="Collapsed">
@@ -229,28 +228,40 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock x:Name="TextBlockCpfNumeroProcurado" Text="Telefone Celular" FontSize="14"/>
-                                    <TextBox x:Name="inputNumeroProcurado" TextChanged="OnCpfTextChanged" MaxLength="14" PlaceholderText="Insira o número celular" Width="188"/>
+                                    <TextBox x:Name="inputNumeroProcurado" MaxLength="14" PlaceholderText="Insira o número celular" Width="188"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
-
                 <StackPanel x:Name="MainContainer" Orientation="Vertical" Margin="160,0">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-                        <StackPanel Padding="40" Spacing="10" Background="#FFF" CornerRadius="0, 10, 10, 0" x:Name="ReclamadoSection" Shadow="{StaticResource SharedShadow}" Width="1478">
+                        <StackPanel Padding="40" Spacing="10" Background="#FFF" CornerRadius="0, 10, 10, 0" 
+                    x:Name="ReclamadoSection" Shadow="{StaticResource SharedShadow}" Width="1478">
                             <TextBlock x:Name="TextBlockReclamado" Text="Reclamado" FontSize="18" FontWeight="Bold" />
+
                             <StackPanel Orientation="Horizontal" Spacing="20">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="Instituição *" FontSize="14"/>
                                     <TextBox x:Name="inputInstituicao" PlaceholderText="Insira o nome da Instituição" Width="300" />
                                 </StackPanel>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Tipo de Documento" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxTipoDocumento" PlaceholderText="Selecione CNPJ ou CPF" SelectionChanged="OnTipoDocumentoChanged" Padding="10" Width="200">
+                                        <ComboBoxItem Content="CPF"/>
+                                        <ComboBoxItem Content="CNPJ"/>
+                                    </ComboBox>
+                                </StackPanel>
+
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="CNPJ/CPF" FontSize="14"/>
-                                    <TextBox x:Name="inputCnpjCpfReclamado" MaxLength="14" TextChanged="OnCpfTextChanged" PlaceholderText="Insira o CNPJ/CPF" Width="188" />
+                                    <TextBox x:Name="inputCnpjCpfReclamado" MaxLength="14" TextChanged="OnCpfCnpjTextChanged" 
+                             PlaceholderText="Insira CNPJ ou CPF" Width="188" IsEnabled="False" />
                                 </StackPanel>
+
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="E-mail" FontSize="14"/>
                                     <TextBox x:Name="inputEmail" PlaceholderText="Insira o E-mail" Width="250" />
@@ -283,18 +294,20 @@
                                     <TextBox x:Name="inputCep" PlaceholderText="Insira o CEP" Width="132" />
                                 </StackPanel>
                             </StackPanel>
+
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
                                 <Button 
-                                    Content="Novo Reclamado" 
-                                    Background="#003366" 
-                                    Foreground="White" 
-                                    Padding="20, 10" 
-                                    CornerRadius="5" 
-                                    Click="OnAddReclamadoClick" />
+                    Content="Novo Reclamado" 
+                    Background="#003366" 
+                    Foreground="White" 
+                    Padding="20, 10" 
+                    CornerRadius="5" 
+                    Click="OnAddReclamadoClick" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
+
 
 
                 <StackPanel Orientation="Horizontal" Margin="160,0">

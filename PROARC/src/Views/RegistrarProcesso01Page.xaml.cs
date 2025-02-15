@@ -23,6 +23,7 @@ using System.Runtime.CompilerServices;
 using Windows.UI.Popups;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
+using System.Text.RegularExpressions;
 
 namespace PROARC.src.Views
 {
@@ -104,13 +105,14 @@ namespace PROARC.src.Views
             {
                 await DefinirNovoProcesso();
                 calendario.MinDate = DateTimeOffset.Now;
+                calendario.Date = DateTimeOffset.Now;
             }
             else
             {
                 NumeroProcesso = string.Empty;
                 AnoProcesso = string.Empty;
                 calendario.ClearValue(CalendarDatePicker.MinDateProperty);
-                calendario.Date = null;
+                calendario.Date = DateTimeOffset.Now;
             }
         }
 
@@ -133,8 +135,6 @@ namespace PROARC.src.Views
                 timePickerFlyout.ShowAt(botao);
             }
         }
-
-
 
         private async Task DefinirNovoProcesso()
         {
@@ -233,6 +233,80 @@ namespace PROARC.src.Views
             }
         }
 
+        private void OnTipoDocumentoChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxTipoDocumento.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string selectedText = selectedItem.Content.ToString();
+
+                // Verifica se o inputCnpjCpfReclamado já foi inicializado antes de acessá-lo
+                if (inputCnpjCpfReclamado != null)
+                {
+                    inputCnpjCpfReclamado.IsEnabled = true;
+
+                    if (selectedText == "CPF")
+                    {
+                        inputCnpjCpfReclamado.MaxLength = 14;
+                        inputCnpjCpfReclamado.PlaceholderText = "Insira o CPF";
+                    }
+                    else if (selectedText == "CNPJ")
+                    {
+                        inputCnpjCpfReclamado.MaxLength = 18;
+                        inputCnpjCpfReclamado.PlaceholderText = "Insira o CNPJ";
+                    }
+
+                    // Limpa o campo ao mudar a opção
+                    inputCnpjCpfReclamado.Text = string.Empty;
+                }
+            }
+        }
+
+       private void OnCpfCnpjTextChanged(object sender, TextChangedEventArgs e)
+       {
+            if (sender is not TextBox textBox) return;
+
+            string selectedType = ((ComboBoxItem)comboBoxTipoDocumento.SelectedItem).Content.ToString();
+            string text = Regex.Replace(textBox.Text, @"\D", "");
+
+
+            int maxLength = selectedType == "CPF" ? 11 : 14;
+            if (text.Length > maxLength) text = text.Substring(0, maxLength);
+
+            textBox.Text = FormatDocument(text, selectedType);
+            textBox.SelectionStart = textBox.Text.Length;
+        }
+
+        private string FormatDocument(string text, string type)
+        {
+            if (type == "CPF")
+                return FormatWithMask(text, new[] {3, 7, 11}, new[] {'.', '.', '-'});
+            else if (type == "CNPJ")
+                return FormatWithMask(text, new[] {2, 6, 10, 15}, new[] {'.', '.', '/', '-'});
+            return text;
+        }
+
+        private string FormatWithMask(string text, int[] positions, char[] separators)
+        {
+            if (text.Length == 0) return text;
+
+            string formattedText = text;
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                if (formattedText.Length > positions[i])
+                    formattedText = formattedText.Insert(positions[i], separators[i].ToString());
+            }
+
+            return formattedText;
+        }
+
+        private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is not TextBox textBox) return;
+                    string rawText = Regex.Replace(textBox.Text, @"\D", "");
+            textBox.Text = FormatWithMask(rawText, new[] {3, 7, 11}, new[] {'.', '.', '-'});
+            textBox.SelectionStart = textBox.Text.Length;
+        }
 
         private UIElement CreateDialogContent()
         {
@@ -440,11 +514,6 @@ namespace PROARC.src.Views
                    radio_naoAtendido.IsChecked == true;
         }
 
-
-
-
-
-
         private bool CamposPreenchidos()
         => new[] { inputNome, inputCpfReclamante, inputRgReclamante, inputInstituicao, inputCnpjCpfReclamado }
             .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
@@ -483,25 +552,6 @@ namespace PROARC.src.Views
                 return "Não Atendido";
 
             return "Nenhum status selecionado";
-        }
-
-
-        private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (textBox == null) return;
-
-            string rawText = new string(textBox.Text.Where(char.IsDigit).ToArray());
-
-            if (rawText.Length > 3)
-                rawText = rawText.Insert(3, ".");
-            if (rawText.Length > 7)
-                rawText = rawText.Insert(7, ".");
-            if (rawText.Length > 11)
-                rawText = rawText.Insert(11, "-");
-
-            textBox.Text = rawText;
-            textBox.SelectionStart = textBox.Text.Length;
         }
 
         private async void PickFileButton_Click(object sender, RoutedEventArgs e)
@@ -581,6 +631,7 @@ namespace PROARC.src.Views
             ProcuradorSection2.Translation = new Vector3(1, 1, 20);
             AnexarArquivosSection.Translation = new Vector3(1, 1, 20);
             ReclamadoSection.Translation = new Vector3(1, 1, 20);
+            ConciliadorSection.Translation = new Vector3(1, 1, 20);
         }
 
         private TextBox CriarTextBox(string placeholder, double width)
