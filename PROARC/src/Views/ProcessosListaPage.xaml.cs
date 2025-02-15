@@ -18,95 +18,123 @@ namespace PROARC.src.Views
 {
     public sealed partial class ProcessosListaPage : Page, INotifyPropertyChanged
     {
-        public ObservableCollection<ProcessoAdministrativo> Processos { get; set; } = new ObservableCollection<ProcessoAdministrativo>();
-
+        public ObservableCollection<Reclamacao?> Processos { get; set; } = new();
         private bool _isLoading;
-        public bool IsLoading
+        private int _limit = 4;
+        private int _offset = 0;
+        private int _paginaAtual = 1;
+
+        public int PaginaAtual
         {
-            get => _isLoading;
+            get => _paginaAtual;
             set
             {
-                if (_isLoading != value)
+                if (_paginaAtual != value)
                 {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
+                    _paginaAtual = value;
+                    OnPropertyChanged(nameof(PaginaAtual));
                 }
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            });
         }
+
+
 
         public ProcessosListaPage()
         {
-            try
-            {
-                this.InitializeComponent();
-                this.DataContext = this;
-
-                _ = CarregarProcessosPeriodicamente();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Erro na inicialização da página: {ex.Message}");
-            }
+            this.InitializeComponent();
+            this.DataContext = this;
+            _ = CarregarProcessos();
         }
 
-        private async Task CarregarProcessosPeriodicamente()
+        private int _totalProcessos = 0; // Guarda o total de processos disponíveis
+
+        private async Task CarregarProcessos()
         {
-            if (IsLoading) return; // Impede chamadas repetidas enquanto já está carregando
+            if (_isLoading) return;
 
             carregando.Visibility = Visibility.Visible;
             carregando.IsActive = true;
-            IsLoading = true;
+            _isLoading = true;
 
             try
             {
-                // Aguarda um intervalo de tempo antes de fazer a requisição
-                while (true)
+                Debug.WriteLine($"🔄 Buscando processos... Página {_paginaAtual}");
+
+                // Primeiro, pegamos o total de processos se ainda não tivermos essa informação
+                if (_totalProcessos == 0)
                 {
-                    // Obtém os processos do banco
-                    var processos = await ProcessoAdministrativoControl.GetAllAsync();
+                    _totalProcessos = await ReclamacaoControl.CountAsync(); // Método fictício que retorna o total
+                }
 
-                    if (processos != null && processos.Any())
+                var processos = await ReclamacaoControl.GetNRows(_limit, _offset);
+
+                // Limpa os processos para carregar a nova página corretamente
+                DispatcherQueue.TryEnqueue(() => Processos.Clear());
+
+                if (processos == null || !processos.Any())
+                {
+                    Debug.WriteLine($"⚠ Nenhum processo encontrado na página {_paginaAtual}.");
+                    return;
+                }
+
+                foreach (var processo in processos)
+                {
+                    if (processo != null)
                     {
-                        foreach (var processo in processos)
-                        {
-                            // Verifica se o processo já está na lista, evitando duplicatas
-                            if (!Processos.Any(p => p.Titulo == processo.Titulo))
-                            {
-                                // Enfileira a atualização na UI para adicionar o processo
-                                DispatcherQueue.TryEnqueue(() =>
-                                {
-                                    Processos.Add(processo); // Adiciona o processo à ObservableCollection
-                                });
-                            }
-                        }
-
-                        Debug.WriteLine($"Carregados {processos.Count} processos.");
-                        carregando.IsActive = false;
-                        carregando.Visibility = Visibility.Collapsed;
+                        DispatcherQueue.TryEnqueue(() => Processos.Add(processo));
                     }
-                    else
-                    {
-                        Debug.WriteLine("Nenhum novo processo foi retornado.");
-                    }
-
-                    // Espera um intervalo de tempo, antes de verificar novamente
-                    await Task.Delay(10000);
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Erro ao carregar os processos: {ex.Message}");
+                Debug.WriteLine($"❌ Erro ao carregar processos: {ex.Message}");
             }
             finally
             {
-                IsLoading = false;
+                carregando.IsActive = false;
+                carregando.Visibility = Visibility.Collapsed;
+                _isLoading = false;
+
+                AtualizarEstadoDosBotoes();
+            }
+        }
+
+        private void AtualizarEstadoDosBotoes()
+        {
+            // Se a página for 1, desativa o botão "Página Anterior"
+            BotaoPaginaAnterior.IsEnabled = _paginaAtual > 1;
+
+            // Se não houver mais processos para exibir, desativa o botão "Próxima Página"
+            BotaoProximaPagina.IsEnabled = _offset + _limit < _totalProcessos;
+        }
+
+        private async void ProximaPagina_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isLoading || _offset + _limit >= _totalProcessos) return; // Impede ir além da última página
+
+            _paginaAtual++;
+            _offset = (_paginaAtual - 1) * _limit;
+            OnPropertyChanged(nameof(PaginaAtual));
+            await CarregarProcessos();
+        }
+
+        private async void PaginaAnterior_Click(object sender, RoutedEventArgs e)
+        {
+            if (_paginaAtual > 1)
+            {
+                _paginaAtual--;
+                _offset = (_paginaAtual - 1) * _limit;
+                OnPropertyChanged(nameof(PaginaAtual));
+                await CarregarProcessos();
             }
         }
 
@@ -160,8 +188,9 @@ namespace PROARC.src.Views
 
         private void OnDragEnter(object sender, DragEventArgs e)
         {
-            e.Handled = true; // Evita que o evento de arrasto se propague
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
         }
+
 
         private void EditarProcesso(ProcessoAdministrativo processo)
         {
