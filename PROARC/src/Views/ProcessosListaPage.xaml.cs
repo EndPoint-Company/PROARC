@@ -183,7 +183,7 @@ namespace PROARC.src.Views
         }
         private void OnDragStarting(UIElement sender, DragStartingEventArgs args)
         {
-            args.Cancel = true; // Cancela qualquer tentativa de arrasto
+            args.Cancel = true; // Cancela qualquer tentativa de arrastoZZ
         }
 
         private void OnDragEnter(object sender, DragEventArgs e)
