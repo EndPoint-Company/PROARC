@@ -25,6 +25,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
 using System.Text.RegularExpressions;
 using PROARC.src.Models.Arquivos;
+using PROARC.src.Converters;
 
 namespace PROARC.src.Views
 {
@@ -309,6 +310,7 @@ namespace PROARC.src.Views
             textBox.SelectionStart = textBox.Text.Length;
         }
 
+
         private UIElement CreateDialogContent()
         {
             return new TextBox
@@ -327,16 +329,18 @@ namespace PROARC.src.Views
             string cpfCnpjXaml = selectedTipoDocumento == "CPF" ? inputCnpjCpfReclamado?.Text : null;
             string cnpjXaml = selectedTipoDocumento == "CNPJ" ? inputCnpjCpfReclamado?.Text : null;
 
+            Console.WriteLine($"Coletando dados do primeiro reclamado: Nome={inputInstituicao.Text}, CPF={cpfCnpjXaml}, CNPJ={cnpjXaml}");
+
             var reclamadoXaml = new Reclamado(
-                nome: inputInstituicao?.Text ?? throw new ArgumentException("Nome não pode ser nulo"),
+                nome: inputInstituicao.Text ?? throw new ArgumentException("Nome não pode ser nulo"),
                 cpf: cpfCnpjXaml,
                 cnpj: cnpjXaml,
                 numero: short.TryParse(inputNumero?.Text, out short num) ? num : (short)0,
-                logradouro: inputRua?.Text ?? throw new ArgumentException("Rua não pode ser nula"),
-                bairro: inputBairro?.Text,
-                cidade: inputCidade?.Text ?? throw new ArgumentException("Cidade não pode ser nula"),
-                uf: inputUf?.Text ?? throw new ArgumentException("UF não pode ser nula"),
-                cep: inputCep?.Text ?? throw new ArgumentException("CEP não pode ser nulo"),
+                logradouro: inputRua.Text ?? throw new ArgumentException("Rua não pode ser nula"),
+                bairro: inputBairro.Text,
+                cidade: inputCidade.Text ?? throw new ArgumentException("Cidade não pode ser nula"),
+                uf: inputUf.Text ?? throw new ArgumentException("UF não pode ser nula"),
+                cep: inputCep.Text ?? throw new ArgumentException("CEP não pode ser nulo"),
                 telefone: string.IsNullOrWhiteSpace(inputTelefoneReclamado?.Text) ? null : inputTelefoneReclamado.Text,
                 email: string.IsNullOrWhiteSpace(inputEmail?.Text) ? null : inputEmail.Text
             );
@@ -350,12 +354,14 @@ namespace PROARC.src.Views
                 {
                     var campos = reclamadoPanel.Children;
 
+                    // Verifica se o StackPanel tem a estrutura esperada
                     if (campos.Count < 12)
                     {
                         Console.WriteLine("Erro: Campos insuficientes no StackPanel.");
                         continue;
                     }
 
+                    // Função para obter o valor de um TextBox dentro de um StackPanel
                     string GetTextBoxValue(int index, bool isRequired = false)
                     {
                         if (index >= campos.Count)
@@ -367,6 +373,7 @@ namespace PROARC.src.Views
                         if (campos[index] is StackPanel panel && panel.Children.Count > 1 && panel.Children[1] is TextBox textBox)
                         {
                             string value = textBox.Text.Trim();
+                            Console.WriteLine($"Campo {index}: {value}");
                             return (isRequired && string.IsNullOrEmpty(value)) ? throw new ArgumentException($"O campo {index} é obrigatório.") : value;
                         }
 
@@ -374,12 +381,14 @@ namespace PROARC.src.Views
                         return isRequired ? throw new ArgumentException($"O campo {index} é obrigatório.") : null;
                     }
 
+                    // Obtém o tipo de documento selecionado
                     string tipoSelecionado = string.Empty;
                     if (campos[1] is StackPanel stackPanel && stackPanel.Children.Count > 1 && stackPanel.Children[1] is ComboBox tipoDocumentoComboBox)
                     {
                         tipoSelecionado = tipoDocumentoComboBox.SelectedItem?.ToString() ?? string.Empty;
                     }
 
+                    // Obtém CPF ou CNPJ com base no tipo selecionado
                     string cpfDinamico = (tipoSelecionado == "CPF") ? GetTextBoxValue(2) : null;
                     string cnpjDinamico = (tipoSelecionado == "CNPJ") ? GetTextBoxValue(3) : null;
 
@@ -416,6 +425,33 @@ namespace PROARC.src.Views
         }
 
 
+
+        public bool Validacaos()
+        {
+            if (!Validacoes.ValidarCPF(inputCpfReclamante.Text))
+            {
+                ShowError("CPF inválido do Reclamante é Invalido.");
+                return false;
+            }
+            else if (!Validacoes.ValidarCEP(inputCep.Text))
+            {
+                ShowError("CEP inválido.");
+                return false;
+            }
+            else if (!Validacoes.ValidarEmail(inputEmailReclamante.Text))
+            {
+                ShowError("E-mail inválido.");
+                return false;
+            }
+            else if (!Validacoes.ValidarTelefone(inputNumeroReclamante.Text))
+            {
+                ShowError("Telefone inválido.");
+                return false;
+            }
+            return true;
+        }
+
+
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
             // Resetando estilos de erro
@@ -437,6 +473,8 @@ namespace PROARC.src.Views
                 return;
             }
 
+            if (!Validacaos()) { return; }
+
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
 
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
@@ -445,9 +483,22 @@ namespace PROARC.src.Views
                 inputNome.Text,
                 cpfLimpoReclamante,
                 string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
-                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text,
-                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text
+                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text,
+                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text
             );
+
+            Procurador procurador = null;
+
+            if (ProcuradorCheckBox.IsChecked == true){
+                string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
+                procurador = new Procurador(
+                inputNomeProcurador.Text,
+                cpfLimpoProcurador,
+                string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
+                string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
+                string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
+                );
+            }
 
             string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
             DateTime? dataSelecionada = calendario.Date?.DateTime;
@@ -460,24 +511,36 @@ namespace PROARC.src.Views
             short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
             string titulo = "G" + nProcesso + "/" + anoProcesso;
 
+            // Coleta os reclamados
             LinkedList<Reclamado> reclamados = CriarListaReclamados();
+
+            string conciliador = inputNomeConciliador.Text;
+
+            // Verifica se há reclamados na lista
+            if (reclamados.Count <= 0)
+            {
+                ShowError("Nenhum reclamado foi adicionado.");
+                return;
+            }
+
+            string situacao = GetSelectedRadioButton();
 
             var reclamacao = new ReclamacaoGeral(
                 motivoSelecionado,
                 reclamante,
-                null, // Procurador opcional
+                procurador, // procurador
                 reclamados,
                 titulo,
-                "Em andamento",
+                situacao,
                 caminhoPasta,
                 DateOnly.FromDateTime(DateTime.Now),
                 "Sistema",
                 dataSelecionada,
-                null // Conciliador opcional
+                conciliador
             );
 
             ButtonContinuar.IsEnabled = false;
-            bool success = await ReclamacaoControl.InsertAsync(reclamacao);
+            bool success = await ReclamacaoControl.InsertAsyncG(reclamacao);
             ButtonContinuar.IsEnabled = true;
 
             if (success)

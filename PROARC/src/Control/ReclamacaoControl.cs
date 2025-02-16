@@ -230,7 +230,7 @@ namespace PROARC.src.Control
             }
         }
 
-        public static async Task<bool> InsertAsync(ReclamacaoGeral reclamacao)
+        public static async Task<bool> InsertAsyncG(ReclamacaoGeral reclamacao)
         {
 
             try
