@@ -29,16 +29,24 @@
                     <SymbolIcon Symbol="Home" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
+            
             <NavigationViewItem Content="Lista de Reclamações" Tag="ListPageGeral" x:Name="ListPageGeralItem">
                 <NavigationViewItem.Icon>
                     <FontIcon Glyph="&#xF0E3;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
+            
             <NavigationViewItem Content="Enel" Icon="Add" ToolTipService.ToolTip="Enel" SelectsOnInvoked="False">
                 <NavigationViewItem.MenuItems>
                     <NavigationViewItem Content="Reclamações Gerais" Icon="Globe" ToolTipService.ToolTip="Reclamações Gerais" Tag="CadastrarPageGeral"/>
                     <NavigationViewItem Content="Reclamações Enel" Icon="FourBars" ToolTipService.ToolTip="Reclamações Enel" Tag="CadastrarPageEnel"/>
                 </NavigationViewItem.MenuItems>
+            </NavigationViewItem>
+
+            <NavigationViewItem Content="Cadastrar Reclamado" Tag="ControleEmpresas" x:Name="ControleEmpresas">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE731;" />
+                </NavigationViewItem.Icon>
             </NavigationViewItem>
         </NavigationView.MenuItems>
 

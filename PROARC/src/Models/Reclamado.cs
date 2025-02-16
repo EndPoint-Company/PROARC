@@ -43,7 +43,6 @@ namespace PROARC.src.Models
             this.email = email;
             this.cep = cep;
         }
-        
 
         public override string ToString()
         {

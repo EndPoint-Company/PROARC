@@ -263,8 +263,8 @@ namespace PROARC.src.Views
             }
         }
 
-       private void OnCpfCnpjTextChanged(object sender, TextChangedEventArgs e)
-       {
+        private void OnCpfCnpjTextChanged(object sender, TextChangedEventArgs e)
+        {
             if (sender is not TextBox textBox) return;
 
             string selectedType = ((ComboBoxItem)comboBoxTipoDocumento.SelectedItem).Content.ToString();
@@ -281,9 +281,9 @@ namespace PROARC.src.Views
         private string FormatDocument(string text, string type)
         {
             if (type == "CPF")
-                return FormatWithMask(text, new[] {3, 7, 11}, new[] {'.', '.', '-'});
+                return FormatWithMask(text, new[] { 3, 7, 11 }, new[] { '.', '.', '-' });
             else if (type == "CNPJ")
-                return FormatWithMask(text, new[] {2, 6, 10, 15}, new[] {'.', '.', '/', '-'});
+                return FormatWithMask(text, new[] { 2, 6, 10, 15 }, new[] { '.', '.', '/', '-' });
             return text;
         }
 
@@ -305,8 +305,8 @@ namespace PROARC.src.Views
         private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is not TextBox textBox) return;
-                    string rawText = Regex.Replace(textBox.Text, @"\D", "");
-            textBox.Text = FormatWithMask(rawText, new[] {3, 7, 11}, new[] {'.', '.', '-'});
+            string rawText = Regex.Replace(textBox.Text, @"\D", "");
+            textBox.Text = FormatWithMask(rawText, new[] { 3, 7, 11 }, new[] { '.', '.', '-' });
             textBox.SelectionStart = textBox.Text.Length;
         }
 
@@ -562,47 +562,45 @@ namespace PROARC.src.Views
             }
         }
 
-
-
         private void HighlightEmptyFields()
+        {
+            HighlightField(null, inputNProcesso, TextBlockNProcesso);
+            HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
+            HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
+            HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
+            HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
+            HighlightField(TextBlockReclamado, inputInstituicao, TextBlockInstituicao);
+            HighlightField(TextBlockReclamado, inputRua, TextBlockRua);
+            HighlightField(TextBlockReclamado, inputBairro, TextBlockBairro);
+            HighlightField(TextBlockReclamado, inputNumero, TextBlockNumero);
+            HighlightField(TextBlockReclamado, inputCidade, TextBlockCidade);
+            HighlightField(TextBlockReclamado, inputUf, TextBlockUf);
+            HighlightField(TextBlockReclamado, inputCep, TextBlockCep);
+
+            // 🟢 Validação do Motivo (ComboBox)
+            if (cbMotivo.SelectedItem == null)
             {
-                HighlightField(null, inputNProcesso, TextBlockNProcesso);
-                HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
-                HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
-                HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
-                HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
-                HighlightField(TextBlockReclamado, inputInstituicao, TextBlockInstituicao);
-                HighlightField(TextBlockReclamado, inputRua, TextBlockRua);
-                HighlightField(TextBlockReclamado, inputBairro, TextBlockBairro);
-                HighlightField(TextBlockReclamado, inputNumero, TextBlockNumero);
-                HighlightField(TextBlockReclamado, inputCidade, TextBlockCidade);
-                HighlightField(TextBlockReclamado, inputUf, TextBlockUf);
-                HighlightField(TextBlockReclamado, inputCep, TextBlockCep);
+                cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
+                TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
+            }
 
-                // 🟢 Validação do Motivo (ComboBox)
-                if (cbMotivo.SelectedItem == null)
-                {
-                    cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
-                    TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
-                }
+            // 🟢 Validação do Status (Se nenhum RadioButton foi selecionado)
+            if (!IsStatusSelected())
+            {
+                StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
+                TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
+                TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
 
-                // 🟢 Validação do Status (Se nenhum RadioButton foi selecionado)
-                if (!IsStatusSelected())
-                {
-                    StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
-                    TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
-                    TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
 
-                    radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                    radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
-                    radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
-                    radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                    radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
-
-                    TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
-                    radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
-                    radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
-                }
+                TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
+                radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
+                radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
+            }
         }
 
         private void HighlightField(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
@@ -728,7 +726,7 @@ namespace PROARC.src.Views
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            picker.FileTypeFilter.Add("*"); 
+            picker.FileTypeFilter.Add("*");
 
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);

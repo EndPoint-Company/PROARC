@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using PROARC.src.Models.Arquivos;
 
 namespace PROARC.src.Control
 {
@@ -81,10 +82,19 @@ namespace PROARC.src.Control
 
 
 
-        public static async Task InsertAsync(Reclamado reclamado)
+        public static async Task<bool> InsertAsync(Reclamado reclamado)
         {
-            var request = new { action = "insert_reclamado", reclamado };          
-            await SendRequestAsync(request);
+            var request = new { action = "insert_reclamado", reclamado };
+
+            try
+            {
+                string response = await SendRequestAsync(request);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public static async Task UpdateAsync(int id, Reclamado reclamado)

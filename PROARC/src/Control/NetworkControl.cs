@@ -11,7 +11,7 @@ namespace PROARC.src.Control
 {
     public class NetworkControl
     {
-        private static readonly string ServerIp = "192.168.18.169";
+        private static readonly string ServerIp = "192.168.1.4";
 
         private static readonly int ServerPort = 9999;
 

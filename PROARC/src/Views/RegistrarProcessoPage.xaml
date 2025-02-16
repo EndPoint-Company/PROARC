@@ -44,22 +44,22 @@
                     </StackPanel>
 
 
-                    <StackPanel Orientation="Horizontal" Margin="160,0">
-                        <StackPanel Orientation="Vertical" Spacing="32">
-                        
-                            <!-- Seção Processo / data -->
-                            <StackPanel x:Name="MainStackPanel" Orientation="Horizontal" Opacity="1">
-                                <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel Padding="40" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Height="186" Orientation="Horizontal">
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock x:Name="TextBlockNProcesso" Text="N° Reclamação" FontSize="18" FontWeight="Bold" />
-                                            <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
-                                            <TextBlock x:Name="TextBlockAnoProcesso" Text="Ano" FontSize="18" FontWeight="Bold" />
-                                            <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="200" Text="{Binding AnoProcesso}" IsReadOnly="False" />
-                                        </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="160,0">
+                    <StackPanel Orientation="Vertical" Spacing="32">
+
+                        <!-- Seção Processo / data -->
+                        <StackPanel x:Name="MainStackPanel" Orientation="Horizontal" Opacity="1">
+                            <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Padding="40" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Height="186" Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockNProcesso" Text="N° Reclamação" FontSize="18" FontWeight="Bold" />
+                                        <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
+                                        <TextBlock x:Name="TextBlockAnoProcesso" Text="Ano" FontSize="18" FontWeight="Bold" />
+                                        <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="200" Text="{Binding AnoProcesso}" IsReadOnly="False" />
+
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -364,20 +364,23 @@
 
                         </StackPanel>
                     </StackPanel>
-                
-                
-                    <!-- Botão de Continuar -->
-                    <Button 
-                        x:Name="ButtonContinuar"
-                        Content="Continuar" 
-                        HorizontalAlignment="Right" 
-                        Padding="30,10" 
-                        FontSize="16"
-                        Background="#003366" 
-                        Foreground="White" 
-                        Margin="0,0,180,0" 
-                        Click="ContinuarButton_Click"/>
+
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
-    </Page>
+
+
+                <!-- Botão de Continuar -->
+                <Button 
+                    x:Name="ButtonContinuar"
+                    Content="Continuar" 
+                    HorizontalAlignment="Right" 
+                    Padding="30,10" 
+                    FontSize="16"
+                    Background="#003366" 
+                    Foreground="White" 
+                    Margin="0,0,180,0" 
+                    Click="ContinuarButton_Click"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
+
