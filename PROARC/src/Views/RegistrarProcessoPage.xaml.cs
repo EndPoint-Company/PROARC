@@ -25,6 +25,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
 using System.Text.RegularExpressions;
 using PROARC.src.Models.Arquivos;
+using PROARC.src.Converters;
 
 namespace PROARC.src.Views
 {
@@ -309,6 +310,7 @@ namespace PROARC.src.Views
             textBox.SelectionStart = textBox.Text.Length;
         }
 
+
         private UIElement CreateDialogContent()
         {
             return new TextBox
@@ -424,6 +426,32 @@ namespace PROARC.src.Views
 
 
 
+        public bool Validacaos()
+        {
+            if (!Validacoes.ValidarCPF(inputCpfReclamante.Text))
+            {
+                ShowError("CPF inválido do Reclamante é Invalido.");
+                return false;
+            }
+            else if (!Validacoes.ValidarCEP(inputCep.Text))
+            {
+                ShowError("CEP inválido.");
+                return false;
+            }
+            else if (!Validacoes.ValidarEmail(inputEmailReclamante.Text))
+            {
+                ShowError("E-mail inválido.");
+                return false;
+            }
+            else if (!Validacoes.ValidarTelefone(inputNumeroReclamante.Text))
+            {
+                ShowError("Telefone inválido.");
+                return false;
+            }
+            return true;
+        }
+
+
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
             // Resetando estilos de erro
@@ -445,6 +473,8 @@ namespace PROARC.src.Views
                 return;
             }
 
+            if (!Validacaos()) { return; }
+
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
 
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
@@ -453,9 +483,22 @@ namespace PROARC.src.Views
                 inputNome.Text,
                 cpfLimpoReclamante,
                 string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
-                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text,
-                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text
+                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text,
+                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text
             );
+
+            Procurador procurador = null;
+
+            if (ProcuradorCheckBox.IsChecked == true){
+                string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
+                procurador = new Procurador(
+                inputNomeProcurador.Text,
+                cpfLimpoProcurador,
+                string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
+                string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
+                string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
+                );
+            }
 
             string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
             DateTime? dataSelecionada = calendario.Date?.DateTime;
@@ -471,29 +514,33 @@ namespace PROARC.src.Views
             // Coleta os reclamados
             LinkedList<Reclamado> reclamados = CriarListaReclamados();
 
+            string conciliador = inputNomeConciliador.Text;
+
             // Verifica se há reclamados na lista
-            if (reclamados.Count == 0)
+            if (reclamados.Count <= 0)
             {
                 ShowError("Nenhum reclamado foi adicionado.");
                 return;
             }
 
+            string situacao = GetSelectedRadioButton();
+
             var reclamacao = new ReclamacaoGeral(
                 motivoSelecionado,
                 reclamante,
-                null, // Procurador opcional
+                procurador, // procurador
                 reclamados,
                 titulo,
-                "Em andamento",
+                situacao,
                 caminhoPasta,
                 DateOnly.FromDateTime(DateTime.Now),
                 "Sistema",
                 dataSelecionada,
-                null // Conciliador opcional
+                conciliador
             );
 
             ButtonContinuar.IsEnabled = false;
-            bool success = await ReclamacaoControl.InsertAsync(reclamacao);
+            bool success = await ReclamacaoControl.InsertAsyncG(reclamacao);
             ButtonContinuar.IsEnabled = true;
 
             if (success)
