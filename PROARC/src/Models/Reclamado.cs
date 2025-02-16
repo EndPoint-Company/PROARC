@@ -27,7 +27,7 @@ namespace PROARC.src.Models
         private object ufAddr;
         private DateTime dateTime;
 
-        public Reclamado(string nome = null, string cpf = null, string cnpj = null,
+        public Reclamado(string nome, string cpf = null, string cnpj = null,
                          short? numero = null, string logradouro = null, string bairro = null, string cidade = null,
                          string uf = null, string cep = null, string telefone = null, string email = null)
         {
