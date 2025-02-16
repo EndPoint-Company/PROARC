@@ -39,6 +39,10 @@ namespace PROARC.src.Views
                         Frame.Navigate(typeof(LoginPage));
                         args.SelectedItemContainer.IsSelected = false;
                         break;
+                    case "ControleEmpresas":
+                        contentFrame.Navigate(typeof(ControleEmpresas));
+                        args.SelectedItemContainer.IsSelected = false;
+                        break;
                 }
             }
         }

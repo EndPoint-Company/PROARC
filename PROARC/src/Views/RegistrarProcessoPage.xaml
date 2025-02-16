@@ -45,7 +45,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="160,0">
                     <StackPanel Orientation="Vertical" Spacing="32">
-                        
+
                         <!-- Seção Processo / data -->
                         <StackPanel x:Name="MainStackPanel" Orientation="Horizontal" Opacity="1">
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
@@ -363,8 +363,8 @@
 
                     </StackPanel>
                 </StackPanel>
-                
-                
+
+
                 <!-- Botão de Continuar -->
                 <Button 
                     x:Name="ButtonContinuar"

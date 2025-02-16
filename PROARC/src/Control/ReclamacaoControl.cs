@@ -156,7 +156,7 @@ namespace PROARC.src.Control
 
             var reclamanteObj = reclamanteToken.First as JProperty;
             Reclamante reclamante = new(
-                (string?)reclamanteObj?.Value?["nome"] ?? "",               
+                (string?)reclamanteObj?.Value?["nome"] ?? "",
                 (string?)reclamanteObj?.Value?["cpf"] ?? "",
                 (string?)reclamanteObj?.Value?["rg"] ?? "",
                 (string?)reclamanteObj?.Value?["telefone"] ?? "",
@@ -254,7 +254,7 @@ namespace PROARC.src.Control
         {
             var request = new { action = "update_reclamacao", titulo, NovaReclamacao };
             string response = await SendRequestAsync(request);
-            Console.WriteLine(response);    
+            Console.WriteLine(response);
         }
         public static async Task UpdateAsync(string titulo, ReclamacaoGeral NovaReclamacao)
         {
