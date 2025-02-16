@@ -21,12 +21,6 @@
             }
         }
 
-        public Reclamante(string nome, string cpf, string? rg = null)
-        {
-            this.nome = nome;
-            this.cpf = cpf;
-            this.rg = rg;
-        }
         public Reclamante(string nome, string cpf, string? rg = null, string telefone = null, string email = null)
         {
             this.nome = nome;
