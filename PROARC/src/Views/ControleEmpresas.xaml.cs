@@ -71,7 +71,7 @@ namespace PROARC.src.Views
                 var successDialog = new ContentDialog
                 {
                     Title = "Sucesso",
-                    Content = "Empresa cadastrada com sucesso!",
+                    Content = "Reclamado cadastrado com sucesso!",
                     CloseButtonText = "OK",
                     XamlRoot = this.Content.XamlRoot
                 };
@@ -81,7 +81,7 @@ namespace PROARC.src.Views
             }
             else
             {
-                ShowError("Falha ao cadastrar empresa. Tente novamente.");
+                ShowError("Falha ao cadastrar reclamado. Tente novamente.");
             }
         }
 
