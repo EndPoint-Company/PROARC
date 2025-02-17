@@ -21,10 +21,20 @@
 	<ItemGroup>
 	  <Compile Remove="src\Converters\Class1.cs" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="Assets\reload.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Assets\reload.png" />
+	</ItemGroup>
 
   <ItemGroup>
 	  <Content Include="Assets\proarc-white-logo.ico" />
 	  <Content Include="Assets\bannerHome.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\reload.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,7 +104,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="src\Views\CadastroPage.xaml">
+    <Page Update="src\Views\ManterFuncionarios.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
