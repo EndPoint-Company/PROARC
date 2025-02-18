@@ -272,7 +272,7 @@
 
                                 <StackPanel>
                                     <TextBlock Text="Tipo de Documento" FontSize="14" Margin="0, 0, 0, 5"/>
-                                    <ComboBox x:Name="comboBoxTipoDocumentoReclamado01" PlaceholderText="Selecione CNPJ ou CPF" SelectionChanged="OnTipoDocumentoChangedReclamado01" Padding="10" Width="200">
+                                    <ComboBox x:Name="comboBoxTipoDocumentoReclamado01" PlaceholderText="Selecione CNPJ ou CPF" SelectionChanged="OnTipoDocumentoChangedReclamado01" Padding="11" Width="200">
                                         <ComboBoxItem Content="CPF"/>
                                         <ComboBoxItem Content="CNPJ"/>
                                     </ComboBox>
@@ -316,13 +316,14 @@
                                     <TextBox x:Name="inputCidadeReclamado01" PlaceholderText="Insira a cidade" Width="200" />
                                 </StackPanel>
 
+
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado01" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado01" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado01" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado01" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockCepReclamado01" Text="CEP *" FontSize="14"/>
+                                    <TextBlock x:Name="TextBlockCepReclamado01" Text="CEP *" FontSize="14" />
                                     <TextBox x:Name="inputCepReclamado01" PlaceholderText="Insira o CEP" MaxLength="9" Width="132" />
                                 </StackPanel>
                             </StackPanel>
@@ -389,8 +390,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado02" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado02" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado02" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado02" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -461,8 +462,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado03" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado03" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado03" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado03" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -533,8 +534,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado04" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado04" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado04" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado04" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -605,8 +606,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado05" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado05" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado05" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado05" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -677,8 +678,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado06" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado06" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado06" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado06" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -749,8 +750,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado07" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado07" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado07" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado07" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -821,8 +822,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado08" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado08" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado08" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado08" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -893,8 +894,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado09" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado09" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado09" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado09" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -965,8 +966,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado10" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado10" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado10" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado10" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -1037,8 +1038,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado11" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado11" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado11" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado11" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -1109,8 +1110,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado12" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado12" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado12" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado12" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -1181,8 +1182,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado13" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado13" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado13" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado13" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -1253,8 +1254,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado14" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado14" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado14" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado14" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -1325,8 +1326,8 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado15" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado15" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado15" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado15" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
 
                                 <StackPanel>
@@ -1397,9 +1398,10 @@
                                 </StackPanel>
 
                                 <StackPanel>
-                                    <TextBlock x:Name="TextBlockUfReclamado16" Text="UF *" FontSize="14"/>
-                                    <TextBox x:Name="inputUfReclamado16" PlaceholderText="Insira a UF" Width="80" />
+                                    <TextBlock x:Name="TextBlockUfReclamado16" Text="UF *" FontSize="14" Margin="0, 0, 0, 5"/>
+                                    <ComboBox x:Name="comboBoxUfReclamado16" PlaceholderText="Selecione a UF" Padding="11" Width="88"/>
                                 </StackPanel>
+
 
                                 <StackPanel>
                                     <TextBlock x:Name="TextBlockCepReclamado16" Text="CEP *" FontSize="14"/>

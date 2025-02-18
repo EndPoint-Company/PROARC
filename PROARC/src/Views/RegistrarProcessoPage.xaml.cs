@@ -73,6 +73,10 @@ namespace PROARC.src.Views
             // Chama manualmente o evento SelectionChanged
             OnQuantidadeReclamados(comboBoxQuantidadeReclamado, null);
 
+
+            // Preenche os ComboBox de UF para todos os reclamados
+            PreencherComboBoxUfTodosReclamados();
+
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -398,6 +402,31 @@ namespace PROARC.src.Views
             };
         }
 
+        private void PreencherComboBoxUfTodosReclamados()
+        {
+            // Lista de UFs do Brasil
+            List<string> ufs = new List<string>
+    {
+        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+        "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+        "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    };
+
+            // Itera sobre os 16 reclamados
+            for (int i = 1; i <= 16; i++)
+            {
+                // Obtém o ComboBox do reclamado atual
+                var comboBoxUf = FindName($"comboBoxUfReclamado{i:00}") as ComboBox;
+
+                // Verifica se o ComboBox foi encontrado
+                if (comboBoxUf != null)
+                {
+                    // Preenche o ComboBox com as UFs
+                    comboBoxUf.ItemsSource = ufs;
+                }
+            }
+        }
+
         public LinkedList<Reclamado> CriarListaReclamados()
         {
             // Cria uma nova LinkedList para armazenar os reclamados
@@ -412,7 +441,11 @@ namespace PROARC.src.Views
             {
                 Debug.WriteLine($"Processando reclamado {i}...");
 
+
+                var comboBox = FindName($"comboBoxUfReclamado{i:00}") as ComboBox;
                 // Obtém os controles do reclamado atual
+
+
                 var inputNomeReclamado = FindName($"inputNomeReclamado{i:00}") as TextBox;
                 var inputCpfReclamado = FindName($"inputCpfReclamado{i:00}") as TextBox;
                 var inputCnpjReclamado = FindName($"inputCnpjReclamado{i:00}") as TextBox;
@@ -420,7 +453,7 @@ namespace PROARC.src.Views
                 var inputRuaReclamado = FindName($"inputRuaReclamado{i:00}") as TextBox;
                 var inputBairroReclamado = FindName($"inputBairroReclamado{i:00}") as TextBox;
                 var inputCidadeReclamado = FindName($"inputCidadeReclamado{i:00}") as TextBox;
-                var inputUfReclamado = FindName($"inputUfReclamado{i:00}") as TextBox;
+                var inputUfReclamado = comboBox?.SelectedItem?.ToString() ?? string.Empty;
                 var inputCepReclamado = FindName($"inputCepReclamado{i:00}") as TextBox;
                 var inputTelefoneReclamado = FindName($"inputTelefoneReclamado{i:00}") as TextBox;
                 var inputEmailReclamado = FindName($"inputEmailReclamado{i:00}") as TextBox;
@@ -439,7 +472,7 @@ namespace PROARC.src.Views
                         logradouro: string.IsNullOrWhiteSpace(inputRuaReclamado?.Text) ? null : inputRuaReclamado.Text,
                         bairro: string.IsNullOrWhiteSpace(inputBairroReclamado?.Text) ? null : inputBairroReclamado.Text,
                         cidade: string.IsNullOrWhiteSpace(inputCidadeReclamado?.Text) ? null : inputCidadeReclamado.Text,
-                        uf: string.IsNullOrWhiteSpace(inputUfReclamado?.Text) ? null : inputUfReclamado.Text,
+                        uf: string.IsNullOrWhiteSpace(inputUfReclamado) ? null : inputUfReclamado,
                         cep: string.IsNullOrWhiteSpace(inputCepReclamado?.Text) ? null : inputCepReclamado.Text,
                         telefone: string.IsNullOrWhiteSpace(inputTelefoneReclamado?.Text) ? null : inputTelefoneReclamado.Text,
                         email: string.IsNullOrWhiteSpace(inputEmailReclamado?.Text) ? null : inputEmailReclamado.Text
@@ -603,7 +636,7 @@ namespace PROARC.src.Views
                 var inputNumeroReclamado = FindName($"inputNumeroReclamado{i:00}") as TextBox;
                 var inputBairroReclamado = FindName($"inputBairroReclamado{i:00}") as TextBox;
                 var inputCidadeReclamado = FindName($"inputCidadeReclamado{i:00}") as TextBox;
-                var inputUfReclamado = FindName($"inputUfReclamado{i:00}") as TextBox;
+                var inputUfReclamado = FindName($"comboBoxUfReclamado{i:00}") as TextBox;
                 var inputCepReclamado = FindName($"inputCepReclamado{i:00}") as TextBox;
 
                 // Valida os campos do reclamado atual
@@ -612,7 +645,7 @@ namespace PROARC.src.Views
                 HighlightField(textBlockReclamado, inputNumeroReclamado, FindName($"TextBlockNumeroReclamado{i:00}") as TextBlock);
                 HighlightField(textBlockReclamado, inputBairroReclamado, FindName($"TextBlockBairroReclamado{i:00}") as TextBlock);
                 HighlightField(textBlockReclamado, inputCidadeReclamado, FindName($"TextBlockCidadeReclamado{i:00}") as TextBlock);
-                HighlightField(textBlockReclamado, inputUfReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
+                //HighlightField(textBlockReclamado, inputUfReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
                 HighlightField(textBlockReclamado, inputCepReclamado, FindName($"TextBlockCepReclamado{i:00}") as TextBlock);
             }
 
@@ -679,7 +712,7 @@ namespace PROARC.src.Views
                 var inputNumeroReclamado = FindName($"inputNumeroReclamado{i:00}") as TextBox;
                 var inputBairroReclamado = FindName($"inputBairroReclamado{i:00}") as TextBox;
                 var inputCidadeReclamado = FindName($"inputCidadeReclamado{i:00}") as TextBox;
-                var inputUfReclamado = FindName($"inputUfReclamado{i:00}") as TextBox;
+                var inputUfReclamado = FindName($"comboBoxUfReclamado{i:00}") as TextBox;
                 var inputCepReclamado = FindName($"inputCepReclamado{i:00}") as TextBox;
 
                 // Reseta os campos do reclamado atual
@@ -688,7 +721,7 @@ namespace PROARC.src.Views
                 ResetFieldStyle(textBlockReclamado, inputNumeroReclamado, FindName($"TextBlockNumeroReclamado{i:00}") as TextBlock);
                 ResetFieldStyle(textBlockReclamado, inputBairroReclamado, FindName($"TextBlockBairroReclamado{i:00}") as TextBlock);
                 ResetFieldStyle(textBlockReclamado, inputCidadeReclamado, FindName($"TextBlockCidadeReclamado{i:00}") as TextBlock);
-                ResetFieldStyle(textBlockReclamado, inputUfReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
+                //ResetFieldStyle(textBlockReclamado, inputUfReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
                 ResetFieldStyle(textBlockReclamado, inputCepReclamado, FindName($"TextBlockCepReclamado{i:00}") as TextBlock);
             }
 
