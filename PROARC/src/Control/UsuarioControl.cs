@@ -19,12 +19,9 @@ namespace PROARC.src.Control
                 return false;
             }
 
-
-            var ipEndPoint = new IPEndPoint(IPAddress.Parse("34.39.145.11"), 9999);
-
-
             using TcpClient client = new();
-            await client.ConnectAsync(ipEndPoint);
+            if (!client.ConnectAsync(NetworkControl.GetAddr()).Wait(2000))
+                throw new SocketException((int)SocketError.NotConnected);
 
             NetworkStream stream = client.GetStream();
 

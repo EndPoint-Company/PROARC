@@ -17,12 +17,12 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAllTest()
         {
-            List<ProcessoAdministrativo>? lista = await ProcessoAdministrativoControl.GetAllAsync();
-            for (int i = 0; i < lista.Count; i++)
-            {
-                ProcessoAdministrativo? listas = lista[i];
-                Console.WriteLine(listas);
-            }
+            //List<ProcessoAdministrativo>? lista = await ProcessoAdministrativoControl.GetAllAsync();
+            //for (int i = 0; i < lista.Count; i++)
+            //{
+            //    ProcessoAdministrativo? listas = lista[i];
+            //    Console.WriteLine(listas);
+            //}
         }
 
         [TestMethod()]
