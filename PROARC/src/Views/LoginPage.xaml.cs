@@ -39,9 +39,9 @@ namespace PROARC.src.Views
             {
                 senhaValida = await LoginConnect(CaixaSenha.Password);
             }
-            catch (Exception ex)
+            catch (SocketException ex)
             {
-                ErrorText.Text = "Erro ao conectar com o servidor";
+                ErrorText.Text = $"Erro ao conectar com o servidor.";
             }
 
             carregando.Visibility = Visibility.Collapsed;

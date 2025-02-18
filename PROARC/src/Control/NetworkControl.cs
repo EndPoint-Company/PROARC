@@ -14,9 +14,6 @@ namespace PROARC.src.Control
 {
     public class NetworkControl
     {
-        private static readonly string ServerIp = "127.0.0.1";
-        private static readonly int ServerPort = 9999;
-
         public static IPEndPoint GetAddr()
         {
             JObject data = JObject.Parse(File.ReadAllText(@"Assets/config.json"));
