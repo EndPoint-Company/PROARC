@@ -20,7 +20,7 @@ namespace PROARC.src.Views
     {
         public ObservableCollection<Reclamacao?> Processos { get; set; } = new();
         private bool _isLoading;
-        private int _limit = 4;
+        private int _limit = 15;
         private int _offset = 0;
         private int _paginaAtual = 1;
 
@@ -55,6 +55,13 @@ namespace PROARC.src.Views
             _ = CarregarProcessos();
         }
 
+
+        private async void _NovoProcessoBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(RegistrarProcesso01Page));
+        }
+
+
         private int _totalProcessos = 0; // Guarda o total de processos disponíveis
 
         private async Task CarregarProcessos()
@@ -72,7 +79,7 @@ namespace PROARC.src.Views
                 // Primeiro, pegamos o total de processos se ainda não tivermos essa informação
                 if (_totalProcessos == 0)
                 {
-                    _totalProcessos = await ReclamacaoControl.CountAsync(); // Método fictício que retorna o total
+                    _totalProcessos = await ReclamacaoControl.CountAsync();
                 }
 
                 var processos = await ReclamacaoControl.GetNRows(_limit, _offset);
@@ -136,7 +143,7 @@ namespace PROARC.src.Views
                 OnPropertyChanged(nameof(PaginaAtual));
                 await CarregarProcessos();
             }
-        }
+        }   
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
