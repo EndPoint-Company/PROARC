@@ -19,6 +19,12 @@
 		<AppxPackage>false</AppxPackage>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="src\NewFolder1\**" />
+	  <EmbeddedResource Remove="src\NewFolder1\**" />
+	  <None Remove="src\NewFolder1\**" />
+	  <Page Remove="src\NewFolder1\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Compile Remove="src\Converters\Class1.cs" />
 	</ItemGroup>
 	<ItemGroup>
@@ -120,5 +126,8 @@
     <Page Update="src\Views\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="src\NewFolder1\**" />
   </ItemGroup>
 </Project>

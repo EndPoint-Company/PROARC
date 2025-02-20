@@ -4,16 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PROARC.src.Views"
     xmlns:models="using:PROARC.src.Models.Arquivos"
+    xmlns:viewModels="using:PROARC.src.ViewModels"
     xmlns:converters="using:PROARC.src.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Page.Resources>
-        <converters:NullToNAConverter x:Key="NullToNAConverter"/>
-        <converters:ReclamacaoDataAudienciaConverter x:Key="ReclamacaoDataAudienciaConverter"/>
-    </Page.Resources>
 
     <Grid Background="#FAFAFA">
         <Grid.Resources>
@@ -31,7 +28,10 @@
                 <TextBlock Text="Processos Administrativos" FontSize="32" FontWeight="Bold" Margin="40,40,160,0" />
 
                 <StackPanel Orientation="Horizontal" Spacing="10">
-                    <TextBox PlaceholderText="Pesquisar" Width="300"/>
+                    <TextBox PlaceholderText="Pesquisar"
+                             Width="300"
+                             Text="{Binding PesquisaTitulo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="PesquisarProcesso"/>
 
                     <Button Content="Novo processo" Padding="30,10" FontSize="16" Background="#003366" Foreground="White"  Click="_NovoProcessoBtn_Click"/>
 
@@ -60,19 +60,19 @@
 
                 <Grid Margin="20,0,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="150" />
                         <ColumnDefinition Width="250" />
                         <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="100" />
                         <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="250" />
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Nº Processo" FontSize="24" FontWeight="SemiBold" Grid.Column="0" />
                     <TextBlock Text="Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="1" />
-                    <TextBlock Text="CPF do Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="2" />
+                    <TextBlock Text="CPF Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="2" />
                     <TextBlock Text="Reclamado" FontSize="24" FontWeight="SemiBold" Grid.Column="3" />
                     <TextBlock Text="Criado" FontSize="24" FontWeight="SemiBold" Grid.Column="4" />
                     <TextBlock Text="Audiência" FontSize="24" FontWeight="SemiBold" Grid.Column="5" />
@@ -82,74 +82,70 @@
 
                 <ListView ItemsSource="{Binding Processos}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Reclamacao">
+                        <DataTemplate x:DataType="viewModels:ReclamacaoViewModel">
                             <Grid RightTapped="Processo_RightTapped">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="150" />
                                     <ColumnDefinition Width="250" />
                                     <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="250" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="{x:Bind Titulo, Converter={StaticResource NullToNAConverter}}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind Titulo}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="{x:Bind Titulo}" Placement="Mouse"/>
                                     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind Reclamante.Nome, Converter={StaticResource NullToNAConverter}}" Grid.Column="1" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind Reclamante}" Grid.Column="1" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="{x:Bind Reclamante.Nome}" Placement="Mouse"/>
+                                        <ToolTip Content="{x:Bind Reclamante}" Placement="Mouse"/>
                                     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind Reclamante.CpfFormatado, Converter={StaticResource NullToNAConverter}}" Grid.Column="2" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind Cpf}" Grid.Column="2" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="{x:Bind Reclamante.CpfFormatado}" Placement="Mouse"/>
+                                        <ToolTip Content="{x:Bind Cpf}" Placement="Mouse"/>
                                     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <ComboBox x:Name="ReclamadosComboBox" 
-                                          ItemsSource="{x:Bind Reclamados}" 
-                                          DisplayMemberPath="Nome"
-                                          
-                                          FontSize="16" Margin="5">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Nome}" TextTrimming="CharacterEllipsis"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                                <TextBlock Text="{x:Bind PrimeiroReclamadoNome}" Grid.Column="3" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                    <ToolTipService.ToolTip>
+                                        <ToolTip Content="{x:Bind PrimeiroReclamadoNome}" Placement="Mouse"/>
+                                    </ToolTipService.ToolTip>
+                                </TextBlock>
 
-
-
-                                <TextBlock Text="{x:Bind DataAbertura, Converter={StaticResource NullToNAConverter}}" Grid.Column="4" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind DataAbertura}" Grid.Column="4" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="{x:Bind DataAbertura}" Placement="Mouse"/>
                                     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{Binding Converter={StaticResource ReclamacaoDataAudienciaConverter}}" Grid.Column="5" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind DataAudiencia}" Grid.Column="5" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="{Binding Converter={StaticResource ReclamacaoDataAudienciaConverter}}" Placement="Mouse"/>
+                                        <ToolTip Content="{x:Bind DataAudiencia}" Placement="Mouse"/>
                                     </ToolTipService.ToolTip>
                                 </TextBlock>
 
-                                <TextBlock Text="{x:Bind Motivo.Nome, Converter={StaticResource NullToNAConverter}}" Grid.Column="6" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                <TextBlock Text="{x:Bind Motivo}" Grid.Column="6" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="{x:Bind Motivo.Nome}" Placement="Mouse"/>
+                                        <ToolTip Content="{x:Bind Status}" Placement="Mouse"/>
                                     </ToolTipService.ToolTip>
                                 </TextBlock>
+                                
 
-                                <TextBlock Text="{x:Bind Situacao, Converter={StaticResource NullToNAConverter}}" Grid.Column="7" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
-                                    <ToolTipService.ToolTip>
-                                        <ToolTip Content="{x:Bind Situacao}" Placement="Mouse"/>
-                                    </ToolTipService.ToolTip>
-                                </TextBlock>
+                                <ComboBox ItemsSource="{x:Bind StatusList}" 
+                                      SelectedItem="{x:Bind Status, Mode=TwoWay}" 
+                                      Grid.Column="7" 
+                                      FontSize="16" 
+                                      Margin="5">
+                                    
+                                </ComboBox>
+
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
