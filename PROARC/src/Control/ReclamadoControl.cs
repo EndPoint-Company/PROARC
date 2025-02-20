@@ -80,8 +80,6 @@ namespace PROARC.src.Control
             return reclamados;
         }
 
-
-
         public static async Task<bool> InsertAsync(Reclamado reclamado)
         {
             var request = new { action = "insert_reclamado", reclamado };

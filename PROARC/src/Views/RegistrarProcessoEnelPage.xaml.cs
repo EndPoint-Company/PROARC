@@ -212,25 +212,6 @@ namespace PROARC.src.Views
             }
         }
 
-        private void OnCepTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is not TextBox textBox) return;
-            string rawText = Regex.Replace(textBox.Text, @"\D", "");
-            textBox.Text = FormatDocument(rawText, "CEP");
-            textBox.SelectionStart = textBox.Text.Length;
-        }
-
-        private string FormatDocument(string text, string type)
-        {
-            if (type == "CPF")
-                return FormatWithMask(text, new[] { 3, 7, 11 }, new[] { '.', '.', '-' });
-            else if (type == "CNPJ")
-                return FormatWithMask(text, new[] { 2, 6, 10, 15 }, new[] { '.', '.', '/', '-' });
-            else if (type == "CEP")
-                return FormatWithMask(text, new[] { 5 }, new[] { '-' });
-            return text;
-        }
-
         private string FormatWithMask(string text, int[] positions, char[] separators)
         {
             if (text.Length == 0) return text;
@@ -340,7 +321,7 @@ namespace PROARC.src.Views
             string situacao = GetSelectedRadioButton();
             string observacao = inputObservacao.Text;
 
-            Reclamado? enel = await ReclamadoControl.GetAsync(63);
+            Reclamado? enel = await ReclamadoControl.GetAsync(74);
 
             if (enel != null)
             {

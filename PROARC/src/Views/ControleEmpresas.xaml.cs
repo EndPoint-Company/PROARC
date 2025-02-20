@@ -186,14 +186,6 @@ namespace PROARC.src.Views
             return formattedText;
         }
 
-        private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is not TextBox textBox) return;
-            string rawText = Regex.Replace(textBox.Text, @"\D", "");
-            textBox.Text = FormatWithMask(rawText, new[] { 3, 7, 11 }, new[] { '.', '.', '-' });
-            textBox.SelectionStart = textBox.Text.Length;
-        }
-
         // SOMBRAS
         private void ConfigureShadows()
         {
