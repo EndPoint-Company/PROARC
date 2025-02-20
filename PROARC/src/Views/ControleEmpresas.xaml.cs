@@ -71,7 +71,7 @@ namespace PROARC.src.Views
                 var successDialog = new ContentDialog
                 {
                     Title = "Sucesso",
-                    Content = "Empresa cadastrada com sucesso!",
+                    Content = "Reclamado cadastrado com sucesso!",
                     CloseButtonText = "OK",
                     XamlRoot = this.Content.XamlRoot
                 };
@@ -81,7 +81,7 @@ namespace PROARC.src.Views
             }
             else
             {
-                ShowError("Falha ao cadastrar empresa. Tente novamente.");
+                ShowError("Falha ao cadastrar reclamado. Tente novamente.");
             }
         }
 
@@ -184,14 +184,6 @@ namespace PROARC.src.Views
             }
 
             return formattedText;
-        }
-
-        private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is not TextBox textBox) return;
-            string rawText = Regex.Replace(textBox.Text, @"\D", "");
-            textBox.Text = FormatWithMask(rawText, new[] { 3, 7, 11 }, new[] { '.', '.', '-' });
-            textBox.SelectionStart = textBox.Text.Length;
         }
 
         // SOMBRAS

@@ -1,0 +1,307 @@
+<Page
+    x:Class="PROARC.src.Views.RegistrarProcessoEnelPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sys="using:System"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Background="#FAFAFA">
+        <!-- Estilos Comuns -->
+        <Grid.Resources>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="CornerRadius" Value="5"/>
+            </Style>
+
+            <ThemeShadow x:Name="SharedShadow" />
+        </Grid.Resources>
+        <ScrollViewer>
+            <StackPanel Padding="20" Spacing="32" Margin="0,0,0, 40">
+                <!-- Título -->
+                <TextBlock Text="CADASTRAR RECLAMAÇÃO ENEL" 
+                           FontSize="32" 
+                           FontWeight="Bold" 
+                           Margin="160,40, 160, 0" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160, 0" Spacing="10">
+                    <Button x:Name="btnProcessoNovo" 
+                        Content="Reclamação Nova" 
+                        Padding="20,10" 
+                        Background="#003366" 
+                        Foreground="White" 
+                        Click="ProcessoNovo_Click" />
+                    <Button x:Name="btnProcessoAntigo" 
+                        Content="Reclamação Antiga" 
+                        Padding="20,10" 
+                        Background="White" 
+                        BorderBrush="#005BC1" 
+                        Foreground="#003366"     
+                        Click="ProcessoAntigo_Click" />
+                </StackPanel>
+
+
+                <StackPanel Orientation="Horizontal" Margin="160,0">
+                    <StackPanel Orientation="Vertical" Spacing="32">
+
+                        <!-- Seção Processo / data -->
+                        <StackPanel x:Name="MainStackPanel" Orientation="Horizontal" Opacity="1">
+                            <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Padding="40" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Height="186" Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockNProcesso" Text="N° Reclamação" FontSize="18" FontWeight="Bold" />
+                                        <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
+                                        <TextBlock x:Name="TextBlockAnoProcesso" Text="Ano" FontSize="18" FontWeight="Bold" />
+                                        <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="200" Text="{Binding AnoProcesso}" IsReadOnly="False" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="32">
+
+                            <!-- Seção Motivo -->
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                                <StackPanel Padding="40" Background="#FFF" Spacing="10" Height="186" CornerRadius="0, 10, 10, 0" x:Name="MotivoSection" Shadow="{StaticResource SharedShadow}" Width="376">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock x:Name="TextBlockMotivo" Text="Motivo" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Grid.Column="0" />
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" Width="180"/>
+                                        <Button Content="Novo Motivo" Grid.Column="1" Click="OnNovoMotivoClick" Background="#003366" Foreground="White" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Seção Atendente -->
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                                <StackPanel Padding="40" Height="186" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="376" x:Name="AtendenteSection" Shadow="{StaticResource SharedShadow}">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Atendente" FontSize="18" FontWeight="Bold" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="TextBlockAtendente" FontSize="14"/>
+                                            <TextBox 
+                                                    x:Name="inputNomeAtendente" 
+                                                    PlaceholderText="Insira o nome do(a) atendente"
+                                                    Width="260"
+                                                    />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Seção Status -->
+                    <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
+                        <!-- Barra lateral azul -->
+                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10"/>
+
+                        <!-- Conteúdo da seção Status -->
+                        <StackPanel Padding="40, 30" Background="#FFF" Spacing="20" CornerRadius="0, 10, 10, 0" x:Name="StatusSection" Shadow="{StaticResource SharedShadow}" Width="638" >
+                            <!-- Título -->
+                            <TextBlock x:Name="TextBlockStatus" Text="Situação" FontSize="18" FontWeight="Bold" />
+
+                            <!-- Status: Em tramitação -->
+                            <StackPanel>
+                                <TextBlock x:Name="TextBlockTramitacao" Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
+                                <StackPanel>
+                                    <RadioButton x:Name="radio_agFazerNotificacao" Content="Aguardando fazer notificação" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agRealizacaoAudiencia" Content="Aguardando realização da audiência" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agResposta" Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agEnvioNotificacao" Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agDocumentacao" Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Status: Arquivado -->
+                            <StackPanel>
+                                <TextBlock x:Name="TextBlockArquivado" Text="Arquivado" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
+                                <StackPanel>
+                                    <RadioButton x:Name="radio_atendido" Content="Atendido" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_naoAtendido" Content="Não Atendido" GroupName="StatusGroup"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <Grid Margin="160, 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="32"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Seção Reclamante -->
+                    <Grid Grid.Column="0">
+                        <Border Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" HorizontalAlignment="Left"/>
+
+                        <Border x:Name="ReclamanteSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}"
+                Padding="40" Background="#FFF" Width="1000" Margin="10, 0, 0, 0">
+                            <StackPanel Spacing="10">
+                                <TextBlock x:Name="TextBlockReclamante" Text="Reclamante" FontSize="18" FontWeight="Bold" />
+                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockNomeReclamante" Text="Nome *" FontSize="14"/>
+                                        <TextBox x:Name="inputNomeReclamante" PlaceholderText="Insira o nome completo" Width="300" MaxLength="100"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockCpfReclamante" Text="CPF *" FontSize="14"/>
+                                        <TextBox x:Name="inputCpfReclamante" TextChanged="OnCpfTextChanged" MaxLength="14" PlaceholderText="Insira o CPF" Width="188"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="RG" FontSize="14"/>
+                                        <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="188" MaxLength="10"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockEmailReclamante" Text="E-mail" FontSize="14"/>
+                                        <TextBox x:Name="inputEmailReclamante" PlaceholderText="Insira o e-mail completo" Width="300" MaxLength="100"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock x:Name="TextBlockCpfNumeroReclamante" Text="Telefone Celular" FontSize="14"/>
+                                        <TextBox x:Name="inputNumeroReclamante" PlaceholderText="Insira o número celular" Width="188" MaxLength="11"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10" Checked="ProcuradorCheckBox_Checked" Unchecked="ProcuradorCheckBox_Unchecked" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Seção Observação -->
+                    <Grid Grid.Column="2">
+                        <Border Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" HorizontalAlignment="Left"/>
+                        <Border x:Name="ObservacaoSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}"
+                Padding="40" Background="#FFF" Width="434" Margin="10, 0, 0, 0">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Observação" FontSize="18" FontWeight="Bold" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="TextBlockObservacao" FontSize="14"/>
+                                    <TextBox 
+                                        x:Name="inputObservacao" 
+                                        PlaceholderText="Insira a observação"
+                                        Width="340" 
+                                        Height="150"
+                                        TextWrapping="Wrap"
+                                        AcceptsReturn="True"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- Contêiner principal para o StackPanel Procurador -->
+                <StackPanel Orientation="Horizontal" Margin="160, 0" x:Name="ProcuradorSection1" Visibility="Collapsed">
+                    <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+
+                    <!-- Seção Procurador -->
+                    <StackPanel Padding="40" Background="#FFF" Spacing="10" x:Name="ProcuradorSection2" Shadow="{StaticResource SharedShadow}" Width="1478" CornerRadius="0, 10, 10, 0">
+                        <TextBlock x:Name="TextBlockProcurador" Text="Procurador" FontSize="18" FontWeight="Bold" />
+
+                        <!-- Primeira Linha -->
+                        <StackPanel Orientation="Horizontal" Spacing="20">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Nome *" FontSize="14"/>
+                                <TextBox x:Name="inputNomeProcurador" PlaceholderText="Insira o nome completo" Width="300" MaxLength="100"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="CPF *" FontSize="14"/>
+                                <TextBox x:Name="inputCpfProcurador" PlaceholderText="Insira o CPF" Width="188" MaxLength="14" TextChanged="OnCpfTextChanged" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="RG" FontSize="14"/>
+                                <TextBox x:Name="inputRgProcurador" PlaceholderText="Insira o RG" Width="188" MaxLength="10" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="20">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock x:Name="TextBlockEmailProcurado" Text="E-mail" FontSize="14"/>
+                                    <TextBox x:Name="inputEmailProcurador" PlaceholderText="Insira o e-mail completo" Width="300" MaxLength="100"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock x:Name="TextBlockNumeroProcurado" Text="Telefone Celular" FontSize="14"/>
+                                    <TextBox x:Name="inputNumeroProcurador" MaxLength="11" PlaceholderText="Insira o número celular" Width="188"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="160,0">
+                    <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+
+                    <StackPanel Padding="40" Spacing="20" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478" >
+                        <TextBlock Text="Anexar Arquivos" FontSize="18" FontWeight="Bold" />
+
+                        <!-- Área para Arrastar e Soltar Arquivos -->
+                        <Border x:Name="DragDropArea" 
+                                BorderBrush="#d8d9d7" 
+                                BorderThickness="1" 
+                                Background="#F7F7F7" 
+                                CornerRadius="5" 
+                                Height="150" 
+                                AllowDrop="True" 
+                                Drop="DragDropArea_Drop" 
+                                DragOver="DragDropArea_DragOver">
+
+                            <Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                                    <Button Content="Procurar Arquivos" 
+                                            x:Name="PickFileButton" 
+                                            Background="#003366" 
+                                            Foreground="White" 
+                                            Padding="10,5" 
+                                            HorizontalAlignment="Center" 
+                                            Click="PickFileButton_Click"
+                                            CornerRadius="5"/>
+
+                                    <TextBlock Text="ou arraste um arquivo até aqui" 
+                                               HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center" 
+                                               FontSize="14" 
+                                               Foreground="Gray" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Lista de Arquivos Anexados -->
+                        <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
+                            <TextBlock Text="Nenhum arquivo selecionado."
+                               x:Name="MensagemNenhumArquivo"
+                               FontSize="14"
+                               Foreground="Gray" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+
+
+                <!-- Botão de Continuar -->
+                <Button 
+                    x:Name="ButtonContinuar"
+                    Content="Continuar" 
+                    HorizontalAlignment="Right" 
+                    Padding="30,10" 
+                    FontSize="16"
+                    Background="#003366" 
+                    Foreground="White" 
+                    Margin="0,0,180,0" 
+                    Click="ContinuarButton_Click"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
