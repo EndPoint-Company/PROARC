@@ -97,8 +97,14 @@ namespace PROARC.src.Control
                     reclamacao.Criador = (string)recl["criador"];
                     reclamacao.DataCriacao = (DateTime)recl["created_at"];
                     reclamacao.DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]);
-                    if (esp["data_audiencia"].HasValues)
+                    try
+                    {
                         reclamacao.DataAudiencia = (DateTime)esp["data_audiencia"];
+                    }
+                    catch (Exception ex)
+                    {
+                        reclamacao.DataAudiencia = null;
+                    }
                     reclamacao.Conciliador = (string)esp["conciliador"];
 
                     reclamacoes.AddLast(reclamacao);

@@ -5,6 +5,7 @@
 
 # Credentials
 credentials.json
+config.json
 
 # User-specific files
 *.rsuser

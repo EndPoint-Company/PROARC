@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -11,14 +14,26 @@ namespace PROARC.src.Control
 {
     public class NetworkControl
     {
-        private static readonly string ServerIp = "34.39.145.11";
+        public static IPEndPoint GetAddr()
+        {
+            JObject data = JObject.Parse(File.ReadAllText(@"Assets/config.json"));
+            string? ipAddr = (string?)data.GetValue("ip_addr");
+            int? portAddr = (int?)data.GetValue("port_addr");
 
-        private static readonly int ServerPort = 9999;
+            Console.WriteLine(ipAddr + ":" + portAddr);
+
+            if (ipAddr == null)
+                throw new ArgumentNullException(nameof(ipAddr), "Tá faltando um IP aí, meu fi");
+            if (portAddr == null)
+                throw new ArgumentNullException(nameof(portAddr), "Tá faltando uma porta aí, meu fi");
+
+            return new IPEndPoint(IPAddress.Parse(ipAddr), portAddr.Value);
+        }
 
         public static async Task<string> SendRequestAsync(object request)
         {
             using TcpClient client = new();
-            if (!client.ConnectAsync(ServerIp, ServerPort).Wait(2000))
+            if (!client.ConnectAsync(GetAddr()).Wait(2000))
                 throw new SocketException((int)SocketError.NotConnected);
 
             await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));
