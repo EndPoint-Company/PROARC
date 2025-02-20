@@ -13,16 +13,18 @@ using PROARC.src.Control;
 using PROARC.src.Models;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Models.Tipos;
+using PROARC.src.ViewModels;
 
 namespace PROARC.src.Views
 {
     public sealed partial class ProcessosListaPage : Page, INotifyPropertyChanged
     {
-        public ObservableCollection<Reclamacao?> Processos { get; set; } = new();
+        public ObservableCollection<ReclamacaoViewModel> Processos { get; set; } = new();
         private bool _isLoading;
         private int _limit = 15;
         private int _offset = 0;
         private int _paginaAtual = 1;
+        private int _totalProcessos = 0;
 
         public int PaginaAtual
         {
@@ -46,6 +48,38 @@ namespace PROARC.src.Views
             });
         }
 
+        private async void Processo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Status")
+            {
+                if (sender is ReclamacaoViewModel processoViewModel)
+                {
+                    var modeloOriginal = processoViewModel.ObterModeloOriginal();
+
+
+                    if (modeloOriginal.Situacao == processoViewModel.Status)
+                    {
+                        Debug.WriteLine(" Nenhuma alteração detectada, ignorando atualização.");
+                        return;
+                    }
+
+                    modeloOriginal.Situacao = processoViewModel.Status; // Atualiza o modelo original aqui
+
+                    if (modeloOriginal is ReclamacaoEnel reclamacaoEnel)
+                    {
+                        await ReclamacaoControl.UpdateAsync(processoViewModel.Titulo, reclamacaoEnel);
+                    }
+                    else if (modeloOriginal is ReclamacaoGeral reclamacaoGeral)
+                    {
+                        await ReclamacaoControl.UpdateAsync(processoViewModel.Titulo, reclamacaoGeral);
+                    }
+                }
+            }
+        }
+
+
+
+
 
 
         public ProcessosListaPage()
@@ -56,13 +90,14 @@ namespace PROARC.src.Views
         }
 
 
-        private async void _NovoProcessoBtn_Click(object sender, RoutedEventArgs e)
+        private async void PesquisarProcesso(object sender, TextChangedEventArgs e)
         {
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
+
         }
 
 
-        private int _totalProcessos = 0; // Guarda o total de processos disponíveis
+
+
 
         private async Task CarregarProcessos()
         {
@@ -74,30 +109,25 @@ namespace PROARC.src.Views
 
             try
             {
-                Debug.WriteLine($"🔄 Buscando processos... Página {_paginaAtual}");
-
-                // Primeiro, pegamos o total de processos se ainda não tivermos essa informação
                 if (_totalProcessos == 0)
                 {
                     _totalProcessos = await ReclamacaoControl.CountAsync();
                 }
 
                 var processos = await ReclamacaoControl.GetNRows(_limit, _offset);
-
-                // Limpa os processos para carregar a nova página corretamente
                 DispatcherQueue.TryEnqueue(() => Processos.Clear());
 
-                if (processos == null || !processos.Any())
+                if (processos != null && processos.Any())
                 {
-                    Debug.WriteLine($"⚠ Nenhum processo encontrado na página {_paginaAtual}.");
-                    return;
-                }
-
-                foreach (var processo in processos)
-                {
-                    if (processo != null)
+                    foreach (var processo in processos)
                     {
-                        DispatcherQueue.TryEnqueue(() => Processos.Add(processo));
+                        if (processo != null)
+                        {
+                            var processoViewModel = new ReclamacaoViewModel(processo);
+                            processoViewModel.PropertyChanged += Processo_PropertyChanged; // Escutar mudanças
+
+                            DispatcherQueue.TryEnqueue(() => Processos.Add(processoViewModel));
+                        }
                     }
                 }
             }
@@ -110,23 +140,19 @@ namespace PROARC.src.Views
                 carregando.IsActive = false;
                 carregando.Visibility = Visibility.Collapsed;
                 _isLoading = false;
-
                 AtualizarEstadoDosBotoes();
             }
         }
 
         private void AtualizarEstadoDosBotoes()
         {
-            // Se a página for 1, desativa o botão "Página Anterior"
             BotaoPaginaAnterior.IsEnabled = _paginaAtual > 1;
-
-            // Se não houver mais processos para exibir, desativa o botão "Próxima Página"
             BotaoProximaPagina.IsEnabled = _offset + _limit < _totalProcessos;
         }
 
         private async void ProximaPagina_Click(object sender, RoutedEventArgs e)
         {
-            if (_isLoading || _offset + _limit >= _totalProcessos) return; // Impede ir além da última página
+            if (_isLoading || _offset + _limit >= _totalProcessos) return;
 
             _paginaAtual++;
             _offset = (_paginaAtual - 1) * _limit;
@@ -143,7 +169,11 @@ namespace PROARC.src.Views
                 OnPropertyChanged(nameof(PaginaAtual));
                 await CarregarProcessos();
             }
-        }   
+        }
+
+        private void _NovoProcessoBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
@@ -188,16 +218,16 @@ namespace PROARC.src.Views
                 menuFlyout.ShowAt(element, e.GetPosition(element));
             }
         }
+
         private void OnDragStarting(UIElement sender, DragStartingEventArgs args)
         {
-            args.Cancel = true; // Cancela qualquer tentativa de arrastoZZ
+            args.Cancel = true; // Cancela qualquer tentativa de arrasto
         }
 
         private void OnDragEnter(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
         }
-
 
         private void EditarProcesso(ProcessoAdministrativo processo)
         {
