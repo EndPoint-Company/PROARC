@@ -196,13 +196,13 @@ namespace PROARC.src.Views
 
         private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is ProcessoAdministrativo processo)
+            if (sender is FrameworkElement element)
             {
                 var menuFlyout = new MenuFlyout();
 
                 var visualizarItem = new MenuFlyoutItem { Text = "Visualizar Processo" };
                 var editarItem = new MenuFlyoutItem { Text = "Editar Processo" };
-                editarItem.Click += (s, args) => EditarProcesso(processo);
+                editarItem.Click += (s, args) => EditarProcesso();
 
                 var excluirItem = new MenuFlyoutItem
                 {
@@ -229,7 +229,7 @@ namespace PROARC.src.Views
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
         }
 
-        private void EditarProcesso(ProcessoAdministrativo processo)
+        private void EditarProcesso()
         {
             Frame.Navigate(typeof(RegistrarProcesso01Page));
         }
