@@ -29,6 +29,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using PROARC.src.Strategies;
 using PROARC.src.Models.Arquivos.FabricaReclamacao;
+using PROARC.src.Models.FabricaEntidadesProcuradoras;
 
 namespace PROARC.src.Views
 {
@@ -38,6 +39,7 @@ namespace PROARC.src.Views
         private string anoProcesso;
         private List<string> arquivosSelecionados = new();
         private static readonly IFabricaReclamacao fabricaReclamacao = new FabricaReclamacao();
+        private static readonly IFabricaEntidadeProcuradora fabricaPessoa = new FabricaEntidadeProcuradora();
 
         public string NumeroProcesso
         {
@@ -255,26 +257,23 @@ namespace PROARC.src.Views
 
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
 
-            var reclamante = new Reclamante(
-                inputNomeReclamante.Text,
+            var reclamante = fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Reclamante, inputNomeReclamante.Text,
                 cpfLimpoReclamante,
                 string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
                 string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text,
-                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text
-            );
+                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text);
 
             Procurador procurador = null;
 
             if (ProcuradorCheckBox.IsChecked == true)
             {
                 string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
-                procurador = new Procurador(
-                    inputNomeProcurador.Text,
-                    cpfLimpoProcurador,
-                    string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
-                    string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
-                    string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
-                );
+
+                procurador = (Procurador?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Procurador, inputNomeProcurador.Text,
+                       cpfLimpoProcurador,
+                       string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
+                       string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
+                       string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text);
             }
 
             string caminhoPasta = $"dir/folder{NumeroProcesso}";
@@ -296,7 +295,7 @@ namespace PROARC.src.Views
                 var reclamacaoEnel = fabricaReclamacao.CriarReclamacao(
                     EnumReclamacao.ReclamacaoEnel,
                     motivoSelecionado,
-                    reclamante,
+                    (Reclamante?)reclamante,
                     procurador,
                     reclamados,
                     titulo,
