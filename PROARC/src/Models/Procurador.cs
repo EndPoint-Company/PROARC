@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROARC.src.Models
 {
-    public class Procurador
+    public class Procurador : IEntidadeProcuradora
     {
         private string nome;
         private string cpf;

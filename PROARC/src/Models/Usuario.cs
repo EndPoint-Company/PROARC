@@ -13,7 +13,7 @@ namespace PROARC.src.Models
 
             if (nivelDePermissao < 0 || nivelDePermissao > 4)
             {
-                throw new Exception("Não temos esse nível aí não, amegon");
+                throw new Exception("Nivel não disponivel");
             }
 
             this.nivelDePermissao = nivelDePermissao;
@@ -22,7 +22,7 @@ namespace PROARC.src.Models
         {
             if (this.nivelDePermissao > 3)
             {
-                throw new Exception("Tá voando alto demais");
+                throw new Exception("Nivel não disponivel");
             }
 
             this.nivelDePermissao++;
@@ -32,7 +32,7 @@ namespace PROARC.src.Models
         {
             if (NivelDePermissao <= 0)
             {
-                throw new Exception("Quer ficar num nível negativo, é, meu fi?");
+                throw new Exception("Nivel não disponivel");
             }
 
             this.nivelDePermissao--;

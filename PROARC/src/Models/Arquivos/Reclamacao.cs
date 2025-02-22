@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PROARC.src.Models.Arquivos.StrategyExibicao;
 
 namespace PROARC.src.Models.Arquivos
 {
@@ -20,11 +21,19 @@ namespace PROARC.src.Models.Arquivos
         private DateOnly? dataAbertura;
         private string criador;
         private DateTime? dataCriacao;
+        private IExibicaoStrategy exibicaoStrategy;
 
+        public void SetExibicaoStrategy(IExibicaoStrategy strategy) => exibicaoStrategy = strategy;
+        /*  
+            |Exemplo de uso de estratégia de exibição|
+            var reclamação = new ReclamacaoEnel(...);
+            reclamação.SetExibicaoStrategy(new ExibicaoDetalhadaStrategy());
+            Console.WriteLine(reclamação); // Usará a estratégia detalhada
+        */
 
         // Propriedade para expor o nome do primeiro reclamado
         public string PrimeiroReclamadoNome => Reclamados.First?.Value?.Nome ?? "N/A";
-
+       
         public Reclamacao() { }
 
         public Reclamacao
@@ -42,6 +51,11 @@ namespace PROARC.src.Models.Arquivos
             this.dataAbertura = dataAbertura;
             this.criador = criador;
             this.dataCriacao = dataCriacao;
+        }
+
+        public override string ToString()
+        {
+            return exibicaoStrategy?.Format(this) ?? base.ToString();
         }
 
         public Motivo? Motivo { get => this.motivo; set { this.motivo = value; } }

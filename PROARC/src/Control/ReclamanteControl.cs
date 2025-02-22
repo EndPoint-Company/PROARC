@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using static PROARC.src.Control.NetworkControl;
 using System.Text.Json;
 using System.Threading.Tasks;
+using PROARC.src.Models.FabricaEntidadesProcuradoras;
 
 namespace PROARC.src.Control
 {
     public static class ReclamanteControl
     {
+        private static readonly IFabricaEntidadeProcuradora fabricaPessoa = new FabricaEntidadeProcuradora();
         public static async Task<Reclamante?> GetAsync(int id)
         {
             var request = new { action = "get_reclamante_por_id", id };
@@ -25,7 +27,7 @@ namespace PROARC.src.Control
                 string? telefone = reclamanteElement[4].GetString();
                 string? email = reclamanteElement[5].GetString();
 
-                return new Reclamante(nome, cpf, rg, telefone, email);
+                return (Reclamante?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Reclamante,nome,cpf,rg,telefone,email);
             }
 
             return null;
@@ -47,7 +49,7 @@ namespace PROARC.src.Control
                 string? telefone = reclamanteElement[4].GetString();
                 string? email = reclamanteElement[5].GetString();
 
-                return new Reclamante(nome, cpf2, rg, telefone, email);
+                return (Reclamante?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Reclamante, nome, cpf2, rg, telefone, email);
             }
 
             return null;
@@ -69,7 +71,7 @@ namespace PROARC.src.Control
                 string? telefone = reclamanteElement[4].GetString();
                 string? email = reclamanteElement[5].GetString();
 
-                return new Reclamante(nome, cpf, rg2, telefone, email);
+                return (Reclamante?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Reclamante, nome, cpf, rg2, telefone, email);
             }
 
             return null;
@@ -94,10 +96,10 @@ namespace PROARC.src.Control
                         string nome = item[1].GetString() ?? string.Empty;
                         string? rg = item[2].GetString();
                         string? cpf = item[3].GetString();
-                        string? telefone = item[2].GetString();
-                        string? email = item[2].GetString();
+                        string? telefone = item[4].GetString();
+                        string? email = item[5].GetString();
 
-                        reclamantes.Add(new Reclamante(nome, cpf, rg, telefone, email));
+                        reclamantes.Add((Reclamante?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Reclamante, nome, cpf, rg, telefone, email));
                     }
                 }
             }

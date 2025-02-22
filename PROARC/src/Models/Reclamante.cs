@@ -1,6 +1,6 @@
 ﻿namespace PROARC.src.Models
 {
-    public class Reclamante
+    public class Reclamante : IEntidadeProcuradora
     {
         private string nome;
         private string cpf;
@@ -8,7 +8,6 @@
         private string? email;
         private string? telefone;
 
-        // Propriedade formatada
         public string CpfFormatado
         {
             get
@@ -17,7 +16,7 @@
                 {
                     return $"{Cpf.Substring(0, 3)}.{Cpf.Substring(3, 3)}.{Cpf.Substring(6, 3)}-{Cpf.Substring(9, 2)}";
                 }
-                return Cpf ?? "N/A"; // Retorna como está, se o formato não for válido
+                return Cpf ?? "N/A";
             }
         }
 

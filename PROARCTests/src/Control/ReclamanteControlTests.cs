@@ -15,7 +15,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetReclamanteByIdAsyncTest()
         {
-            //Console.WriteLine(await ReclamanteControl.GetAsync(1));
+            Console.WriteLine(await ReclamanteControl.GetAsync(96));
         }
 
         [TestMethod()]
