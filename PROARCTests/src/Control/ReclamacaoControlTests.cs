@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Models;
 using PROARC.src.Models.Tipos;
+using PROARC.src.Models.Arquivos.StrategyExibicao;
 
 
 namespace PROARC.src.Control.Tests
@@ -31,7 +32,8 @@ namespace PROARC.src.Control.Tests
         public async Task GetAsyncTest()
         {
             Reclamacao reclamacao = await ReclamacaoControl.GetAsync("G001/2025");
-            Console.WriteLine(reclamacao);
+            reclamacao.SetExibicaoStrategy(new ExibicaoDetalhadaStrategy());
+            Console.WriteLine(reclamacao.ToStringStrategy());
         }
 
         [TestMethod()]

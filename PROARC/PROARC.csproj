@@ -29,10 +29,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\proarc-white-logo.ico" />
-<<<<<<< Updated upstream
 		<Content Include="Assets\config.json" />
-=======
->>>>>>> Stashed changes
 		<Content Include="Assets\bannerHome.png" />
 	</ItemGroup>
 

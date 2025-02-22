@@ -24,12 +24,6 @@ namespace PROARC.src.Models.Arquivos
         private IExibicaoStrategy exibicaoStrategy;
 
         public void SetExibicaoStrategy(IExibicaoStrategy strategy) => exibicaoStrategy = strategy;
-        /*  
-            |Exemplo de uso de estratégia de exibição|
-            var reclamação = new ReclamacaoEnel(...);
-            reclamação.SetExibicaoStrategy(new ExibicaoDetalhadaStrategy());
-            Console.WriteLine(reclamação); // Usará a estratégia detalhada
-        */
 
         // Propriedade para expor o nome do primeiro reclamado
         public string PrimeiroReclamadoNome => Reclamados.First?.Value?.Nome ?? "N/A";
@@ -53,7 +47,7 @@ namespace PROARC.src.Models.Arquivos
             this.dataCriacao = dataCriacao;
         }
 
-        public override string ToString()
+        public string ToStringStrategy()
         {
             return exibicaoStrategy?.Format(this) ?? base.ToString();
         }
