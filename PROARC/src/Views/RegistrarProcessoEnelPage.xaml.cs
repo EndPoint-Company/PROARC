@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.UI.Xaml;
@@ -27,6 +27,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using PROARC.src.Strategies;
 
 namespace PROARC.src.Views
 {
@@ -82,7 +83,7 @@ namespace PROARC.src.Views
 
         private void ConfigurarEstadoProcesso(bool isNovoProcesso)
         {
-            radio_agFazerNotificacao.IsChecked = isNovoProcesso;
+            radio_agResposta.IsChecked = isNovoProcesso;
             AtualizarEstilosBotoes(isNovoProcesso);
             AjustarCamposProcesso(isNovoProcesso);
         }
@@ -158,7 +159,7 @@ namespace PROARC.src.Views
                         var errorDialog = new ContentDialog
                         {
                             Title = "Erro",
-                            Content = "Este motivo já existe.",
+                            Content = "Este motivo jÃ¡ existe.",
                             CloseButtonText = "Ok",
                             XamlRoot = this.Content.XamlRoot
                         };
@@ -202,7 +203,7 @@ namespace PROARC.src.Views
                     var errorDialog = new ContentDialog
                     {
                         Title = "Erro",
-                        Content = "O motivo não pode estar vazio.",
+                        Content = "O motivo nÃ£o pode estar vazio.",
                         CloseButtonText = "Ok",
                         XamlRoot = this.Content.XamlRoot
                     };
@@ -227,25 +228,39 @@ namespace PROARC.src.Views
             return formattedText;
         }
 
-        //public bool Validacaos()
-        //{
-        //    if (!Validacoes.ValidarCPF(inputCpfReclamante.Text))
-        //    {
-        //        ShowError("CPF inválido do Reclamante é Invalido.");
-        //        return false;
-        //    }
-        //    else if (!Validacoes.ValidarEmail(inputEmailReclamante.Text))
-        //    {
-        //        ShowError("E-mail inválido.");
-        //        return false;
-        //    }
-        //    else if (!Validacoes.ValidarTelefone(inputNumeroReclamante.Text))
-        //    {
-        //        ShowError("Telefone inválido.");
-        //        return false;
-        //    }
-        //    return true;
-        //}
+        private bool ValidarCampos()
+        {
+            var erros = new List<string>();
+
+            var validacoes = new (IValidacaoStrategy estrategia, string valor, string mensagemErro)[]
+            {
+                (new ValidacaoCPF(), inputCpfReclamante.Text, "CPF do Reclamante invÃ¡lido."),
+                (new ValidacaoEmail(), inputEmailReclamante.Text, "E-mail invÃ¡lido."),
+                (new ValidacaoTelefone(), inputNumeroReclamante.Text, "Telefone invÃ¡lido.")
+            };
+
+            foreach (var (estrategia, valor, mensagemErro) in validacoes)
+            {
+                if (!string.IsNullOrWhiteSpace(valor))
+                {
+                    var validador = new Validador(estrategia);
+                    if (!validador.Validar(valor))
+                    {
+                        erros.Add(mensagemErro);
+                    }
+                }
+            }
+
+            if (erros.Count > 0)
+            {
+                ShowError(string.Join("\n", erros));
+                return false;
+            }
+
+            return true;
+        }
+
+
 
         private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -263,28 +278,58 @@ namespace PROARC.src.Views
             };
         }
 
+        private IEnumerable<(FrameworkElement Field, TextBlock Label, TextBlock? Title)> GetFieldsToProcess()
+        {
+            yield return (inputNProcesso, TextBlockNProcesso, null);
+            yield return (inputAnoProcesso, TextBlockAnoProcesso, null);
+            yield return (inputNomeReclamante, TextBlockNomeReclamante, TextBlockReclamante);
+            yield return (inputCpfReclamante, TextBlockCpfReclamante, TextBlockReclamante);
+
+            yield return (cbMotivo, TextBlockMotivo, null);
+
+            if (GetSelectedRadioButton() == "Nenhum status selecionado")
+            {
+                yield return (radio_agResposta, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_agAguardandoPrazo, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_atendido, TextBlockArquivado, TextBlockStatus);
+                yield return (radio_naoAtendido, TextBlockArquivado, TextBlockStatus);
+            }
+        }
+
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Resetando estilos de erro
-            ResetErrorStyles();
+            var resetProcessor = new FieldProcessor(new ResetFieldStrategy());
+            resetProcessor.ProcessMultipleFields(GetFieldsToProcess());
 
             NumeroProcesso = inputNProcesso.Text.Trim();
             AnoProcesso = inputAnoProcesso.Text.Trim();
 
-            if (string.IsNullOrEmpty(NumeroProcesso))
+            bool isNovoProcesso = radio_agResposta.IsChecked == true;
+
+            if (isNovoProcesso)
             {
-                int count = await ReclamacaoControl.CountAsync();
-                NumeroProcesso = (count + 1).ToString();
+                if (string.IsNullOrEmpty(NumeroProcesso))
+                {
+                    int count = await ReclamacaoControl.CountAsync();
+                    NumeroProcesso = (count + 1).ToString();
+                }
+
+                if (string.IsNullOrEmpty(AnoProcesso))
+                {
+                    AnoProcesso = DateTime.Now.Year.ToString();
+                }
             }
 
             if (!CamposPreenchidos())
             {
-                ShowError("Preencha todos os campos obrigatórios antes de continuar.");
-                HighlightEmptyFields(); // ?? Adiciona bordas vermelhas nos campos vazios
+                ShowError("Preencha todos os campos obrigatÃ³rios antes de continuar.");
+
+                var highlightProcessor = new FieldProcessor(new HighlightFieldStrategy());
+                highlightProcessor.ProcessMultipleFields(GetFieldsToProcess());
                 return;
             }
 
-            // if (!Validacaos()) { return; }
+            if (!ValidarCampos()) return;
 
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
 
@@ -360,7 +405,7 @@ namespace PROARC.src.Views
                     };
 
                     await successDialog.ShowAsync();
-                    Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+                    Frame.Navigate(typeof(RegistrarProcessoEnelPage), true);
                 }
                 else
                 {
@@ -369,118 +414,17 @@ namespace PROARC.src.Views
             }
         }
 
-        private void HighlightEmptyFields()
-        {
-            HighlightField(null, inputNProcesso, TextBlockNProcesso);
-            HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
-            HighlightField(TextBlockReclamante, inputNomeReclamante, TextBlockNomeReclamante);
-            HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
+        private bool CamposPreenchidos() => new[] { inputNomeReclamante, inputCpfReclamante, inputNProcesso, inputAnoProcesso }
+         .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
+         && cbMotivo.SelectedItem != null
+         && GetSelectedRadioButton() != "Nenhum status selecionado";
 
-            // ?? Validação do Motivo (ComboBox)
-            if (cbMotivo.SelectedItem == null)
-            {
-                cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
-                TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
-            }
-
-            // ?? Validação do Status (Se nenhum RadioButton foi selecionado)
-            if (!IsStatusSelected())
-            {
-                StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
-                TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
-                TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
-
-                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
-
-                TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
-                radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
-                radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
-            }
-        }
-
-        private void HighlightField(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
-        {
-            if (string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.BorderBrush = new SolidColorBrush(Colors.Red);
-                textBox.PlaceholderForeground = new SolidColorBrush(Colors.Red);
-                textBlock.Foreground = new SolidColorBrush(Colors.Red);
-
-                if (titulo != null)
-                {
-                    titulo.Foreground = new SolidColorBrush(Colors.Red);
-                }
-            }
-        }
-
-        // ?? Método para Resetar os Estilos de Erro
-        private void ResetErrorStyles()
-        {
-            ResetFieldStyle(inputNProcesso, TextBlockNProcesso);
-            ResetFieldStyle(inputAnoProcesso, TextBlockAnoProcesso);
-            ResetFieldStyle(inputNomeReclamante, TextBlockNomeReclamante, TextBlockReclamante);
-            ResetFieldStyle(inputCpfReclamante, TextBlockCpfReclamante, TextBlockReclamante);
-
-            // ?? Resetando o ComboBox do Motivo
-            cbMotivo.BorderBrush = new SolidColorBrush(Colors.Gray);
-            TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Black);
-
-            // ?? Resetando a Seção de Status
-            StatusSection.BorderBrush = new SolidColorBrush(Colors.Transparent);
-            TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
-            TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
-
-            radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agResposta.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Black);
-
-            TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Black);
-            radio_atendido.Foreground = new SolidColorBrush(Colors.Black);
-            radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Black);
-        }
-
-        // ?? Método Genérico para Resetar o Estilo de um Campo
-        private void ResetFieldStyle(TextBox textBox, TextBlock textBlock, TextBlock? titulo = null)
-        {
-            textBox.BorderBrush = new SolidColorBrush(Colors.Gray);
-            textBox.PlaceholderForeground = new SolidColorBrush(Colors.DarkGray);
-            textBlock.Foreground = new SolidColorBrush(Colors.Black);
-
-            if (titulo != null)
-            {
-                titulo.Foreground = new SolidColorBrush(Colors.Black);
-            }
-        }
-
-        // ? Verifica se algum RadioButton do Status foi selecionado
-        private bool IsStatusSelected()
-        {
-            return radio_agFazerNotificacao.IsChecked == true ||
-                   radio_agRealizacaoAudiencia.IsChecked == true ||
-                   radio_agResposta.IsChecked == true ||
-                   radio_agEnvioNotificacao.IsChecked == true ||
-                   radio_agDocumentacao.IsChecked == true ||
-                   radio_atendido.IsChecked == true ||
-                   radio_naoAtendido.IsChecked == true;
-        }
-
-        private bool CamposPreenchidos()
-        => new[] { inputNomeReclamante, inputCpfReclamante }
-            .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
-            && cbMotivo.SelectedItem != null
-            && GetSelectedRadioButton() != "Nenhum status selecionado";
 
         private async void ShowError(string mensagemErro)
         {
             var dialog = new ContentDialog
             {
-                Title = "Erro de Validação",
+                Title = "Erro de ValidaÃ§Ã£o",
                 Content = mensagemErro,
                 CloseButtonText = "OK",
                 XamlRoot = this.Content.XamlRoot
@@ -491,20 +435,14 @@ namespace PROARC.src.Views
 
         private string GetSelectedRadioButton()
         {
-            if (radio_agFazerNotificacao.IsChecked == true)
-                return "Aguardando fazer notificação";
-            if (radio_agRealizacaoAudiencia.IsChecked == true)
-                return "Aguardando realização da audiência";
+            if (radio_agAguardandoPrazo.IsChecked == true)
+                return "Aguardando prazo";
             if (radio_agResposta.IsChecked == true)
                 return "Aguardando resposta da empresa";
-            if (radio_agEnvioNotificacao.IsChecked == true)
-                return "Aguardando envio da notificação";
-            if (radio_agDocumentacao.IsChecked == true)
-                return "Aguardando documentação";
             if (radio_atendido.IsChecked == true)
                 return "Atendido";
             if (radio_naoAtendido.IsChecked == true)
-                return "Não Atendido";
+                return "NÃ£o Atendido";
 
             return "Nenhum status selecionado";
         }
