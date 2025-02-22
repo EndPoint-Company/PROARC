@@ -87,7 +87,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                                 <StackPanel Padding="40" Height="186" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" Width="376" x:Name="AudienciaSection" Shadow="{StaticResource SharedShadow}">
-                                    <TextBlock Text="Audiência" FontSize="18" FontWeight="Bold" />
+                                    <TextBlock Text="Audiência" x:Name="TextBlockCalendario" FontSize="18" FontWeight="Bold" />
 
                                     <StackPanel Orientation="Horizontal">
                                         <!-- Seletor de Data -->
