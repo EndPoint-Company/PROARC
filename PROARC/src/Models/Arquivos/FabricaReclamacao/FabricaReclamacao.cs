@@ -11,15 +11,32 @@ namespace PROARC.src.Models.Arquivos.FabricaReclamacao
 {
     public class FabricaReclamacao : IFabricaReclamacao
     {
-        public object CriarReclamacao(EnumReclamacao tipo,Motivo? motivo, Reclamante? reclamante, Procurador? procurador, LinkedList<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador, DateTime? dataCriacao = null)
+        public Reclamacao CriarReclamacao(EnumReclamacao tipo,
+        Motivo? motivo,
+        Reclamante? reclamante,
+        Procurador? procurador,
+        LinkedList<Reclamado>? reclamados,
+        string titulo,
+        string situacao,
+        string caminhoDir,
+        DateOnly? dataAbertura,
+        string criador,
+        string? atendente = null,
+        string? contatoEnelTelefone = null,
+        string? contatoEnelEmail = null,
+        string? observacao = null,
+        DateTime? dataAudiencia = null,
+        string? conciliador = null)
         {
             switch (tipo)
             {
                 case EnumReclamacao.ReclamacaoEnel:
-                    return new ReclamacaoEnel(motivo, reclamante, procurador, reclamados, titulo, situacao, caminhoDir, dataAbertura, criador, null, null, null, null);
+                    return new ReclamacaoEnel(motivo, reclamante, procurador, reclamados, titulo, situacao, caminhoDir, dataAbertura, criador,
+                    atendente, contatoEnelTelefone, contatoEnelEmail, observacao);
 
                 case EnumReclamacao.ReclamacaoGeral:
-                   return new ReclamacaoGeral(motivo, reclamante, procurador, reclamados, titulo, situacao, caminhoDir, dataAbertura, criador, null, null);
+                   return new ReclamacaoGeral(motivo, reclamante, procurador, reclamados, titulo, situacao, caminhoDir, dataAbertura, criador,
+                    dataAudiencia, conciliador);
 
                 default:
                     throw new ArgumentException("Tipo de reclamacao inválido.");

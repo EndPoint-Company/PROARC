@@ -8,11 +8,14 @@ using static PROARC.src.Control.NetworkControl;
 using PROARC.src.Models.Tipos;
 using PROARC.src.Models;
 using Newtonsoft.Json.Linq;
+using PROARC.src.Models.Arquivos.FabricaReclamacao;
+using PROARC.src.Models.FabricaEntidadesProcuradoras;
 
 namespace PROARC.src.Control
 {
     public static class ReclamacaoControl
     {
+        private static readonly IFabricaReclamacao fabricaReclamacao = new FabricaReclamacao();
         public static async Task<LinkedList<Reclamacao?>?> GetNRows(int limit, int offset)
         {
             var action = new { action = "get_p_reclamacoes", limit, offset };
@@ -86,46 +89,43 @@ namespace PROARC.src.Control
 
                 if (esp.HasValues)
                 {
-                    ReclamacaoGeral reclamacao = new ReclamacaoGeral();
-                    reclamacao.Motivo = motivo;
-                    reclamacao.Reclamante = reclamante;
-                    reclamacao.Procurador = procurador;
-                    reclamacao.Reclamados = reclamados;
-                    reclamacao.Titulo = (string)recl["titulo"];
-                    reclamacao.Situacao = (string)recl["situacao"];
-                    reclamacao.CaminhoDir = (string)recl["caminho_dir"];
-                    reclamacao.Criador = (string)recl["criador"];
-                    reclamacao.DataCriacao = (DateTime)recl["created_at"];
-                    reclamacao.DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]);
-                    try
-                    {
-                        reclamacao.DataAudiencia = (DateTime)esp["data_audiencia"];
-                    }
-                    catch (Exception ex)
-                    {
-                        reclamacao.DataAudiencia = null;
-                    }
-                    reclamacao.Conciliador = (string)esp["conciliador"];
+                    var reclamacao = fabricaReclamacao.CriarReclamacao(
+                    EnumReclamacao.ReclamacaoGeral,
+                    motivo,
+                    reclamante,
+                    procurador,
+                    reclamados,
+                    (string)recl["titulo"],
+                    (string)recl["situacao"],
+                    (string)recl["caminho_dir"],
+                    DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
+                    (string)recl["criador"],
+                    null,
+                    null,
+                    null,
+                    null,
+                    (DateTime?)esp["data_audiencia"],
+                    (string)esp["conciliador"]);
 
                     reclamacoes.AddLast(reclamacao);
                 }
                 else
                 {
-                    ReclamacaoEnel reclamacao = new ReclamacaoEnel();
-                    reclamacao.Motivo = motivo;
-                    reclamacao.Reclamante = reclamante;
-                    reclamacao.Procurador = procurador;
-                    reclamacao.Reclamados = reclamados;
-                    reclamacao.Titulo = (string)recl["titulo"];
-                    reclamacao.Situacao = (string)recl["situacao"];
-                    reclamacao.CaminhoDir = (string)recl["caminho_dir"];
-                    reclamacao.Criador = (string)recl["criador"];
-                    reclamacao.DataCriacao = (DateTime)recl["created_at"];
-                    reclamacao.DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]);
-                    reclamacao.Atendente = (string)esp["atendente"];
-                    reclamacao.ContatoEnelEmail = (string)esp["contato_enel_email"];
-                    reclamacao.ContatoEnelTelefone = (string)esp["contato_enel_telefone"];
-                    reclamacao.Observacao = (string)esp["observacao"];
+                     var reclamacao = fabricaReclamacao.CriarReclamacao(
+                     EnumReclamacao.ReclamacaoEnel,
+                     motivo,
+                     reclamante,
+                     procurador,
+                     reclamados,
+                     (string)recl["titulo"],
+                     (string)recl["situacao"],
+                     (string)recl["caminho_dir"],
+                     DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
+                     (string)recl["criador"],
+                     (string)esp["atendente"],
+                     (string)esp["contato_enel_telefone"],
+                     (string)esp["contato_enel_email"],
+                     (string)esp["observacao"]);
 
                     reclamacoes.AddLast(reclamacao);
                 }
@@ -197,41 +197,46 @@ namespace PROARC.src.Control
 
             if (esp.HasValues)
             {
-                ReclamacaoGeral reclamacao = new()
-                {
-                    Motivo = motivo,
-                    Reclamante = reclamante,
-                    Procurador = procurador,
-                    Reclamados = reclamados,
-                    Titulo = (string)recl["titulo"],
-                    Situacao = (string)recl["situacao"],
-                    CaminhoDir = (string)recl["caminho_dir"],
-                    Criador = (string)recl["criador"],
-                    DataCriacao = (DateTime)recl["created_at"],
-                    DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
-                    Conciliador = (string?)esp["conciliador"] ?? ""
-                };
+
+                var reclamacao = fabricaReclamacao.CriarReclamacao(
+                   EnumReclamacao.ReclamacaoGeral,
+                   motivo,
+                   reclamante,
+                   procurador,
+                   reclamados,
+                   (string)recl["titulo"],
+                   (string)recl["situacao"],
+                   (string)recl["caminho_dir"],
+                   DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
+                   (string)recl["criador"],
+                   null,
+                   null,
+                   null,
+                   null,
+                   (DateTime?)esp["data_audiencia"],
+                   (string)esp["conciliador"]);
+
                 return reclamacao;
             }
+
             else
             {
-                ReclamacaoEnel reclamacao = new()
-                {
-                    Motivo = motivo,
-                    Reclamante = reclamante,
-                    Procurador = procurador,
-                    Reclamados = reclamados,
-                    Titulo = (string)recl["titulo"],
-                    Situacao = (string)recl["situacao"],
-                    CaminhoDir = (string)recl["caminho_dir"],
-                    Criador = (string)recl["criador"],
-                    DataCriacao = (DateTime)recl["created_at"],
-                    DataAbertura = DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
-                    Atendente = (string?)enel?["atendente"] ?? "",
-                    ContatoEnelEmail = (string?)enel?["contato_enel_email"] ?? "",
-                    ContatoEnelTelefone = (string?)enel?["contato_enel_telefone"] ?? "",
-                    Observacao = (string?)enel?["observacao"] ?? ""
-                };
+                var reclamacao = fabricaReclamacao.CriarReclamacao(
+                     EnumReclamacao.ReclamacaoEnel,
+                     motivo,
+                     reclamante,
+                     procurador,
+                     reclamados,
+                     (string)recl["titulo"],
+                     (string)recl["situacao"],
+                     (string)recl["caminho_dir"],
+                     DateOnly.FromDateTime((DateTime)recl["data_abertura"]),
+                     (string)recl["criador"],
+                     (string)esp["atendente"],
+                     (string)esp["contato_enel_telefone"],
+                     (string)esp["contato_enel_email"],
+                     (string)esp["observacao"]);
+
                 return reclamacao;
             }
         }

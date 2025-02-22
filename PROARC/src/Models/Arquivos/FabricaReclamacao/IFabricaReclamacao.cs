@@ -9,6 +9,21 @@ namespace PROARC.src.Models.Arquivos.FabricaReclamacao
 {
     public interface IFabricaReclamacao
     {
-        object CriarReclamacao(EnumReclamacao tipo, Motivo? motivo, Reclamante? reclamante, Procurador? procurador, LinkedList<Reclamado>? reclamados, string titulo, string situacao, string caminhoDir, DateOnly? dataAbertura, string criador, DateTime? dataCriacao = null);
+        Reclamacao CriarReclamacao(EnumReclamacao tipo,
+        Motivo? motivo,
+        Reclamante? reclamante,
+        Procurador? procurador,
+        LinkedList<Reclamado>? reclamados,
+        string titulo,
+        string situacao,
+        string caminhoDir,
+        DateOnly? dataAbertura,
+        string criador,
+        string? atendente = null,
+        string? contatoEnelTelefone = null,
+        string? contatoEnelEmail = null,
+        string? observacao = null,
+        DateTime? dataAudiencia = null,
+        string? conciliador = null);
     }
 }
