@@ -28,6 +28,7 @@ using Windows.Globalization;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using PROARC.src.Strategies;
+using PROARC.src.Models.Arquivos.FabricaReclamacao;
 
 namespace PROARC.src.Views
 {
@@ -36,6 +37,7 @@ namespace PROARC.src.Views
         private string numeroProcesso;
         private string anoProcesso;
         private List<string> arquivosSelecionados = new();
+        private static readonly IFabricaReclamacao fabricaReclamacao = new FabricaReclamacao();
 
         public string NumeroProcesso
         {
@@ -291,7 +293,8 @@ namespace PROARC.src.Views
                 LinkedList<Reclamado> reclamados = new LinkedList<Reclamado>();
                 reclamados.AddLast(enel);
 
-                var reclamacaoEnel = new ReclamacaoEnel(
+                var reclamacaoEnel = fabricaReclamacao.CriarReclamacao(
+                    EnumReclamacao.ReclamacaoEnel,
                     motivoSelecionado,
                     reclamante,
                     procurador,
@@ -308,7 +311,7 @@ namespace PROARC.src.Views
                 );
 
                 ButtonContinuar.IsEnabled = false;
-                bool success = await ReclamacaoControl.InsertAsync(reclamacaoEnel);
+                bool success = await ReclamacaoControl.InsertAsync((ReclamacaoEnel)reclamacaoEnel);
                 ButtonContinuar.IsEnabled = true;
 
                 if (success)

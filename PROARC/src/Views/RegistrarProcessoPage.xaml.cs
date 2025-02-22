@@ -28,6 +28,9 @@ using PROARC.src.Models.Arquivos;
 using PROARC.src.Converters;
 using System.IO;
 using PROARC.src.Strategies;
+using PROARC.src.Models.Arquivos.FabricaReclamacao;
+using PROARC.src.Models.FabricaEntidadesProcuradoras;
+using Microsoft.WindowsAppSDK.Runtime.Packages;
 
 namespace PROARC.src.Views
 {
@@ -36,6 +39,8 @@ namespace PROARC.src.Views
         private string numeroProcesso;
         private string anoProcesso;
         private List<string> arquivosSelecionados = new();
+        private static readonly IFabricaReclamacao fabricaReclamacao = new FabricaReclamacao();
+        private static readonly IFabricaEntidadeProcuradora fabricaPessoa = new FabricaEntidadeProcuradora();
 
         public string NumeroProcesso
         {
@@ -522,26 +527,23 @@ namespace PROARC.src.Views
 
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
 
-            var reclamante = new Reclamante(
-                inputNome.Text,
+            var reclamante = fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Reclamante, inputNome.Text,
                 cpfLimpoReclamante,
                 string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
                 string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text,
-                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text
-            );
+                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text);
 
             Procurador procurador = null;
 
             if (ProcuradorCheckBox.IsChecked == true)
             {
                 string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
-                procurador = new Procurador(
-                    inputNomeProcurador.Text,
+
+             procurador = (Procurador?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Procurador, inputNomeProcurador.Text,
                     cpfLimpoProcurador,
                     string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
                     string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
-                    string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
-                );
+                    string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text);
             }
 
             string dataAtual = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") ?? "null";
@@ -562,9 +564,10 @@ namespace PROARC.src.Views
             string conciliador = inputNomeConciliador.Text;
             string situacao = GetSelectedRadioButton();
 
-            var reclamacao = new ReclamacaoGeral(
+            var reclamacaoGeral = fabricaReclamacao.CriarReclamacao(
+                EnumReclamacao.ReclamacaoGeral,
                 motivoSelecionado,
-                reclamante,
+                (Reclamante?)reclamante,
                 procurador,
                 reclamados,
                 titulo,
@@ -572,12 +575,16 @@ namespace PROARC.src.Views
                 caminhoPasta,
                 DateOnly.FromDateTime(DateTime.Now),
                 "Sistema",
+                null,
+                null,
+                null,
+                null,
                 dataSelecionada,
                 conciliador
-            );
+                );
 
             ButtonContinuar.IsEnabled = false;
-            bool success = await ReclamacaoControl.InsertAsyncG(reclamacao);
+            bool success = await ReclamacaoControl.InsertAsyncG((ReclamacaoGeral)reclamacaoGeral);
             ButtonContinuar.IsEnabled = true;
 
             if (success)

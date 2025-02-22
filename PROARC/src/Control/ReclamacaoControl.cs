@@ -28,7 +28,6 @@ namespace PROARC.src.Control
                 jsonToken = JToken.Parse(jsonToken.Value<string>());
             }
 
-
             JArray reclamacoesArray = (JArray)jsonToken["reclamacoes"];
 
             if(reclamacoesArray == null) return null; 
@@ -243,7 +242,6 @@ namespace PROARC.src.Control
 
         public static async Task<bool> InsertAsyncG(ReclamacaoGeral reclamacao)
         {
-
             try
             {
                 var request = new { action = "insert_reclamacao", reclamacao };
@@ -341,6 +339,5 @@ namespace PROARC.src.Control
 
             return 0;
         }
-
     }
 }
