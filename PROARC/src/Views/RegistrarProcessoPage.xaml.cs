@@ -567,7 +567,7 @@ namespace PROARC.src.Views
             var reclamacao = new ReclamacaoGeral(
                 motivoSelecionado,
                 reclamante,
-                procurador, // procurador
+                procurador,
                 reclamados,
                 titulo,
                 situacao,

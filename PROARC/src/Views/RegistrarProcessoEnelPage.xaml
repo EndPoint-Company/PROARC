@@ -51,10 +51,11 @@
                             <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Padding="40" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Height="186" Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Vertical" >
                                         <TextBlock x:Name="TextBlockNProcesso" Text="N° Reclamação" FontSize="18" FontWeight="Bold" />
                                         <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
                                     </StackPanel>
+
                                     <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
                                         <TextBlock x:Name="TextBlockAnoProcesso" Text="Ano" FontSize="18" FontWeight="Bold" />
                                         <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="200" Text="{Binding AnoProcesso}" IsReadOnly="False" />
@@ -118,11 +119,9 @@
                             <StackPanel>
                                 <TextBlock x:Name="TextBlockTramitacao" Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
-                                    <RadioButton x:Name="radio_agFazerNotificacao" Content="Aguardando fazer notificação" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agRealizacaoAudiencia" Content="Aguardando realização da audiência" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agResposta" Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agEnvioNotificacao" Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agDocumentacao" Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
+                                    
+                                    <RadioButton x:Name="radio_agResposta" Content="Aguardando resposta da Enel" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agAguardandoPrazo" Content="Aguardando prazo" GroupName="StatusGroup"/>
                                 </StackPanel>
                             </StackPanel>
 
