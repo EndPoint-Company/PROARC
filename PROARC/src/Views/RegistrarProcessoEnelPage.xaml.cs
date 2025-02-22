@@ -40,7 +40,14 @@ namespace PROARC.src.Views
         public string NumeroProcesso
         {
             get => numeroProcesso;
-            set => SetProperty(ref numeroProcesso, value);
+            set
+            {
+                if (int.TryParse(value, out int numero))
+                {
+                    value = numero.ToString("D3"); // Garante três dígitos
+                }
+                SetProperty(ref numeroProcesso, value);
+            }
         }
 
         public string AnoProcesso
@@ -70,9 +77,8 @@ namespace PROARC.src.Views
                 OnPropertyChanged(propertyName);
             }
         }
-        private async Task CarregarMotivosAsync()
+        private async Task CarregarMotivosAsync() 
          => cbMotivo.ItemsSource = await MotivoControl.GetAllAsync();
-
 
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         => ConfigurarEstadoProcesso(true);
@@ -133,37 +139,56 @@ namespace PROARC.src.Views
             ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
 
-        private async void OnNovoMotivoClick(object sender, RoutedEventArgs e)
+        // POP-UPS
+        private async Task<ContentDialogResult> MostrarContentDialogAsync(string title, object content, string primaryButtonText = null, string closeButtonText = "Ok")
         {
             var dialog = new ContentDialog
             {
-                Title = "Adicionar Novo Motivo",
-                Content = CreateDialogContent(),
-                PrimaryButtonText = "Salvar",
-                CloseButtonText = "Cancelar",
+                Title = title,
+                Content = content,
+                PrimaryButtonText = primaryButtonText,
+                CloseButtonText = closeButtonText,
                 XamlRoot = this.Content.XamlRoot
             };
 
-            var result = await dialog.ShowAsync();
+            return await dialog.ShowAsync();
+        }
+
+        private async Task ShowError(string mensagemErro)
+        {
+            await MostrarContentDialogAsync("Erro", mensagemErro);
+        }
+
+        private async Task ShowSuccess(string mensagemSucesso)
+        {
+            await MostrarContentDialogAsync("Sucesso", mensagemSucesso);
+        }
+
+
+        private async void OnNovoMotivoClick(object sender, RoutedEventArgs e)
+        {
+            var textBox = new TextBox
+            {
+                PlaceholderText = "Digite o motivo"
+            };
+
+            var result = await MostrarContentDialogAsync(
+                "Adicionar Novo Motivo",
+                textBox,
+                "Salvar",
+                "Cancelar");
 
             if (result == ContentDialogResult.Primary)
             {
-                var motivoTexto = ((TextBox)dialog.Content).Text;
+                var motivoTexto = textBox.Text;
 
-                if (!string.IsNullOrWhiteSpace(((TextBox)dialog.Content).Text))
+                if (!string.IsNullOrWhiteSpace(motivoTexto))
                 {
                     var motivosExistentes = await MotivoControl.GetAllAsync();
 
                     if (motivosExistentes.Any(m => m.Nome.Equals(motivoTexto, StringComparison.OrdinalIgnoreCase)))
                     {
-                        var errorDialog = new ContentDialog
-                        {
-                            Title = "Erro",
-                            Content = "Este motivo já existe.",
-                            CloseButtonText = "Ok",
-                            XamlRoot = this.Content.XamlRoot
-                        };
-                        await errorDialog.ShowAsync();
+                        await ShowError("Este motivo já existe.");
                     }
                     else
                     {
@@ -174,41 +199,126 @@ namespace PROARC.src.Views
                             await MotivoControl.InsertAsync(motivo);
                             await CarregarMotivosAsync();
 
-                            var successDialog = new ContentDialog
-                            {
-                                Title = "Sucesso",
-                                Content = "Motivo salvo com sucesso!",
-                                CloseButtonText = "Ok",
-                                XamlRoot = this.Content.XamlRoot
-                            };
-
-                            await successDialog.ShowAsync();
+                            await ShowSuccess("Motivo salvo com sucesso!");
                         }
                         catch (Exception ex)
                         {
-                            var errorDialog = new ContentDialog
-                            {
-                                Title = "Erro",
-                                Content = $"Falha ao salvar motivo: {ex.Message}",
-                                CloseButtonText = "Ok",
-                                XamlRoot = this.Content.XamlRoot
-                            };
-
-                            await errorDialog.ShowAsync();
+                            await ShowError($"Falha ao salvar motivo: {ex.Message}");
                         }
                     }
                 }
                 else
                 {
-                    var errorDialog = new ContentDialog
-                    {
-                        Title = "Erro",
-                        Content = "O motivo não pode estar vazio.",
-                        CloseButtonText = "Ok",
-                        XamlRoot = this.Content.XamlRoot
-                    };
+                    await ShowError("O motivo não pode estar vazio.");
+                }
+            }
+        }
 
-                    await errorDialog.ShowAsync();
+        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
+        {
+            var resetProcessor = new FieldProcessor(new ResetFieldStrategy());
+            resetProcessor.ProcessMultipleFields(GetFieldsToProcess());
+
+            NumeroProcesso = inputNProcesso.Text.Trim();
+            AnoProcesso = inputAnoProcesso.Text.Trim();
+
+            bool isNovoProcesso = radio_agResposta.IsChecked == true;
+
+            if (isNovoProcesso)
+            {
+                if (string.IsNullOrEmpty(NumeroProcesso))
+                {
+                    int count = await ReclamacaoControl.CountAsync();
+                    NumeroProcesso = (count + 1).ToString();
+                }
+
+                if (string.IsNullOrEmpty(AnoProcesso))
+                {
+                    AnoProcesso = DateTime.Now.Year.ToString();
+                }
+            }
+
+            if (!CamposPreenchidos())
+            {
+                await ShowError("Preencha todos os campos obrigatórios antes de continuar.");
+
+                var highlightProcessor = new FieldProcessor(new HighlightFieldStrategy());
+                highlightProcessor.ProcessMultipleFields(GetFieldsToProcess());
+                return;
+            }
+
+            if (!ValidarCampos()) return;
+
+            Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
+
+            string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
+
+            var reclamante = new Reclamante(
+                inputNomeReclamante.Text,
+                cpfLimpoReclamante,
+                string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
+                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text,
+                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text
+            );
+
+            Procurador procurador = null;
+
+            if (ProcuradorCheckBox.IsChecked == true)
+            {
+                string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
+                procurador = new Procurador(
+                    inputNomeProcurador.Text,
+                    cpfLimpoProcurador,
+                    string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
+                    string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
+                    string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
+                );
+            }
+
+            string caminhoPasta = $"dir/folder{NumeroProcesso}";
+            string nProcesso = NumeroProcesso;
+            short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
+            string titulo = "E" + nProcesso + "/" + anoProcesso;
+
+            string atendente = inputNomeAtendente.Text;
+            string situacao = GetSelectedRadioButton();
+            string observacao = inputObservacao.Text;
+
+            Reclamado? enel = await ReclamadoControl.GetAsync(74);
+
+            if (enel != null)
+            {
+                LinkedList<Reclamado> reclamados = new LinkedList<Reclamado>();
+                reclamados.AddLast(enel);
+
+                var reclamacaoEnel = new ReclamacaoEnel(
+                    motivoSelecionado,
+                    reclamante,
+                    procurador,
+                    reclamados,
+                    titulo,
+                    situacao,
+                    caminhoPasta,
+                    DateOnly.FromDateTime(DateTime.Now),
+                    "Sistema",
+                    atendente,
+                    enel.Telefone,
+                    enel.Email,
+                    observacao
+                );
+
+                ButtonContinuar.IsEnabled = false;
+                bool success = await ReclamacaoControl.InsertAsync(reclamacaoEnel);
+                ButtonContinuar.IsEnabled = true;
+
+                if (success)
+                {
+                    await ShowSuccess("O processo foi cadastrado com sucesso!");
+                    Frame.Navigate(typeof(RegistrarProcessoEnelPage), true);
+                }
+                else
+                {
+                    await ShowError("Falha ao cadastrar o processo. Tente novamente.");
                 }
             }
         }
@@ -260,22 +370,12 @@ namespace PROARC.src.Views
             return true;
         }
 
-
-
         private void OnCpfTextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is not TextBox textBox) return;
             string rawText = Regex.Replace(textBox.Text, @"\D", "");
             textBox.Text = FormatWithMask(rawText, new[] { 3, 7, 11 }, new[] { '.', '.', '-' });
             textBox.SelectionStart = textBox.Text.Length;
-        }
-
-        private UIElement CreateDialogContent()
-        {
-            return new TextBox
-            {
-                PlaceholderText = "Digite o motivo"
-            };
         }
 
         private IEnumerable<(FrameworkElement Field, TextBlock Label, TextBlock? Title)> GetFieldsToProcess()
@@ -296,142 +396,10 @@ namespace PROARC.src.Views
             }
         }
 
-        private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
-        {
-            var resetProcessor = new FieldProcessor(new ResetFieldStrategy());
-            resetProcessor.ProcessMultipleFields(GetFieldsToProcess());
-
-            NumeroProcesso = inputNProcesso.Text.Trim();
-            AnoProcesso = inputAnoProcesso.Text.Trim();
-
-            bool isNovoProcesso = radio_agResposta.IsChecked == true;
-
-            if (isNovoProcesso)
-            {
-                if (string.IsNullOrEmpty(NumeroProcesso))
-                {
-                    int count = await ReclamacaoControl.CountAsync();
-                    NumeroProcesso = (count + 1).ToString();
-                }
-
-                if (string.IsNullOrEmpty(AnoProcesso))
-                {
-                    AnoProcesso = DateTime.Now.Year.ToString();
-                }
-            }
-
-            if (!CamposPreenchidos())
-            {
-                ShowError("Preencha todos os campos obrigatórios antes de continuar.");
-
-                var highlightProcessor = new FieldProcessor(new HighlightFieldStrategy());
-                highlightProcessor.ProcessMultipleFields(GetFieldsToProcess());
-                return;
-            }
-
-            if (!ValidarCampos()) return;
-
-            Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
-
-            string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
-
-            var reclamante = new Reclamante(
-                inputNomeReclamante.Text,
-                cpfLimpoReclamante,
-                string.IsNullOrWhiteSpace(inputRgReclamante.Text) ? null : inputRgReclamante.Text,
-                string.IsNullOrWhiteSpace(inputNumeroReclamante.Text) ? null : inputNumeroReclamante.Text,
-                string.IsNullOrWhiteSpace(inputEmailReclamante.Text) ? null : inputEmailReclamante.Text
-            );
-
-            Procurador procurador = null;
-
-            if (ProcuradorCheckBox.IsChecked == true)
-            {
-                string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
-                procurador = new Procurador(
-                inputNomeProcurador.Text,
-                cpfLimpoProcurador,
-                string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
-                string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
-                string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
-                );
-            }
-
-            string caminhoPasta = $"dir/folder{NumeroProcesso}";
-            string nProcesso = NumeroProcesso;
-            short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
-            string titulo = "E" + nProcesso + "/" + anoProcesso;
-
-            string atendente = inputNomeAtendente.Text;
-            string situacao = GetSelectedRadioButton();
-            string observacao = inputObservacao.Text;
-
-            Reclamado? enel = await ReclamadoControl.GetAsync(74);
-
-            if (enel != null)
-            {
-                LinkedList<Reclamado> reclamados = new LinkedList<Reclamado>();
-                reclamados.AddLast(enel);
-
-                var reclamacaoEnel = new ReclamacaoEnel
-                (
-                    motivoSelecionado,
-                    reclamante,
-                    procurador,
-                    reclamados,
-                    titulo,
-                    situacao,
-                    caminhoPasta,
-                    DateOnly.FromDateTime(DateTime.Now),
-                    "Sistema",
-                    atendente,
-                    enel.Telefone,
-                    enel.Email,
-                    observacao
-                );
-
-                ButtonContinuar.IsEnabled = false;
-                bool success = await ReclamacaoControl.InsertAsync(reclamacaoEnel);
-                ButtonContinuar.IsEnabled = true;
-
-                if (success)
-                {
-                    var successDialog = new ContentDialog
-                    {
-                        Title = "Sucesso",
-                        Content = "O processo foi cadastrado com sucesso!",
-                        CloseButtonText = "OK",
-                        XamlRoot = this.Content.XamlRoot
-                    };
-
-                    await successDialog.ShowAsync();
-                    Frame.Navigate(typeof(RegistrarProcessoEnelPage), true);
-                }
-                else
-                {
-                    ShowError("Falha ao cadastrar o processo. Tente novamente.");
-                }
-            }
-        }
-
         private bool CamposPreenchidos() => new[] { inputNomeReclamante, inputCpfReclamante, inputNProcesso, inputAnoProcesso }
          .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
          && cbMotivo.SelectedItem != null
          && GetSelectedRadioButton() != "Nenhum status selecionado";
-
-
-        private async void ShowError(string mensagemErro)
-        {
-            var dialog = new ContentDialog
-            {
-                Title = "Erro de Validação",
-                Content = mensagemErro,
-                CloseButtonText = "OK",
-                XamlRoot = this.Content.XamlRoot
-            };
-
-            await dialog.ShowAsync();
-        }
 
         private string GetSelectedRadioButton()
         {

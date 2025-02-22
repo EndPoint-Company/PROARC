@@ -27,6 +27,7 @@ using System.Text.RegularExpressions;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Converters;
 using System.IO;
+using PROARC.src.Strategies;
 
 namespace PROARC.src.Views
 {
@@ -176,37 +177,56 @@ namespace PROARC.src.Views
             ProcuradorSection1.Visibility = Visibility.Collapsed;
         }
 
-        private async void OnNovoMotivoClick(object sender, RoutedEventArgs e)
+        // POP-UPS
+        private async Task<ContentDialogResult> MostrarContentDialogAsync(string title, object content, string primaryButtonText = null, string closeButtonText = "Ok")
         {
             var dialog = new ContentDialog
             {
-                Title = "Adicionar Novo Motivo",
-                Content = CreateDialogContent(),
-                PrimaryButtonText = "Salvar",
-                CloseButtonText = "Cancelar",
+                Title = title,
+                Content = content,
+                PrimaryButtonText = primaryButtonText,
+                CloseButtonText = closeButtonText,
                 XamlRoot = this.Content.XamlRoot
             };
 
-            var result = await dialog.ShowAsync();
+            return await dialog.ShowAsync();
+        }
+
+        private async Task ShowError(string mensagemErro)
+        {
+            await MostrarContentDialogAsync("Erro", mensagemErro);
+        }
+
+        private async Task ShowSuccess(string mensagemSucesso)
+        {
+            await MostrarContentDialogAsync("Sucesso", mensagemSucesso);
+        }
+
+
+        private async void OnNovoMotivoClick(object sender, RoutedEventArgs e)
+        {
+            var textBox = new TextBox
+            {
+                PlaceholderText = "Digite o motivo"
+            };
+
+            var result = await MostrarContentDialogAsync(
+                "Adicionar Novo Motivo",
+                textBox,
+                "Salvar",
+                "Cancelar");
 
             if (result == ContentDialogResult.Primary)
             {
-                var motivoTexto = ((TextBox)dialog.Content).Text;
+                var motivoTexto = textBox.Text;
 
-                if (!string.IsNullOrWhiteSpace(((TextBox)dialog.Content).Text))
+                if (!string.IsNullOrWhiteSpace(motivoTexto))
                 {
                     var motivosExistentes = await MotivoControl.GetAllAsync();
 
                     if (motivosExistentes.Any(m => m.Nome.Equals(motivoTexto, StringComparison.OrdinalIgnoreCase)))
                     {
-                        var errorDialog = new ContentDialog
-                        {
-                            Title = "Erro",
-                            Content = "Este motivo já existe.",
-                            CloseButtonText = "Ok",
-                            XamlRoot = this.Content.XamlRoot
-                        };
-                        await errorDialog.ShowAsync();
+                        await ShowError("Este motivo já existe.");
                     }
                     else
                     {
@@ -217,41 +237,17 @@ namespace PROARC.src.Views
                             await MotivoControl.InsertAsync(motivo);
                             await CarregarMotivosAsync();
 
-                            var successDialog = new ContentDialog
-                            {
-                                Title = "Sucesso",
-                                Content = "Motivo salvo com sucesso!",
-                                CloseButtonText = "Ok",
-                                XamlRoot = this.Content.XamlRoot
-                            };
-
-                            await successDialog.ShowAsync();
+                            await ShowSuccess("Motivo salvo com sucesso!");
                         }
                         catch (Exception ex)
                         {
-                            var errorDialog = new ContentDialog
-                            {
-                                Title = "Erro",
-                                Content = $"Falha ao salvar motivo: {ex.Message}",
-                                CloseButtonText = "Ok",
-                                XamlRoot = this.Content.XamlRoot
-                            };
-
-                            await errorDialog.ShowAsync();
+                            await ShowError($"Falha ao salvar motivo: {ex.Message}");
                         }
                     }
                 }
                 else
                 {
-                    var errorDialog = new ContentDialog
-                    {
-                        Title = "Erro",
-                        Content = "O motivo não pode estar vazio.",
-                        CloseButtonText = "Ok",
-                        XamlRoot = this.Content.XamlRoot
-                    };
-
-                    await errorDialog.ShowAsync();
+                    await ShowError("O motivo não pode estar vazio.");
                 }
             }
         }
@@ -393,15 +389,6 @@ namespace PROARC.src.Views
             textBox.SelectionStart = textBox.Text.Length;
         }
 
-
-        private UIElement CreateDialogContent()
-        {
-            return new TextBox
-            {
-                PlaceholderText = "Digite o motivo"
-            };
-        }
-
         private void PreencherComboBoxUfTodosReclamados()
         {
             // Lista de UFs do Brasil
@@ -496,26 +483,40 @@ namespace PROARC.src.Views
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Resetando estilos de erro
-            ResetErrorStyles();
+            int quantidadeReclamados = ObterQuantidadeReclamadosSelecionada();
+
+            var resetProcessor = new FieldProcessor(new ResetFieldStrategy());
+            resetProcessor.ProcessMultipleFields(GetFieldsToProcess(quantidadeReclamados));
 
             NumeroProcesso = inputNProcesso.Text.Trim();
             AnoProcesso = inputAnoProcesso.Text.Trim();
 
-            if (string.IsNullOrEmpty(NumeroProcesso))
+            bool isNovoProcesso = radio_agResposta.IsChecked == true;
+
+            if (isNovoProcesso)
             {
-                int count = await ReclamacaoControl.CountAsync();
-                NumeroProcesso = (count + 1).ToString();
+                if (string.IsNullOrEmpty(NumeroProcesso))
+                {
+                    int count = await ReclamacaoControl.CountAsync();
+                    NumeroProcesso = (count + 1).ToString();
+                }
+
+                if (string.IsNullOrEmpty(AnoProcesso))
+                {
+                    AnoProcesso = DateTime.Now.Year.ToString();
+                }
             }
 
             if (!CamposPreenchidos())
             {
-                ShowError("Preencha todos os campos obrigatórios antes de continuar.");
-                HighlightEmptyFields(); // 🔴 Adiciona bordas vermelhas nos campos vazios
+                await ShowError("Preencha todos os campos obrigatórios antes de continuar.");
+
+                var highlightProcessor = new FieldProcessor(new HighlightFieldStrategy());
+                highlightProcessor.ProcessMultipleFields(GetFieldsToProcess(quantidadeReclamados));
                 return;
             }
 
-            //if (!Validacaos()) { return; }
+            if (!ValidarCampos()) return;
 
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
 
@@ -535,11 +536,11 @@ namespace PROARC.src.Views
             {
                 string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
                 procurador = new Procurador(
-                inputNomeProcurador.Text,
-                cpfLimpoProcurador,
-                string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
-                string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
-                string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
+                    inputNomeProcurador.Text,
+                    cpfLimpoProcurador,
+                    string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
+                    string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
+                    string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
                 );
             }
 
@@ -551,7 +552,6 @@ namespace PROARC.src.Views
 
             string caminhoPasta = Path.Combine("/home/~/recl", $"G{NumeroProcesso}", AnoProcesso);
 
-
             string nProcesso = NumeroProcesso;
             short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
             string titulo = "G" + nProcesso + "/" + anoProcesso;
@@ -560,8 +560,6 @@ namespace PROARC.src.Views
             LinkedList<Reclamado> reclamados = CriarListaReclamados();
 
             string conciliador = inputNomeConciliador.Text;
-
-
             string situacao = GetSelectedRadioButton();
 
             var reclamacao = new ReclamacaoGeral(
@@ -584,22 +582,15 @@ namespace PROARC.src.Views
 
             if (success)
             {
-                var successDialog = new ContentDialog
-                {
-                    Title = "Sucesso",
-                    Content = "O processo foi cadastrado com sucesso!",
-                    CloseButtonText = "OK",
-                    XamlRoot = this.Content.XamlRoot
-                };
-
-                await successDialog.ShowAsync();
+                await ShowSuccess("O processo foi cadastrado com sucesso!");
                 Frame.Navigate(typeof(RegistrarProcesso01Page), true);
             }
             else
             {
-                ShowError("Falha ao cadastrar o processo. Tente novamente.");
+                await ShowError("Falha ao cadastrar o processo. Tente novamente.");
             }
         }
+
 
         private int ObterQuantidadeReclamadosSelecionada()
         {
@@ -610,164 +601,37 @@ namespace PROARC.src.Views
             return 1; // Se nenhum item estiver selecionado
         }
 
-
-
-
-
-        private void HighlightEmptyFields()
+        private IEnumerable<(FrameworkElement Field, TextBlock Label, TextBlock? Title)> GetFieldsToProcess(int quantidadeReclamados)
         {
-            // Obtém a quantidade de reclamados selecionada no ComboBox
-            int quantidadeReclamados = ObterQuantidadeReclamadosSelecionada();
+            yield return (inputNProcesso, TextBlockNProcesso, null);
+            yield return (inputAnoProcesso, TextBlockAnoProcesso, null);
+            yield return (inputNome, TextBlockNome, TextBlockReclamante);
+            yield return (inputCpfReclamante, TextBlockCpfReclamante, TextBlockReclamante);
+            yield return (cbMotivo, TextBlockMotivo, null);
+            yield return (calendario, TextBlockCalendario, null);
 
-            // Validação dos campos comuns (não relacionados aos reclamados)
-            HighlightField(null, inputNProcesso, TextBlockNProcesso);
-            HighlightField(null, inputAnoProcesso, TextBlockAnoProcesso);
-            HighlightField(TextBlockReclamante, inputNome, TextBlockNome);
-            HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
-            HighlightField(TextBlockConciliador, inputNomeConciliador, TextBlockNomeConciliador);
-
-            // Validação dos campos dos reclamados (apenas os visíveis)
             for (int i = 1; i <= quantidadeReclamados; i++)
             {
-                // Obtém os controles do reclamado atual
                 var textBlockReclamado = FindName($"textBlockReclamado{i:00}") as TextBlock;
-                var inputNomeReclamado = FindName($"inputNomeReclamado{i:00}") as TextBox;
-                var inputRuaReclamado = FindName($"inputRuaReclamado{i:00}") as TextBox;
-                var inputNumeroReclamado = FindName($"inputNumeroReclamado{i:00}") as TextBox;
-                var inputBairroReclamado = FindName($"inputBairroReclamado{i:00}") as TextBox;
-                var inputCidadeReclamado = FindName($"inputCidadeReclamado{i:00}") as TextBox;
-                var inputUfReclamado = FindName($"comboBoxUfReclamado{i:00}") as TextBox;
-                var inputCepReclamado = FindName($"inputCepReclamado{i:00}") as TextBox;
-
-                // Valida os campos do reclamado atual
-                HighlightField(textBlockReclamado, inputNomeReclamado, FindName($"TextBlockNomeReclamado{i:00}") as TextBlock);
-                HighlightField(textBlockReclamado, inputRuaReclamado, FindName($"TextBlockRuaReclamado{i:00}") as TextBlock);
-                HighlightField(textBlockReclamado, inputNumeroReclamado, FindName($"TextBlockNumeroReclamado{i:00}") as TextBlock);
-                HighlightField(textBlockReclamado, inputBairroReclamado, FindName($"TextBlockBairroReclamado{i:00}") as TextBlock);
-                HighlightField(textBlockReclamado, inputCidadeReclamado, FindName($"TextBlockCidadeReclamado{i:00}") as TextBlock);
-                //HighlightField(textBlockReclamado, inputUfReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
-                HighlightField(textBlockReclamado, inputCepReclamado, FindName($"TextBlockCepReclamado{i:00}") as TextBlock);
+                yield return (FindName($"inputNomeReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockNomeReclamado{i:00}") as TextBlock);
+                yield return (FindName($"inputRuaReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockRuaReclamado{i:00}") as TextBlock);
+                yield return (FindName($"inputNumeroReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockNumeroReclamado{i:00}") as TextBlock);
+                yield return (FindName($"inputBairroReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockBairroReclamado{i:00}") as TextBlock);
+                yield return (FindName($"inputCidadeReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockCidadeReclamado{i:00}") as TextBlock);
+                yield return (FindName($"inputCepReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockCepReclamado{i:00}") as TextBlock);
+                // yield return (FindName($"comboBoxUfReclamado{i:00}") as ComboBox, textBlockReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
             }
 
-            // Validação do Motivo (ComboBox)
-            if (cbMotivo.SelectedItem == null)
+            if (GetSelectedRadioButton() == "Nenhum status selecionado")
             {
-                cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
-                TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
+                yield return (radio_agFazerNotificacao, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_agRealizacaoAudiencia, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_agResposta, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_agEnvioNotificacao, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_agDocumentacao, TextBlockTramitacao, TextBlockStatus);
+                yield return (radio_atendido, TextBlockArquivado, TextBlockStatus);
+                yield return (radio_naoAtendido, TextBlockArquivado, TextBlockStatus);
             }
-
-            // Validação do Status (Se nenhum RadioButton foi selecionado)
-            if (!IsStatusSelected())
-            {
-                StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
-                TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
-                TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
-
-                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
-
-                TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
-                radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
-                radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Red);
-            }
-        }
-
-        private void HighlightField(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
-        {
-            if (string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.BorderBrush = new SolidColorBrush(Colors.Red);
-                textBox.PlaceholderForeground = new SolidColorBrush(Colors.Red);
-                textBlock.Foreground = new SolidColorBrush(Colors.Red);
-
-                if (titulo != null)
-                {
-                    titulo.Foreground = new SolidColorBrush(Colors.Red);
-                }
-            }
-        }
-
-        // 🔵 Método para Resetar os Estilos de Erro
-        private void ResetErrorStyles()
-        {
-            // Reseta os campos comuns
-            ResetFieldStyle(null, inputNProcesso, TextBlockNProcesso);
-            ResetFieldStyle(null, inputAnoProcesso, TextBlockAnoProcesso);
-            ResetFieldStyle(TextBlockReclamante, inputNome, TextBlockNome);
-            ResetFieldStyle(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
-
-            // Obtém a quantidade de reclamados selecionada no ComboBox
-            int quantidadeReclamados = ObterQuantidadeReclamadosSelecionada();
-
-            // Reseta os campos dos reclamados (apenas os visíveis)
-            for (int i = 1; i <= quantidadeReclamados; i++)
-            {
-                // Obtém os controles do reclamado atual
-                var textBlockReclamado = FindName($"textBlockReclamado{i:00}") as TextBlock;
-                var inputNomeReclamado = FindName($"inputNomeReclamado{i:00}") as TextBox;
-                var inputRuaReclamado = FindName($"inputRuaReclamado{i:00}") as TextBox;
-                var inputNumeroReclamado = FindName($"inputNumeroReclamado{i:00}") as TextBox;
-                var inputBairroReclamado = FindName($"inputBairroReclamado{i:00}") as TextBox;
-                var inputCidadeReclamado = FindName($"inputCidadeReclamado{i:00}") as TextBox;
-                var inputUfReclamado = FindName($"comboBoxUfReclamado{i:00}") as TextBox;
-                var inputCepReclamado = FindName($"inputCepReclamado{i:00}") as TextBox;
-
-                // Reseta os campos do reclamado atual
-                ResetFieldStyle(textBlockReclamado, inputNomeReclamado, FindName($"TextBlockNomeReclamado{i:00}") as TextBlock);
-                ResetFieldStyle(textBlockReclamado, inputRuaReclamado, FindName($"TextBlockRuaReclamado{i:00}") as TextBlock);
-                ResetFieldStyle(textBlockReclamado, inputNumeroReclamado, FindName($"TextBlockNumeroReclamado{i:00}") as TextBlock);
-                ResetFieldStyle(textBlockReclamado, inputBairroReclamado, FindName($"TextBlockBairroReclamado{i:00}") as TextBlock);
-                ResetFieldStyle(textBlockReclamado, inputCidadeReclamado, FindName($"TextBlockCidadeReclamado{i:00}") as TextBlock);
-                //ResetFieldStyle(textBlockReclamado, inputUfReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
-                ResetFieldStyle(textBlockReclamado, inputCepReclamado, FindName($"TextBlockCepReclamado{i:00}") as TextBlock);
-            }
-
-            // Reseta o ComboBox do Motivo
-            cbMotivo.BorderBrush = new SolidColorBrush(Colors.Gray);
-            TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Black);
-
-            // Reseta a Seção de Status
-            StatusSection.BorderBrush = new SolidColorBrush(Colors.Transparent);
-            TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
-            TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
-
-            radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agResposta.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Black);
-
-            TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Black);
-            radio_atendido.Foreground = new SolidColorBrush(Colors.Black);
-            radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Black);
-        }
-
-        // 🔵 Método Genérico para Resetar o Estilo de um Campo
-        private void ResetFieldStyle(TextBlock? titulo, TextBox textBox, TextBlock textBlock)
-        {
-            textBox.BorderBrush = new SolidColorBrush(Colors.Gray);
-            textBox.PlaceholderForeground = new SolidColorBrush(Colors.DarkGray);
-            textBlock.Foreground = new SolidColorBrush(Colors.Black);
-
-            if (titulo != null)
-            {
-                titulo.Foreground = new SolidColorBrush(Colors.Black);
-            }
-        }
-
-        // ✅ Verifica se algum RadioButton do Status foi selecionado
-        private bool IsStatusSelected()
-        {
-            return radio_agFazerNotificacao.IsChecked == true ||
-                   radio_agRealizacaoAudiencia.IsChecked == true ||
-                   radio_agResposta.IsChecked == true ||
-                   radio_agEnvioNotificacao.IsChecked == true ||
-                   radio_agDocumentacao.IsChecked == true ||
-                   radio_atendido.IsChecked == true ||
-                   radio_naoAtendido.IsChecked == true;
         }
 
         private bool CamposPreenchidos()
@@ -776,19 +640,6 @@ namespace PROARC.src.Views
             && cbMotivo.SelectedItem != null
             && calendario.Date != null
             && GetSelectedRadioButton() != "Nenhum status selecionado";
-
-        private async void ShowError(string mensagemErro)
-        {
-            var dialog = new ContentDialog
-            {
-                Title = "Erro de Validação",
-                Content = mensagemErro,
-                CloseButtonText = "OK",
-                XamlRoot = this.Content.XamlRoot
-            };
-
-            await dialog.ShowAsync();
-        }
 
         private string GetSelectedRadioButton()
         {
@@ -872,6 +723,38 @@ namespace PROARC.src.Views
             }
         }
 
+        private bool ValidarCampos()
+        {
+            var erros = new List<string>();
+
+            var validacoes = new (IValidacaoStrategy estrategia, string valor, string mensagemErro)[]
+            {
+                (new ValidacaoCPF(), inputCpfReclamante.Text, "CPF do Reclamante inválido."),
+                (new ValidacaoEmail(), inputEmailReclamante.Text, "E-mail inválido."),
+                (new ValidacaoTelefone(), inputNumeroReclamante.Text, "Telefone inválido.")
+            };
+
+            foreach (var (estrategia, valor, mensagemErro) in validacoes)
+            {
+                if (!string.IsNullOrWhiteSpace(valor))
+                {
+                    var validador = new Validador(estrategia);
+                    if (!validador.Validar(valor))
+                    {
+                        erros.Add(mensagemErro);
+                    }
+                }
+            }
+
+            if (erros.Count > 0)
+            {
+                ShowError(string.Join("\n", erros));
+                return false;
+            }
+
+            return true;
+        }
+
         private void DragDropArea_DragOver(object sender, Microsoft.UI.Xaml.DragEventArgs e)
         {
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
@@ -886,13 +769,8 @@ namespace PROARC.src.Views
             ReclamanteSection.Translation = new Vector3(1, 1, 20);
             ProcuradorSection2.Translation = new Vector3(1, 1, 20);
             AnexarArquivosSection.Translation = new Vector3(1, 1, 20);
-            ///ReclamadoSectionReclama.Translation = new Vector3(1, 1, 20);
             ConciliadorSection.Translation = new Vector3(1, 1, 20);
         }
-
-
-
-
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

@@ -22,17 +22,11 @@
 		<Compile Remove="src\Converters\Class1.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Include="assets\config.json" />
-	</ItemGroup>
-	<ItemGroup>
 		<None Remove="src\Views\NewHomePage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\proarc-white-logo.ico" />
-<<<<<<< Updated upstream
-		<Content Include="Assets\config.json" />
-=======
->>>>>>> Stashed changes
+		<Content Include="Assets\config.json"/>
 		<Content Include="Assets\bannerHome.png" />
 	</ItemGroup>
 
