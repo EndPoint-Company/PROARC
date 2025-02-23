@@ -321,6 +321,38 @@ namespace PROARC.src.Control
 
             return 0;
         }
+        public static async Task<int> CountReclamacoesGeralPorAnoAsync()
+        {
+            var request = new { action = "count_reclamacoes_geral_ano" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+
+            return 0;
+        }
+
+        public static async Task<int> CountReclamacoesEnelPorAnoAsync()
+        {
+            var request = new { action = "count_reclamacoes_enel_ano" };
+            string response = await SendRequestAsync(request);
+
+            using JsonDocument doc = JsonDocument.Parse(response);
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("count", out JsonElement countElement))
+            {
+                return countElement.GetInt32();
+            }
+
+            return 0;
+        }
+
         public static async Task<int> CountEAsync()
         {
             var request = new { action = "count_reclamacoes_enel" };

@@ -124,7 +124,7 @@ namespace PROARC.src.Views
 
         private async Task DefinirNovoProcesso()
         {
-            int count = await ReclamacaoControl.CountEAsync();
+            int count = await ReclamacaoControl.CountReclamacoesEnelPorAnoAsync();
             NumeroProcesso = (count + 1).ToString();
             AnoProcesso = DateTime.Now.Year.ToString();
         }
