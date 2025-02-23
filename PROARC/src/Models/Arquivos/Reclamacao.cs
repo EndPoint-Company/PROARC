@@ -21,6 +21,10 @@ namespace PROARC.src.Models.Arquivos
         private string criador;
         private DateTime? dataCriacao;
 
+
+        // Propriedade para expor o nome do primeiro reclamado
+        public string PrimeiroReclamadoNome => Reclamados.First?.Value?.Nome ?? "N/A";
+
         public Reclamacao() { }
 
         public Reclamacao

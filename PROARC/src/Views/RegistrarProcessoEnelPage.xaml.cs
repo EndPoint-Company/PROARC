@@ -39,7 +39,14 @@ namespace PROARC.src.Views
         public string NumeroProcesso
         {
             get => numeroProcesso;
-            set => SetProperty(ref numeroProcesso, value);
+            set
+            {
+                if (int.TryParse(value, out int numero))
+                {
+                    value = numero.ToString("D3"); 
+                }
+                SetProperty(ref numeroProcesso, value);
+            }
         }
 
         public string AnoProcesso
@@ -485,7 +492,7 @@ namespace PROARC.src.Views
             if (radio_agRespostaEnel.IsChecked == true)
                 return "Aguardando resposta da Enel";
             if (radio_agAguardandoPrazo.IsChecked == true)
-                return "Aguardando Prazo";
+                return "Aguardando prazo";
             if (radio_atendido.IsChecked == true)
                 return "Atendido";
             if (radio_naoAtendido.IsChecked == true)
