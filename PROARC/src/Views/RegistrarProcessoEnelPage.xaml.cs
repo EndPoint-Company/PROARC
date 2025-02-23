@@ -82,7 +82,7 @@ namespace PROARC.src.Views
 
         private void ConfigurarEstadoProcesso(bool isNovoProcesso)
         {
-            radio_agFazerNotificacao.IsChecked = isNovoProcesso;
+            radio_agRespostaEnel.IsChecked = isNovoProcesso;
             AtualizarEstilosBotoes(isNovoProcesso);
             AjustarCamposProcesso(isNovoProcesso);
         }
@@ -390,11 +390,8 @@ namespace PROARC.src.Views
                 TextBlockStatus.Foreground = new SolidColorBrush(Colors.Red);
                 TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Red);
 
-                radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agResposta.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Red);
-                radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agAguardandoPrazo.Foreground = new SolidColorBrush(Colors.Red);
+                radio_agRespostaEnel.Foreground = new SolidColorBrush(Colors.Red);
 
                 TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Red);
                 radio_atendido.Foreground = new SolidColorBrush(Colors.Red);
@@ -434,11 +431,8 @@ namespace PROARC.src.Views
             TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
             TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
 
-            radio_agFazerNotificacao.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agRealizacaoAudiencia.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agResposta.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agEnvioNotificacao.Foreground = new SolidColorBrush(Colors.Black);
-            radio_agDocumentacao.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agRespostaEnel.Foreground = new SolidColorBrush(Colors.Black);
+            radio_agAguardandoPrazo.Foreground = new SolidColorBrush(Colors.Black);
 
             TextBlockArquivado.Foreground = new SolidColorBrush(Colors.Black);
             radio_atendido.Foreground = new SolidColorBrush(Colors.Black);
@@ -461,11 +455,8 @@ namespace PROARC.src.Views
         // ? Verifica se algum RadioButton do Status foi selecionado
         private bool IsStatusSelected()
         {
-            return radio_agFazerNotificacao.IsChecked == true ||
-                   radio_agRealizacaoAudiencia.IsChecked == true ||
-                   radio_agResposta.IsChecked == true ||
-                   radio_agEnvioNotificacao.IsChecked == true ||
-                   radio_agDocumentacao.IsChecked == true ||
+            return radio_agRespostaEnel.IsChecked == true ||
+                   radio_agAguardandoPrazo.IsChecked == true ||
                    radio_atendido.IsChecked == true ||
                    radio_naoAtendido.IsChecked == true;
         }
@@ -491,16 +482,10 @@ namespace PROARC.src.Views
 
         private string GetSelectedRadioButton()
         {
-            if (radio_agFazerNotificacao.IsChecked == true)
-                return "Aguardando fazer notificação";
-            if (radio_agRealizacaoAudiencia.IsChecked == true)
-                return "Aguardando realização da audiência";
-            if (radio_agResposta.IsChecked == true)
-                return "Aguardando resposta da empresa";
-            if (radio_agEnvioNotificacao.IsChecked == true)
-                return "Aguardando envio da notificação";
-            if (radio_agDocumentacao.IsChecked == true)
-                return "Aguardando documentação";
+            if (radio_agRespostaEnel.IsChecked == true)
+                return "Aguardando resposta da Enel";
+            if (radio_agAguardandoPrazo.IsChecked == true)
+                return "Aguardando Prazo";
             if (radio_atendido.IsChecked == true)
                 return "Atendido";
             if (radio_naoAtendido.IsChecked == true)
