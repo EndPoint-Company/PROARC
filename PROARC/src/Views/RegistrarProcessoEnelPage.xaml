@@ -118,11 +118,8 @@
                             <StackPanel>
                                 <TextBlock x:Name="TextBlockTramitacao" Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
-                                    <RadioButton x:Name="radio_agFazerNotificacao" Content="Aguardando fazer notificação" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agRealizacaoAudiencia" Content="Aguardando realização da audiência" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agResposta" Content="Aguardando resposta do reclamado" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agEnvioNotificacao" Content="Aguardando envio de notificação" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agDocumentacao" Content="Aguardando documentação das partes e assinatura" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agRespostaEnel" Content="Aguardando resposta da Enel" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agAguardandoPrazo" Content="Aguardando prazo" GroupName="StatusGroup"/>
                                 </StackPanel>
                             </StackPanel>
 

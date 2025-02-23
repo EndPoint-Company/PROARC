@@ -172,7 +172,7 @@ namespace PROARC.src.Views
 
         private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is ProcessoAdministrativo processo)
+            if (sender is FrameworkElement element)
             {
                 var menuFlyout = new MenuFlyout();
 

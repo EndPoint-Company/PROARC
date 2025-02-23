@@ -20,12 +20,6 @@ namespace PROARC.src.Models
         private string? cep;
         private string? telefone;
         private string? email;
-        private object numeroAddr;
-        private object logradouroAddr;
-        private object bairroAddr;
-        private object cidadeAddr;
-        private object ufAddr;
-        private DateTime dateTime;
 
         public Reclamado(string nome, string cpf = null, string cnpj = null,
                          short? numero = null, string logradouro = null, string bairro = null, string cidade = null,

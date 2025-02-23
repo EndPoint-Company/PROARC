@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using PROARC.src.Models;
 using System.Text.Json;
 using System.Security.Cryptography;
+using Newtonsoft.Json.Linq;
+using static PROARC.src.Control.NetworkControl;
+using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control
 {
@@ -68,5 +72,40 @@ namespace PROARC.src.Control
 
             return false;
        }
+
+        public static async Task<LinkedList<Usuario?>?> GetAll()
+        {
+            var action = new { action = "get_all_usuarios" };
+            string res = await SendRequestAsync(action);
+
+            Console.WriteLine(res);
+
+            LinkedList<Usuario?>? usuarios = new LinkedList<Usuario?>();
+            JToken jsonToken = JToken.Parse(res);
+
+            if (jsonToken.Type == JTokenType.String)
+            {
+                jsonToken = JToken.Parse(jsonToken.Value<string>());
+            }
+
+            JArray reclamacoesArray = (JArray)jsonToken["usuarios"];
+
+            if (reclamacoesArray == null) return null;
+
+            Console.WriteLine(reclamacoesArray.ToString());
+
+            foreach (JArray usr in reclamacoesArray)
+            {
+                Usuario usuario = new Usuario();
+                usuario.Nome = (string?)usr[0];
+                usuario.Cargo = (string?)usr[1];
+
+                Console.WriteLine(usuario.ToString());
+
+                usuarios.AddLast(usuario);
+            }
+
+            return usuarios;
+        }
     }
 }
