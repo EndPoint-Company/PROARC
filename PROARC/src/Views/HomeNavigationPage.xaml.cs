@@ -32,7 +32,7 @@ namespace PROARC.src.Views
                         args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "CadastrarPageGeral":
-                        contentFrame.Navigate(typeof(RegistrarProcesso01Page), true);
+                        contentFrame.Navigate(typeof(RegistrarProcessoPage), true);
                         args.SelectedItemContainer.IsSelected = false;
                         break;
                     case "LoginPage":

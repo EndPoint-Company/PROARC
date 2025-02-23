@@ -27,14 +27,14 @@ using System.Text.RegularExpressions;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Converters;
 using System.IO;
-using PROARC.src.Strategies;
 using PROARC.src.Models.Arquivos.FabricaReclamacao;
 using PROARC.src.Models.FabricaEntidadesProcuradoras;
-using Microsoft.WindowsAppSDK.Runtime.Packages;
+using PROARC.src.Control.Strategies.StrategyValidacao;
+using PROARC.src.Control.Strategies.StrategyField;
 
 namespace PROARC.src.Views
 {
-    public sealed partial class RegistrarProcesso01Page : Page, INotifyPropertyChanged
+    public sealed partial class RegistrarProcessoPage : Page, INotifyPropertyChanged
     {
         private string numeroProcesso;
         private string anoProcesso;
@@ -64,7 +64,7 @@ namespace PROARC.src.Views
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public RegistrarProcesso01Page()
+        public RegistrarProcessoPage()
         {
             InitializeComponent();
             DataContext = this;
@@ -537,7 +537,7 @@ namespace PROARC.src.Views
 
             if (ProcuradorCheckBox.IsChecked == true)
             {
-                string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
+             string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
 
              procurador = (Procurador?)fabricaPessoa.CriarEntidadeProcuradora(EnumEntidadeProcuradora.Procurador, inputNomeProcurador.Text,
                     cpfLimpoProcurador,
@@ -590,7 +590,7 @@ namespace PROARC.src.Views
             if (success)
             {
                 await ShowSuccess("O processo foi cadastrado com sucesso!");
-                Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+                Frame.Navigate(typeof(RegistrarProcessoPage), true);
             }
             else
             {
@@ -626,7 +626,7 @@ namespace PROARC.src.Views
                 yield return (FindName($"inputBairroReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockBairroReclamado{i:00}") as TextBlock);
                 yield return (FindName($"inputCidadeReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockCidadeReclamado{i:00}") as TextBlock);
                 yield return (FindName($"inputCepReclamado{i:00}") as TextBox, textBlockReclamado, FindName($"TextBlockCepReclamado{i:00}") as TextBlock);
-                // yield return (FindName($"comboBoxUfReclamado{i:00}") as ComboBox, textBlockReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
+                yield return (FindName($"comboBoxUfReclamado{i:00}") as ComboBox, textBlockReclamado, FindName($"TextBlockUfReclamado{i:00}") as TextBlock);
             }
 
             if (GetSelectedRadioButton() == "Nenhum status selecionado")

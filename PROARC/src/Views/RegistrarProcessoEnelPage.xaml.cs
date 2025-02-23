@@ -27,9 +27,10 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using PROARC.src.Strategies;
 using PROARC.src.Models.Arquivos.FabricaReclamacao;
 using PROARC.src.Models.FabricaEntidadesProcuradoras;
+using PROARC.src.Control.Strategies.StrategyValidacao;
+using PROARC.src.Control.Strategies.StrategyField;
 
 namespace PROARC.src.Views
 {

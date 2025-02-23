@@ -231,7 +231,7 @@ namespace PROARC.src.Views
 
         private void EditarProcesso()
         {
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
+            Frame.Navigate(typeof(RegistrarProcessoPage));
         }
     }
 }
