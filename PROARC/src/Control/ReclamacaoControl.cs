@@ -138,7 +138,6 @@ namespace PROARC.src.Control
         {
             var request = new { action = "get_reclamacao_por_titulo", titulo };
             string response = await SendRequestAsync(request);
-            Console.WriteLine(response);
             JToken jsonToken = JToken.Parse(response);
 
             if (jsonToken.Type == JTokenType.String)

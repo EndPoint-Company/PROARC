@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using PROARC.src.Control.Utils;
 using PROARC.src.Models;
 
 namespace PROARC.src.ViewModels
@@ -27,55 +29,120 @@ namespace PROARC.src.ViewModels
         // Método para carregar os dados de reclamações dos últimos 12 meses
         public async Task LoadComplaintDataAsync()
         {
-            // Simulação de uma chamada ao banco de dados
-            await Task.Delay(1000); // Simula um atraso de rede/banco de dados
+            try
+            {
+                // Chama o método GetReclamadosPorMesAsync para obter os dados do banco de dados
+                var reclamacoesPorMes = await EstatisticasControl.GetReclamadosPorMesAsync();
 
-            // Dados de exemplo (substitua por dados reais do banco de dados)
-            var currentDate = DateTime.Now;
-            var random = new Random();
+                // Log dos dados recebidos
+                Debug.WriteLine("Dados recebidos do GetReclamadosPorMesAsync: " + string.Join(", ", reclamacoesPorMes));
 
-            ComplaintData = Enumerable.Range(0, 12)
-                .Select(i => new ComplaintData
+                // Cria uma lista para armazenar os dados formatados
+                ComplaintData = new List<ComplaintData>();
+
+                // Obtém o ano atual
+                int anoAtual = DateTime.Now.Year;
+
+                // Processa os dados retornados
+                foreach (var item in reclamacoesPorMes)
                 {
-                    Date = currentDate.AddMonths(-i), // Armazena a data completa
-                    Complaints = random.Next(10, 100) // Número aleatório de reclamações
-                })
-                .OrderBy(d => d.Date) // Ordena pela data completa
-                .ToList();
+                    // Divide a string no formato "Mês X: Y"
+                    var parts = item.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length == 2 && int.TryParse(parts[0].Replace("Mês", "").Trim(), out int mes) && int.TryParse(parts[1].Trim(), out int quantidade))
+                    {
+                        // Cria uma data para o mês e ano atual
+                        var data = new DateTime(anoAtual, mes, 1);
+
+                        // Adiciona os dados à lista
+                        ComplaintData.Add(new ComplaintData
+                        {
+                            Date = data, // Armazena a data completa
+                            Complaints = quantidade // Quantidade de reclamações
+                        });
+                    }
+                    else
+                    {
+                        // Log de entradas mal formatadas
+                        Debug.WriteLine("Entrada mal formatada: " + item);
+                    }
+                }
+
+                // Garante que os dados estejam ordenados por mês
+                ComplaintData = ComplaintData.OrderBy(d => d.Date).ToList();
+
+                // Log da lista final de reclamações
+                Debug.WriteLine("Lista final de reclamações: " + string.Join(", ", ComplaintData.Select(d => $"{d.Date:MM/yyyy}: {d.Complaints}")));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erro ao carregar dados de reclamações: {ex.Message}");
+                // Define uma lista vazia em caso de erro
+                ComplaintData = new List<ComplaintData>();
+            }
         }
 
         // Método para carregar as 5 empresas mais reclamadas
         public async Task LoadTopCompaniesAsync()
         {
-            // Simulação de uma chamada ao banco de dados
-            await Task.Delay(1000); // Simula um atraso de rede/banco de dados
+            try
+            {
+                // Chama o método GetAsync(5) do controlador EstatisticasControl para obter as 5 empresas mais reclamadas
+                var empresasReclamadas = await EstatisticasControl.GetAsync(5);
 
-            // Dados de exemplo (substitua por dados reais do banco de dados)
-            TopCompanies = new List<CompanyComplaintData>
-        {
-            new CompanyComplaintData { CompanyName = "Empresa A", Complaints = 120 },
-            new CompanyComplaintData { CompanyName = "Empresa B", Complaints = 95 },
-            new CompanyComplaintData { CompanyName = "Empresa C", Complaints = 80 },
-            new CompanyComplaintData { CompanyName = "Empresa D", Complaints = 70 },
-            new CompanyComplaintData { CompanyName = "Empresa E", Complaints = 60 }
-        };
+                // Log dos dados recebidos
+                Debug.WriteLine("Dados recebidos do GetAsync: " + string.Join(", ", empresasReclamadas));
+
+                // Processa os dados retornados e preenche a lista TopCompanies
+                TopCompanies = empresasReclamadas.Select(empresa =>
+                {
+                    // Log da string sendo processada
+                    Debug.WriteLine("Processando: " + empresa);
+
+                    // Divide a string no formato "Empresa: Quantidade"
+                    var parts = empresa.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length == 2 && int.TryParse(parts[1].Trim(), out int quantidadeReclamacoes))
+                    {
+                        return new CompanyComplaintData
+                        {
+                            CompanyName = parts[0].Trim(), // Nome da empresa
+                            Complaints = quantidadeReclamacoes // Quantidade de reclamações
+                        };
+                    }
+                    else
+                    {
+                        // Log de entradas mal formatadas
+                        Debug.WriteLine("Entrada mal formatada: " + empresa);
+                        return null; // Ignora entradas mal formatadas
+                    }
+                }).Where(c => c != null).ToList(); // Filtra valores nulos e converte para lista
+
+                // Log da lista final de empresas
+                Debug.WriteLine("Lista final de empresas: " + string.Join(", ", TopCompanies.Select(c => c.CompanyName)));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erro ao carregar empresas mais reclamadas: {ex.Message}");
+                // Define uma lista vazia em caso de erro
+                TopCompanies = new List<CompanyComplaintData>();
+            }
         }
 
         // Método para carregar os 5 motivos mais recorrentes
         public async Task LoadTopReasonsAsync()
         {
-            // Simulação de uma chamada ao banco de dados
-            await Task.Delay(1000); // Simula um atraso de rede/banco de dados
+            // Chama o método GetMotivosNumAsync() do controlador EstatisticasControl
+            var motivos = await EstatisticasControl.GetMotivosNumAsync();
 
-            // Dados de exemplo (substitua por dados reais do banco de dados)
-            TopReasons = new List<ReasonData>
-        {
-            new ReasonData { Reason = "Problemas com Entrega", Count = 150 },
-            new ReasonData { Reason = "Produto Danificado", Count = 120 },
-            new ReasonData { Reason = "Atendimento ao Cliente", Count = 100 },
-            new ReasonData { Reason = "Cobrança Incorreta", Count = 90 },
-            new ReasonData { Reason = "Produto Não Recebido", Count = 80 }
-        };
+            // Processa os dados retornados e preenche a lista TopReasons
+            TopReasons = motivos.Select(motivo =>
+            {
+                var parts = motivo.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 2 && int.TryParse(parts[1].Trim(), out int count))
+                {
+                    return new ReasonData { Reason = parts[0].Trim(), Count = count };
+                }
+                return null;
+            }).Where(r => r != null).Take(5).ToList();
         }
     }
 

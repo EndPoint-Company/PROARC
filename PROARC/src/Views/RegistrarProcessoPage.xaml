@@ -1415,53 +1415,52 @@
                 </StackPanel>
 
 
-                    <StackPanel Orientation="Horizontal" Margin="160,0">
-                        <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
+                <StackPanel Orientation="Horizontal" Margin="160,0">
+                    <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
-                        <StackPanel Padding="40" Spacing="20" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478" >
-                            <TextBlock Text="Anexar Arquivos" FontSize="18" FontWeight="Bold" />
+                    <StackPanel Padding="40" Spacing="20" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478">
+                        <TextBlock Text="Anexar Arquivos" FontSize="18" FontWeight="Bold" />
 
-                            <!-- Área para Arrastar e Soltar Arquivos -->
-                            <Border x:Name="DragDropArea" 
-                                        BorderBrush="#d8d9d7" 
-                                        BorderThickness="1" 
-                                        Background="#F7F7F7" 
-                                        CornerRadius="5" 
-                                        Height="150" 
-                                        AllowDrop="True" 
-                                        Drop="DragDropArea_Drop" 
-                                        DragOver="DragDropArea_DragOver">
+                        <!-- Área para Arrastar e Soltar Arquivos -->
+                        <Border x:Name="DragDropArea" 
+                BorderBrush="#d8d9d7" 
+                BorderThickness="1" 
+                Background="#F7F7F7" 
+                CornerRadius="5" 
+                Height="150" 
+                AllowDrop="True" 
+                Drop="DragDropArea_Drop" 
+                DragOver="DragDropArea_DragOver">
 
-                                <Grid>
-                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-                                        <Button Content="Procurar Arquivos" 
-                                                    x:Name="PickFileButton" 
-                                                    Background="#003366" 
-                                                    Foreground="White" 
-                                                    Padding="10,5" 
-                                                    HorizontalAlignment="Center" 
-                                                    Click="PickFileButton_Click"
-                                                    CornerRadius="5"/>
+                            <Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                                    <Button Content="Procurar Arquivos" 
+                            x:Name="PickFileButton" 
+                            Background="#003366" 
+                            Foreground="White" 
+                            Padding="10,5" 
+                            HorizontalAlignment="Center" 
+                            Click="PickFileButton_Click"
+                            CornerRadius="5"/>
 
-                                        <TextBlock Text="ou arraste um arquivo até aqui" 
-                                                       HorizontalAlignment="Center" 
-                                                       VerticalAlignment="Center" 
-                                                       FontSize="14" 
-                                                       Foreground="Gray" />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
+                                    <TextBlock Text="ou arraste um arquivo até aqui" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               FontSize="14" 
+                               Foreground="Gray" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
 
-                            <!-- Lista de Arquivos Anexados -->
-                            <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
-                                <TextBlock Text="Nenhum arquivo selecionado."
-                                       x:Name="MensagemNenhumArquivo"
-                                       FontSize="14"
-                                       Foreground="Gray" />
-                            </StackPanel>
-
+                        <!-- Lista de Arquivos Anexados -->
+                        <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
+                            <TextBlock Text="Nenhum arquivo selecionado."
+                       x:Name="MensagemNenhumArquivo"
+                       FontSize="14"
+                       Foreground="Gray" />
                         </StackPanel>
                     </StackPanel>
+                </StackPanel>
 
 
                 <!-- Botão de Continuar -->

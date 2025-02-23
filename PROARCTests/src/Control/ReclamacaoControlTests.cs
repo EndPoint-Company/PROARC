@@ -30,7 +30,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task GetAsyncTest()
         {
-            Reclamacao reclamacao = await ReclamacaoControl.GetAsync("titus");
+            Reclamacao reclamacao = await ReclamacaoControl.GetAsync("G001/2025");
             Console.WriteLine(reclamacao);
         }
 
