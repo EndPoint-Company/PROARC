@@ -1,6 +1,7 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Storage.Pickers;
@@ -165,7 +166,7 @@ namespace PROARC.src.Views
                         var errorDialog = new ContentDialog
                         {
                             Title = "Erro",
-                            Content = "Este motivo j· existe.",
+                            Content = "Este motivo j√° existe.",
                             CloseButtonText = "Ok",
                             XamlRoot = this.Content.XamlRoot
                         };
@@ -209,7 +210,7 @@ namespace PROARC.src.Views
                     var errorDialog = new ContentDialog
                     {
                         Title = "Erro",
-                        Content = "O motivo n„o pode estar vazio.",
+                        Content = "O motivo n√£o pode estar vazio.",
                         CloseButtonText = "Ok",
                         XamlRoot = this.Content.XamlRoot
                     };
@@ -238,17 +239,17 @@ namespace PROARC.src.Views
         //{
         //    if (!Validacoes.ValidarCPF(inputCpfReclamante.Text))
         //    {
-        //        ShowError("CPF inv·lido do Reclamante È Invalido.");
+        //        ShowError("CPF inv√°lido do Reclamante √© Invalido.");
         //        return false;
         //    }
         //    else if (!Validacoes.ValidarEmail(inputEmailReclamante.Text))
         //    {
-        //        ShowError("E-mail inv·lido.");
+        //        ShowError("E-mail inv√°lido.");
         //        return false;
         //    }
         //    else if (!Validacoes.ValidarTelefone(inputNumeroReclamante.Text))
         //    {
-        //        ShowError("Telefone inv·lido.");
+        //        ShowError("Telefone inv√°lido.");
         //        return false;
         //    }
         //    return true;
@@ -286,13 +287,46 @@ namespace PROARC.src.Views
 
             if (!CamposPreenchidos())
             {
-                ShowError("Preencha todos os campos obrigatÛrios antes de continuar.");
-                HighlightEmptyFields(); // ?? Adiciona bordas vermelhas nos campos vazios
+                ShowError("Preencha todos os campos obrigat√≥rios antes de continuar.");
+                HighlightEmptyFields(); // üî¥ Adiciona bordas vermelhas nos campos vazios
                 return;
             }
 
-            // if (!Validacaos()) { return; }
+            // Coletar os arquivos anexados (caminhos completos)
+            var arquivosAnexados = ListaArquivos.Children.OfType<StackPanel>()
+                .Select(stackPanel => stackPanel.Children.OfType<TextBlock>().FirstOrDefault()?.Tag?.ToString())
+                .Where(path => !string.IsNullOrEmpty(path))
+                .ToList();
 
+            // Log dos arquivos a serem enviados
+            if (arquivosAnexados.Any())
+            {
+                foreach (var arquivo in arquivosAnexados)
+                {
+                    Debug.WriteLine($"Arquivo a ser enviado: {arquivo}");
+                }
+
+                // Enviar cada arquivo para o servidor
+                foreach (var caminhoArquivo in arquivosAnexados)
+                {
+                    if (File.Exists(caminhoArquivo))
+                    {
+                        string tituloPasta = $"E{NumeroProcesso}-{AnoProcesso}"; // T√≠tulo da pasta
+                        Debug.WriteLine($"Enviando arquivo: {caminhoArquivo} para a pasta: {tituloPasta}");
+                        await FileNetworkControl.SendFile(caminhoArquivo, tituloPasta); // Chama o m√©todo do controlador
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Arquivo n√£o encontrado: {caminhoArquivo}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Nenhum arquivo encontrado para enviar.");
+            }
+
+            // Restante da l√≥gica para salvar o processo...
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
 
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
@@ -383,14 +417,14 @@ namespace PROARC.src.Views
             HighlightField(TextBlockReclamante, inputNomeReclamante, TextBlockNomeReclamante);
             HighlightField(TextBlockReclamante, inputCpfReclamante, TextBlockCpfReclamante);
 
-            // ?? ValidaÁ„o do Motivo (ComboBox)
+            // ?? Valida√ß√£o do Motivo (ComboBox)
             if (cbMotivo.SelectedItem == null)
             {
                 cbMotivo.BorderBrush = new SolidColorBrush(Colors.Red);
                 TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Red);
             }
 
-            // ?? ValidaÁ„o do Status (Se nenhum RadioButton foi selecionado)
+            // ?? Valida√ß√£o do Status (Se nenhum RadioButton foi selecionado)
             if (!IsStatusSelected())
             {
                 StatusSection.BorderBrush = new SolidColorBrush(Colors.Red);
@@ -421,7 +455,7 @@ namespace PROARC.src.Views
             }
         }
 
-        // ?? MÈtodo para Resetar os Estilos de Erro
+        // ?? M√©todo para Resetar os Estilos de Erro
         private void ResetErrorStyles()
         {
             ResetFieldStyle(inputNProcesso, TextBlockNProcesso);
@@ -433,7 +467,7 @@ namespace PROARC.src.Views
             cbMotivo.BorderBrush = new SolidColorBrush(Colors.Gray);
             TextBlockMotivo.Foreground = new SolidColorBrush(Colors.Black);
 
-            // ?? Resetando a SeÁ„o de Status
+            // ?? Resetando a Se√ß√£o de Status
             StatusSection.BorderBrush = new SolidColorBrush(Colors.Transparent);
             TextBlockStatus.Foreground = new SolidColorBrush(Colors.Black);
             TextBlockTramitacao.Foreground = new SolidColorBrush(Colors.Black);
@@ -446,7 +480,7 @@ namespace PROARC.src.Views
             radio_naoAtendido.Foreground = new SolidColorBrush(Colors.Black);
         }
 
-        // ?? MÈtodo GenÈrico para Resetar o Estilo de um Campo
+        // ?? M√©todo Gen√©rico para Resetar o Estilo de um Campo
         private void ResetFieldStyle(TextBox textBox, TextBlock textBlock, TextBlock? titulo = null)
         {
             textBox.BorderBrush = new SolidColorBrush(Colors.Gray);
@@ -478,7 +512,7 @@ namespace PROARC.src.Views
         {
             var dialog = new ContentDialog
             {
-                Title = "Erro de ValidaÁ„o",
+                Title = "Erro de Valida√ß√£o",
                 Content = mensagemErro,
                 CloseButtonText = "OK",
                 XamlRoot = this.Content.XamlRoot
@@ -489,6 +523,7 @@ namespace PROARC.src.Views
 
         private string GetSelectedRadioButton()
         {
+
             if (radio_agRespostaEnel.IsChecked == true)
                 return "Aguardando resposta da Enel";
             if (radio_agAguardandoPrazo.IsChecked == true)
@@ -496,7 +531,7 @@ namespace PROARC.src.Views
             if (radio_atendido.IsChecked == true)
                 return "Atendido";
             if (radio_naoAtendido.IsChecked == true)
-                return "N„o Atendido";
+                return "N√£o Atendido";
 
             return "Nenhum status selecionado";
         }
@@ -509,7 +544,9 @@ namespace PROARC.src.Views
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            picker.FileTypeFilter.Add("*");
+            // Adiciona filtros para tipos de arquivo permitidos
+            picker.FileTypeFilter.Add(".pdf");
+            picker.FileTypeFilter.Add(".docx");
 
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
@@ -530,12 +567,24 @@ namespace PROARC.src.Views
 
                 if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
                 {
-                    ListaArquivos.Children.Add(new TextBlock
+                    var textBlock = new TextBlock
                     {
                         Text = nomeArquivo,
+                        Tag = arquivo, // Armazena o caminho completo no Tag
                         FontSize = 14,
                         Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Green)
-                    });
+                    };
+
+                    // Adiciona um √≠cone de sucesso (opcional)
+                    var icon = new SymbolIcon(Symbol.Accept);
+                    var stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
+                    stackPanel.Children.Add(icon);
+                    stackPanel.Children.Add(textBlock);
+
+                    ListaArquivos.Children.Add(stackPanel);
+
+                    // Log para verificar o arquivo adicionado
+                    Debug.WriteLine($"Arquivo adicionado: {nomeArquivo}, Caminho: {arquivo}");
                 }
             }
 

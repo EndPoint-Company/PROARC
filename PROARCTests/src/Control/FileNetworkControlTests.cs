@@ -14,7 +14,7 @@ namespace PROARC.src.Control.Tests
         [TestMethod()]
         public async Task SendFileTest()
         {
-            await FileNetworkControl.SendFile(@"C:\Users\Mykae\Downloads\counting_stars.mp3", "G001-2025");
+            await FileNetworkControl.SendFile(@"C:\Users\henri\OneDrive\Área de Trabalho\mcai macaco\Seminários-RC2024-2-Turma1A.pdf", "G001-2025");
         }
 
         [TestMethod()]
