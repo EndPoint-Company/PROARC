@@ -4,9 +4,7 @@ using static PROARC.src.Control.NetworkControl;
 using PROARC.src.Models.Tipos;
 using System.Linq;
 using System.Text.Json;
-using System.Text;
 using System.Threading.Tasks;
-using PROARC.src.Models;
 using Newtonsoft.Json.Linq;
 
 namespace PROARC.src.Control
