@@ -367,7 +367,7 @@ namespace PROARC.src.Views
                     };
 
                     await successDialog.ShowAsync();
-                    Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+                    Frame.Navigate(typeof(RegistrarProcessoEnelPage), true);
                 }
                 else
                 {
