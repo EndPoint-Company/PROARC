@@ -101,5 +101,17 @@ namespace PROARC.src.Control.Tests
             ReclamacaoGeral recgeral = new ReclamacaoGeral(new Motivo("Atraso na entrega"), new Reclamante("lorax", "12345678950", null), null, reclamados, "testeok", "Aberto", "C:\\Users\\marco\\Documents\\Rec12313", DateOnly.FromDateTime(DateTime.Now), "Marcos Vitor", DateTime.Now, "advogada");
             await ReclamacaoControl.UpdateAsync("testeok", recgeral);
         }
+
+        [TestMethod()]
+        public async Task CountReclamacaoGeralPorAnoAsyncTest()
+        {
+            Console.WriteLine(await ReclamacaoControl.CountReclamacoesGeralPorAnoAsync());
+        }
+
+        [TestMethod()]
+        public async Task CountReclamacoesEnelPorAnoAsyncTest()
+        {
+            Console.WriteLine(await ReclamacaoControl.CountReclamacoesEnelPorAnoAsync());
+        }
     }
 }
