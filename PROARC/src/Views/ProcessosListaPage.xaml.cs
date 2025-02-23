@@ -202,7 +202,6 @@ namespace PROARC.src.Views
 
                 var visualizarItem = new MenuFlyoutItem { Text = "Visualizar Processo" };
                 var editarItem = new MenuFlyoutItem { Text = "Editar Processo" };
-                //editarItem.Click += (s, args) => ;
 
                 var excluirItem = new MenuFlyoutItem
                 {
