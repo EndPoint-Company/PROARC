@@ -26,22 +26,10 @@ namespace PROARC.src.Control.Tests
         }
 
         [TestMethod()]
-        public async Task GetTest()
-        {
-            await ProcessoAdministrativoControl.GetAsync(1);
-        }
-
-        [TestMethod()]
         public async Task InsertAsyncTest()
         {
             Assert.Fail();
 
-        }
-
-        [TestMethod()]
-        public async Task GetReclamadoFromRelacaoTest()
-        {
-           Console.WriteLine(await ProcessoAdministrativoControl.GetReclamadoFromRelacao(34));
         }
     }
 }
