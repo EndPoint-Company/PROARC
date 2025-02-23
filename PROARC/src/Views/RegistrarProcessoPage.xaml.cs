@@ -27,6 +27,8 @@ using System.Text.RegularExpressions;
 using PROARC.src.Models.Arquivos;
 using PROARC.src.Converters;
 using System.IO;
+using System.Net.Sockets;
+using System.Text;
 
 namespace PROARC.src.Views
 {
@@ -461,7 +463,7 @@ namespace PROARC.src.Views
                 // Verifica se os campos obrigatórios estão preenchidos
                 if (inputNomeReclamado != null && !string.IsNullOrWhiteSpace(inputNomeReclamado.Text))
                 {
-                    Debug.WriteLine($"Reclamado {i}: Nome encontrado: {inputNomeReclamado.Text}");
+                    //Debug.WriteLine($"Reclamado {i}: Nome encontrado: {inputNomeReclamado.Text}");
 
                     // Cria um novo objeto Reclamado com os dados dos campos
                     Reclamado reclamado = new Reclamado(
@@ -480,18 +482,21 @@ namespace PROARC.src.Views
 
                     // Adiciona o reclamado à LinkedList
                     listaReclamados.AddLast(reclamado);
-                    Debug.WriteLine($"Reclamado {i} adicionado à lista.");
+                    //Debug.WriteLine($"Reclamado {i} adicionado à lista.");
                 }
                 else
                 {
-                    Debug.WriteLine($"Reclamado {i}: Nome não preenchido ou controle não encontrado.");
+                    //Debug.WriteLine($"Reclamado {i}: Nome não preenchido ou controle não encontrado.");
                 }
             }
 
             // Retorna a lista de reclamados
-            Debug.WriteLine($"Total de reclamados criados: {listaReclamados.Count}");
+            //Debug.WriteLine($"Total de reclamados criados: {listaReclamados.Count}");
             return listaReclamados;
         }
+
+
+
 
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
@@ -515,8 +520,41 @@ namespace PROARC.src.Views
                 return;
             }
 
-            //if (!Validacaos()) { return; }
+            // Coletar os arquivos anexados (caminhos completos)
+            var arquivosAnexados = ListaArquivos.Children.OfType<StackPanel>()
+                .Select(stackPanel => stackPanel.Children.OfType<TextBlock>().FirstOrDefault()?.Tag?.ToString())
+                .Where(path => !string.IsNullOrEmpty(path))
+                .ToList();
 
+            // Log dos arquivos a serem enviados
+            if (arquivosAnexados.Any())
+            {
+                foreach (var arquivo in arquivosAnexados)
+                {
+                    Debug.WriteLine($"Arquivo a ser enviado: {arquivo}");
+                }
+
+                // Enviar cada arquivo para o servidor
+                foreach (var caminhoArquivo in arquivosAnexados)
+                {
+                    if (File.Exists(caminhoArquivo))
+                    {
+                        string tituloPasta = $"G{NumeroProcesso}-{AnoProcesso}"; // Título da pasta
+                        Debug.WriteLine($"Enviando arquivo: {caminhoArquivo} para a pasta: {tituloPasta}");
+                        await FileNetworkControl.SendFile(caminhoArquivo, tituloPasta); // Chama o método do controlador
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Arquivo não encontrado: {caminhoArquivo}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Nenhum arquivo encontrado para enviar.");
+            }
+
+            // Restante da lógica para salvar o processo...
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
 
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
@@ -551,7 +589,6 @@ namespace PROARC.src.Views
 
             string caminhoPasta = Path.Combine("/home/~/recl", $"G{NumeroProcesso}", AnoProcesso);
 
-
             string nProcesso = NumeroProcesso;
             short anoProcesso = short.TryParse(AnoProcesso, out short parsedAno) ? parsedAno : (short)DateTime.Now.Year;
             string titulo = "G" + nProcesso + "/" + anoProcesso;
@@ -560,7 +597,6 @@ namespace PROARC.src.Views
             LinkedList<Reclamado> reclamados = CriarListaReclamados();
 
             string conciliador = inputNomeConciliador.Text;
-
 
             string situacao = GetSelectedRadioButton();
 
@@ -818,7 +854,9 @@ namespace PROARC.src.Views
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            picker.FileTypeFilter.Add("*");
+            // Adiciona filtros para tipos de arquivo permitidos
+            picker.FileTypeFilter.Add(".pdf");
+            picker.FileTypeFilter.Add(".docx");
 
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
@@ -839,12 +877,24 @@ namespace PROARC.src.Views
 
                 if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
                 {
-                    ListaArquivos.Children.Add(new TextBlock
+                    var textBlock = new TextBlock
                     {
                         Text = nomeArquivo,
+                        Tag = arquivo, // Armazena o caminho completo no Tag
                         FontSize = 14,
                         Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Green)
-                    });
+                    };
+
+                    // Adiciona um ícone de sucesso (opcional)
+                    var icon = new SymbolIcon(Symbol.Accept);
+                    var stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
+                    stackPanel.Children.Add(icon);
+                    stackPanel.Children.Add(textBlock);
+
+                    ListaArquivos.Children.Add(stackPanel);
+
+                    // Log para verificar o arquivo adicionado
+                    Debug.WriteLine($"Arquivo adicionado: {nomeArquivo}, Caminho: {arquivo}");
                 }
             }
 
@@ -889,10 +939,6 @@ namespace PROARC.src.Views
             ///ReclamadoSectionReclama.Translation = new Vector3(1, 1, 20);
             ConciliadorSection.Translation = new Vector3(1, 1, 20);
         }
-
-
-
-
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
