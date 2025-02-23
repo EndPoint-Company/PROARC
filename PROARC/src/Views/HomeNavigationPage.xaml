@@ -48,6 +48,12 @@
                     <FontIcon Glyph="&#xE731;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
+
+            <NavigationViewItem Content="Listar Usuários" Tag="ListarUsuarios" x:Name="ListarUsuarios">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE731;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
         </NavigationView.MenuItems>
 
         <NavigationView.FooterMenuItems>

@@ -20,6 +20,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="src\Converters\Class1.cs" />
+		<Compile Remove="src\ViewModels\UsuarioViewModel.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="src\Views\NewHomePage.xaml" />
@@ -46,6 +47,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

@@ -47,6 +47,10 @@ namespace PROARC.src.Views
                         contentFrame.Navigate(typeof(RegistrarProcessoEnelPage), true);
                         args.SelectedItemContainer.IsSelected = false;
                         break;
+                    case "ListarUsuarios":
+                        contentFrame.Navigate(typeof(ManterFuncionario), true);
+                        args.SelectedItemContainer.IsSelected = false;
+                        break;
                 }
             }
         }
