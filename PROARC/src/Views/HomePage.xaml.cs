@@ -21,7 +21,7 @@ namespace PROARC.src.Views
         private void CadastrarProcessoAntigoButton_Click(object sender, RoutedEventArgs e)
         {
             // Passando um parâmetro indicando que se trata de um processo antigo
-            Frame.Navigate(typeof(RegistrarProcesso01Page), false); // false indica que não é um novo processo
+            Frame.Navigate(typeof(NewHomePage), false); // false indica que não é um novo processo
         }
 
         // Manipulador de clique para o botão "Listar Processos"

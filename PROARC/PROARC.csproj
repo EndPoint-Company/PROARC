@@ -26,13 +26,14 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\proarc-white-logo.ico" />
-		<Content Include="Assets\config.json"/>
 		<Content Include="Assets\bannerHome.png" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Manifest Include="$(ApplicationManifest)" />
-	</ItemGroup>
+  <ItemGroup>
+	  <Content Include="Assets\proarc-white-logo.ico" />
+	  <Content Include="Assets\bannerHome.png" />
+	  <Content Include="Assets\1292844.png" />
+  </ItemGroup>
 
 	<!--
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
