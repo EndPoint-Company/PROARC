@@ -65,13 +65,35 @@ namespace PROARC.src.Control.Utils
 
             foreach (JsonProperty item in estatisticas.EnumerateObject())
             {
-                string mes = item.Name; // Número do mês como string
-                int quantidade = item.Value.GetInt32(); // Quantidade de reclamações
+                string mes = item.Name; 
+                int quantidade = item.Value.GetInt32(); 
                 listaFormatada.Add($"Mês {mes}: {quantidade}");
             }
 
             return listaFormatada;
 
         }
+        public static async Task<List<string>> GetUltimasReclamacoesAsync(int quantidade)
+        {
+            var request = new { action = "get_ultimas_p_reclamacoes_criadas", quantidade };
+            string response = await SendRequestAsync(request);
+            
+            using JsonDocument doc = JsonDocument.Parse(response);
+            JsonElement root = doc.RootElement;
+            JsonElement reclamacoes = root.GetProperty("reclamacoes");
+
+            List<string> listaFormatada = new List<string>();
+
+            foreach (JsonElement item in reclamacoes.EnumerateArray())
+            {
+                string titulo = item[0].GetString();
+                string situacao = item[1].GetString();
+                listaFormatada.Add($"{titulo}: {situacao}");
+            }
+
+            return listaFormatada;
+
+        }
+
     }
 }

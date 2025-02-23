@@ -40,5 +40,15 @@ namespace PROARC.src.Control.Utils.Tests
                 Console.WriteLine(item);
             }
         }
+
+        [TestMethod()]
+        public async Task GetUltimasReclamacoesAsyncTest()
+        {
+            List<string> lista = await EstatisticasControl.GetUltimasReclamacoesAsync(10);
+            foreach (string item in lista)
+            {
+                Console.WriteLine(item);
+            }
+        }
     }
 }
