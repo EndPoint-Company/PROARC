@@ -170,8 +170,6 @@
                         <StackPanel Background="#FFF" x:Name="GraficoGrande01Section" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 12, 12, 0">
                             <FlipView MaxWidth="900" Height="400" Background="Transparent" Padding="10">
                                 <WebView2 x:Name="WebViewChart" Width="900" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <Image Source="/Assets/1292844.png"/>
-                                <Image Source="/Assets/jujutsu.png" />
                                 <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="C"/>
                                 <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="D"/>
                                 <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="E"/>
@@ -191,8 +189,6 @@
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Bottom"
                                          Margin="0,0,0,20"/>
-                                    <Image Source="/Assets/1292844.png"/>
-                                    <Image Source="/Assets/jujutsu.png" />
                                     <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="C"/>
                                     <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="D"/>
                                     <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="E"/>
