@@ -67,6 +67,7 @@ namespace PROARC.src.Views
             CarregarMotivosAsync();
             ConfigureShadows();
             calendario.Date = DateTime.Now.Date;
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
 
 
             // Define o primeiro item ("01") como selecionado nos reclamados (vlw marquin)

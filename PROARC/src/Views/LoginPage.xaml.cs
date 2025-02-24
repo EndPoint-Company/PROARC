@@ -24,6 +24,7 @@ namespace PROARC.src.Views
         {
             this.InitializeComponent();
             this.RequestedTheme = Microsoft.UI.Xaml.ElementTheme.Light;
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)

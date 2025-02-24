@@ -87,6 +87,7 @@ namespace PROARC.src.Views
             this.InitializeComponent();
             this.DataContext = this;
             _ = CarregarProcessos();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
 
@@ -173,7 +174,8 @@ namespace PROARC.src.Views
 
         private void _NovoProcessoBtn_Click(object sender, RoutedEventArgs e)
         {
-        }
+            Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+        }   
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {

@@ -27,6 +27,7 @@ namespace PROARC.src.Views
         {
             this.InitializeComponent();
             ConfigureShadows();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
         // CADASTRAR EMPRESA

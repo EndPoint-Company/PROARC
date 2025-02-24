@@ -64,6 +64,7 @@ namespace PROARC.src.Views
             DataContext = this;
             CarregarMotivosAsync();
             ConfigureShadows();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
         protected void OnPropertyChanged(string propertyName)
