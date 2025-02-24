@@ -25,7 +25,7 @@
         <ScrollViewer>
 
             <StackPanel Spacing="10" Padding="40">
-                <TextBlock Text="Processos Administrativos" FontSize="32" FontWeight="Bold" Margin="40,40,160,0" />
+                <TextBlock Text="Reclamações" FontSize="32" FontWeight="Bold" Margin="40,40,160,0" />
 
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <TextBox PlaceholderText="Pesquisar"
@@ -35,7 +35,8 @@
 
                     <Button Content="Novo processo" Padding="30,10" FontSize="16" Background="#003366" Foreground="White"  Click="_NovoProcessoBtn_Click"/>
 
-                    <!-- Botão para selecionar Data Início e Data Fim -->
+                    <!-- Botão para selecionar Data Início e Data Fim
+                    
                     <Button Content="Data" Padding="10,5">
                         <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft" ShowMode="Standard">
@@ -55,22 +56,23 @@
 
 
                     <Button Content="Status"/>
-                    <Button Content="Filtro"/>
+                    <Button Content="Filtro"/> 
+                    -->
                 </StackPanel>
 
                 <Grid Margin="20,0,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="250" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="250" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="250" />
-                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Nº Processo" FontSize="24" FontWeight="SemiBold" Grid.Column="0" />
+                    <TextBlock Text="Reclamação" FontSize="24" FontWeight="SemiBold" Grid.Column="0" />
                     <TextBlock Text="Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="1" />
                     <TextBlock Text="CPF Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="2" />
                     <TextBlock Text="Reclamado" FontSize="24" FontWeight="SemiBold" Grid.Column="3" />
@@ -85,14 +87,14 @@
                         <DataTemplate x:DataType="viewModels:ReclamacaoViewModel">
                             <Grid RightTapped="Processo_RightTapped">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="250" />
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="250" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="250" />
-                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="210" />
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="{x:Bind Titulo}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">

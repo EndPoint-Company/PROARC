@@ -9,6 +9,7 @@ namespace PROARC.src.Views
             this.InitializeComponent();
 
             contentFrame.Navigate(typeof(NewHomePage));
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

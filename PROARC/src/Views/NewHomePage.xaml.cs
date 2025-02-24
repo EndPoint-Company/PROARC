@@ -35,6 +35,7 @@ namespace PROARC.src.Views
             LoadDashboardData();
             _ = CarregarProcessos();
             ConfigureShadows();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
 

@@ -32,7 +32,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Background="#003366" Width="10" CornerRadius="12, 0, 0, 12" />
                         <StackPanel Background="#FFF" x:Name="ReclamacoesSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0,12,12,0" Height="650" Width="800">
-                            <Grid Margin="20,20,0,0">
+                            <Grid Margin="30,20,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="180" />
                                     <ColumnDefinition Width="180" />
@@ -40,17 +40,17 @@
                                     <ColumnDefinition Width="180" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="Nº Processo" FontSize="24" FontWeight="SemiBold" Grid.Column="0" />
+                                <TextBlock Text="Reclamação" FontSize="24" FontWeight="SemiBold" Grid.Column="0" />
                                 <TextBlock Text="Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="1" />
                                 <TextBlock Text="Reclamado" FontSize="24" FontWeight="SemiBold" Grid.Column="2" />
-                                <TextBlock Text="Status" FontSize="24" FontWeight="SemiBold" Grid.Column="3" />
+                                <TextBlock Text="Situação" FontSize="24" FontWeight="SemiBold" Grid.Column="3" />
                             </Grid>
 
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                 <ListView ItemsSource="{Binding Processos}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="viewModels:ReclamacaoViewModel">
-                                            <Grid RightTapped="Processo_RightTapped">
+                                            <Grid Margin="10,2,0,0" RightTapped="Processo_RightTapped">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="180" />
                                                     <ColumnDefinition Width="180" />
