@@ -566,7 +566,7 @@ namespace PROARC.src.Views
             {
                 var nomeArquivo = System.IO.Path.GetFileName(arquivo);
 
-                if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
+                if (!ListaArquivos.Children.OfType<StackPanel>().Any(sp => sp.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo)))
                 {
                     var textBlock = new TextBlock
                     {
@@ -576,11 +576,26 @@ namespace PROARC.src.Views
                         Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Green)
                     };
 
-                    // Adiciona um ícone de sucesso (opcional)
-                    var icon = new SymbolIcon(Symbol.Accept);
+                    var button = new Button
+                    {
+                        Content = "X",
+                        Background = new SolidColorBrush(Microsoft.UI.Colors.Blue),
+                        Foreground = new SolidColorBrush(Microsoft.UI.Colors.White),
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Padding = new Thickness(5),
+                        CornerRadius = new CornerRadius(5)
+                    };
+
+                    button.Click += (sender, e) =>
+                    {
+                        var stackPanel = (StackPanel)((Button)sender).Parent;
+                        ListaArquivos.Children.Remove(stackPanel);
+                        AtualizarMensagemNenhumArquivo();
+                    };
+
                     var stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
-                    stackPanel.Children.Add(icon);
                     stackPanel.Children.Add(textBlock);
+                    stackPanel.Children.Add(button);
 
                     ListaArquivos.Children.Add(stackPanel);
 
