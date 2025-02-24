@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
@@ -33,6 +34,7 @@ namespace PROARC.src.Views
             this.DataContext = this;
             LoadDashboardData();
             _ = CarregarProcessos();
+            ConfigureShadows();
         }
 
 
@@ -513,14 +515,33 @@ namespace PROARC.src.Views
         }
 
 
-        private void CadastrarReclamacaoButton_Click(object sender, RoutedEventArgs e)
+        private void CadastrarReclamacaoGeralButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(RegistrarProcesso01Page), true);
         }
 
+
+        private void CadastrarReclamacaoEnelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(RegistrarProcessoEnelPage));
+        }
         private void ListarReclamacaoButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(ProcessosListaPage));
+        }
+
+        private void CadastrarReclamadoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(ControleEmpresas));
+        }
+
+
+        private void ConfigureShadows()
+        {
+            ReclamacoesSection.Translation = new Vector3(1, 1, 20);
+            GraficoGrande01Section.Translation = new Vector3(1, 1, 20);
+            Grafico02Section.Translation = new Vector3(1, 1, 20);
+            Grafico03Section.Translation = new Vector3(1, 1, 20);
         }
 
 
@@ -529,5 +550,6 @@ namespace PROARC.src.Views
         {
             System.Diagnostics.Debug.WriteLine("Navegação concluída com sucesso!");
         }
+
     }
 }

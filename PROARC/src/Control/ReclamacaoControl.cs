@@ -328,7 +328,8 @@ namespace PROARC.src.Control
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("count", out JsonElement countElement))
+            if (root.TryGetProperty("count", out JsonElement countElement) &&
+                countElement.ValueKind == JsonValueKind.Number)
             {
                 return countElement.GetInt32();
             }
