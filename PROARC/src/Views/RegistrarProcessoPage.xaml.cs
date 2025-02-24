@@ -936,7 +936,26 @@ namespace PROARC.src.Views
             ReclamanteSection.Translation = new Vector3(1, 1, 20);
             ProcuradorSection2.Translation = new Vector3(1, 1, 20);
             AnexarArquivosSection.Translation = new Vector3(1, 1, 20);
-            ///ReclamadoSectionReclama.Translation = new Vector3(1, 1, 20);
+
+            CadastrarEmpresaSectionReclamado01.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado02.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado03.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado04.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado05.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado06.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado07.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado08.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado09.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado10.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado11.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado12.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado13.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado14.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado15.Translation = new Vector3(1, 1, 20);
+            CadastrarEmpresaSectionReclamado16.Translation = new Vector3(1, 1, 20);
+
+            CadastrarEmpresaSectionReclamado01.Translation = new Vector3(1, 1, 20);
+
             ConciliadorSection.Translation = new Vector3(1, 1, 20);
         }
 

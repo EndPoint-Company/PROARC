@@ -26,7 +26,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Assets\config.json" />
-	</ItemGroup>
+	</ItemGroup> 	 
 	<ItemGroup>
 		<Content Include="Assets\proarc-white-logo.ico" />
 		<Content Include="Assets\bannerHome.png" />
