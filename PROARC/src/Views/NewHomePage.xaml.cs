@@ -309,7 +309,19 @@ namespace PROARC.src.Views
                 }},
                 plugins: {{
                     legend: {{
-                        display: false // Remove a legenda/título completamente
+                        display: false // Remove a legenda completamente
+                    }},
+                    title: {{
+                        display: true,
+                        text: 'Reclamações por Mês', // Título do gráfico
+                        color: 'black', // Cor do título
+                        font: {{
+                            size: 16 // Tamanho da fonte do título
+                        }},
+                        padding: {{
+                            top: 10,
+                            bottom: 20 // Espaçamento do título
+                        }}
                     }}
                 }}
             }}
@@ -379,10 +391,25 @@ namespace PROARC.src.Views
                     x: {{
                         position: 'top', // Move os valores para a parte superior
                         ticks: {{
-                            reverse: true // Faz com que os valores sejam lidos da direita para a esquerda
+                            reverse: false, // Mantém a ordem normal dos valores
+                            color: 'black', // Cor dos números no eixo X
+                            font: {{
+                                size: 12 // Tamanho da fonte dos números
+                            }},
+                            callback: function(value) {{
+                                return value; // Exibe os valores numéricos
+                            }}
                         }},
                         grid: {{
                             color: 'rgba(0, 0, 0, 0.1)' // Grades mais suaves
+                        }},
+                        title: {{
+                            display: true,
+                            text: 'Número de Reclamações', // Título do eixo X
+                            color: 'black', // Cor do título do eixo X
+                            font: {{
+                                size: 14 // Tamanho da fonte do título do eixo X
+                            }}
                         }}
                     }},
                     y: {{
@@ -397,6 +424,19 @@ namespace PROARC.src.Views
                 plugins: {{
                     legend: {{
                         display: false // Remove a legenda completamente
+                    }},
+                    title: {{
+                        display: true,
+                        text: 'Reclamados mais recorrentes', // Título do gráfico
+                        color: 'black', // Cor do título
+                        font: {{
+                            size: 16, // Tamanho da fonte do título
+                            weight: 'bold' // Deixa o título em negrito
+                        }},
+                        padding: {{
+                            top: 10,
+                            bottom: 20 // Espaçamento do título
+                        }}
                     }}
                 }},
                 hover: {{
@@ -480,6 +520,18 @@ namespace PROARC.src.Views
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {{
+                    title: {{
+                        display: true,
+                        text: 'Motivos Mais Usados',
+                        font: {{
+                            size: 18,
+                            weight: 'bold'
+                        }},
+                        padding: {{
+                            top: 10,
+                            bottom: 20
+                        }}
+                    }},
                     legend: {{
                         display: false // Remove a legenda
                     }},
