@@ -1457,9 +1457,9 @@
                         <!-- Lista de Arquivos Anexados -->
                         <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
                             <TextBlock Text="Nenhum arquivo selecionado."
-                       x:Name="MensagemNenhumArquivo"
-                       FontSize="14"
-                       Foreground="Gray" />
+                           x:Name="MensagemNenhumArquivo"
+                           FontSize="14"
+                           Foreground="Gray" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
