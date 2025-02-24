@@ -35,6 +35,8 @@ namespace PROARC.src.Control
 
             await client.Client.SendAsync(Encoding.UTF8.GetBytes("DB"));
 
+            await Task.Delay(300);
+
             using NetworkStream stream = client.GetStream();
             string? jsonRequest = JsonSerializer.Serialize(request);
 
