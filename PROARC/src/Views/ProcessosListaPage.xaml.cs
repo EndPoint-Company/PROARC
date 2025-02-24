@@ -91,9 +91,45 @@ namespace PROARC.src.Views
         }
 
 
-        private async void PesquisarProcesso(object sender, TextChangedEventArgs e)
+        private async void PesquisarProcesso_KeyDown(object sender, KeyRoutedEventArgs e)
         {
+            // Verifica se a tecla pressionada foi "Enter"
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                var textBox = sender as TextBox;
+                string pesquisa = textBox.Text;
 
+                if (string.IsNullOrWhiteSpace(pesquisa))
+                {
+                    await CarregarProcessos();
+                    MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
+                    return;
+                }
+
+                try
+                {
+                    var processo = await ReclamacaoControl.GetAsync(pesquisa);
+                    Processos.Clear();
+
+                    if (processo != null)
+                    {
+                        var processoViewModel = new ReclamacaoViewModel(processo);
+                        processoViewModel.PropertyChanged += Processo_PropertyChanged;
+                        Processos.Add(processoViewModel);
+                        MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
+                    }
+                    else
+                    {
+                        MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de feedback
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌ Erro ao pesquisar processo: {ex.Message}");
+                    MensagemFeedback.Text = "Erro ao pesquisar processo.";
+                    MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de erro
+                }
+            }
         }
 
 
