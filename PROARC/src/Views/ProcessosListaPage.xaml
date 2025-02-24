@@ -25,15 +25,16 @@
         <ScrollViewer>
 
             <StackPanel Spacing="10" Padding="40">
-                <TextBlock Text="Reclamações" FontSize="32" FontWeight="Bold" Margin="40,40,160,0" />
+                <TextBlock Text="Reclamações" FontSize="32" FontWeight="Bold" Margin="20,20,160,0" />
 
-                <StackPanel Orientation="Horizontal" Spacing="10">
-                    <TextBox PlaceholderText="Pesquisar"
-                             Width="300"
-                             Text="{Binding PesquisaTitulo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="PesquisarProcesso"/>
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,20,0,0">
+                        <TextBox PlaceholderText="Pesquisar"
+                         Width="300"
+                         Text="{Binding PesquisaTitulo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         KeyDown="PesquisarProcesso_KeyDown"
+                         Margin="20,0,0,0"/>
 
-                    <Button Content="Novo processo" Padding="30,10" FontSize="16" Background="#003366" Foreground="White"  Click="_NovoProcessoBtn_Click"/>
+                    <Button Content="Nova Reclamação" Margin="20,0,0,0" Padding="30,10" FontSize="16" Background="#003366" Foreground="White"  Click="_NovoProcessoBtn_Click"/>
 
                     <!-- Botão para selecionar Data Início e Data Fim
                     
@@ -60,7 +61,14 @@
                     -->
                 </StackPanel>
 
-                <Grid Margin="20,0,0,0">
+                <TextBlock x:Name="MensagemFeedback" 
+               Text="Nenhuma reclamação encontrada." 
+               Foreground="Red" 
+               Visibility="Collapsed" 
+               Margin="10,0,0,0"/>
+
+
+                <Grid Margin="20,20,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="210" />
                         <ColumnDefinition Width="210" />
