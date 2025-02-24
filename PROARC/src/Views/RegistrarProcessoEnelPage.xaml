@@ -24,24 +24,38 @@
                 <TextBlock Text="CADASTRAR RECLAMAÇÃO ENEL" 
                            FontSize="32" 
                            FontWeight="Bold" 
-                           Margin="160,40, 160, 0" />
+                           x:Name="tituloTextBlock"
+                           Margin="160,60, 160, 0" />
 
+                <!-- Botões "Novo Processo" e "Antigo" -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Padding="10" Margin="160, 0" Spacing="10">
                     <Button x:Name="btnProcessoNovo" 
-                        Content="Reclamação Nova" 
-                        Padding="20,10" 
-                        Background="#003366" 
-                        Foreground="White" 
-                        Click="ProcessoNovo_Click" />
+                            Content="Reclamação Nova" 
+                            Padding="20,10" 
+                            Background="#003366" 
+                            Foreground="White" 
+                            Click="ProcessoNovo_Click"
+                            Visibility="{x:Bind BotoesVisiveis, Mode=OneWay}" />
                     <Button x:Name="btnProcessoAntigo" 
-                        Content="Reclamação Antiga" 
-                        Padding="20,10" 
-                        Background="White" 
-                        BorderBrush="#005BC1" 
-                        Foreground="#003366"     
-                        Click="ProcessoAntigo_Click" />
+                            Content="Reclamação Antiga" 
+                            Padding="20,10" 
+                            Background="White" 
+                            BorderBrush="#005BC1" 
+                            Foreground="#003366"     
+                            Click="ProcessoAntigo_Click"
+                            Visibility="{x:Bind BotoesVisiveis, Mode=OneWay}" />
                 </StackPanel>
 
+                <Button x:Name="btnEditar"
+                Content="Editar"
+                HorizontalAlignment="Right"
+                Margin="0,-20,180,0"
+                Padding="30,10"
+                FontSize="16"
+                Background="#003366"
+                Foreground="White"
+                Click="BtnEditar_Click"
+                Visibility="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
 
                 <StackPanel Orientation="Horizontal" Margin="160,0">
                     <StackPanel Orientation="Vertical" Spacing="32">
@@ -53,11 +67,19 @@
                                 <StackPanel Padding="40" Background="#FFF" Spacing="10" CornerRadius="0, 10, 10, 0" x:Name="NProcessoSection" Shadow="{StaticResource SharedShadow}" Width="796" Height="186" Orientation="Horizontal">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock x:Name="TextBlockNProcesso" Text="N° Reclamação" FontSize="18" FontWeight="Bold" />
-                                        <TextBox x:Name="inputNProcesso" PlaceholderText="Insira o n° do processo" Width="200" Text="{Binding NumeroProcesso}" IsReadOnly="False" />
+                                        <TextBox x:Name="inputNProcesso" 
+                                                 PlaceholderText="Insira o n° do processo" 
+                                                 Width="200" 
+                                                 Text="{Binding NumeroProcesso}" 
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0">
                                         <TextBlock x:Name="TextBlockAnoProcesso" Text="Ano" FontSize="18" FontWeight="Bold" />
-                                        <TextBox x:Name="inputAnoProcesso" PlaceholderText="Insira o ano do processo" Width="200" Text="{Binding AnoProcesso}" IsReadOnly="False" />
+                                        <TextBox x:Name="inputAnoProcesso" 
+                                                 PlaceholderText="Insira o ano do processo" 
+                                                 Width="200" 
+                                                 Text="{Binding AnoProcesso}" 
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -77,8 +99,21 @@
                                         <TextBlock x:Name="TextBlockMotivo" Text="Motivo" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Grid.Column="0" />
                                     </Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <ComboBox x:Name="cbMotivo" PlaceholderText="Selecione o motivo" Width="180"/>
-                                        <Button Content="Novo Motivo" Grid.Column="1" Click="OnNovoMotivoClick" Background="#003366" Foreground="White" Margin="10,0,0,0"/>
+                                        <ComboBox x:Name="cbMotivo" 
+                                                  PlaceholderText="Selecione o motivo" 
+                                                  Width="180"
+                                                  DisplayMemberPath="Nome"
+                                                  SelectedValuePath="Nome"
+                                                  SelectedItem="{Binding MotivoSelecionado, Mode=TwoWay}" 
+                                                  IsEnabled="{x:Bind MotivoHabilitado, Mode=OneWay}"
+                                                  />
+                                        <Button Content="Novo Motivo" 
+                                                Grid.Column="1" 
+                                                Click="OnNovoMotivoClick" 
+                                                Background="#003366" 
+                                                Foreground="White" 
+                                                Margin="10,0,0,0"
+                                                Visibility="{x:Bind BotoesVisiveis, Mode=OneWay}" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -91,14 +126,12 @@
                                         <TextBlock Text="Atendente" FontSize="18" FontWeight="Bold" />
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock x:Name="TextBlockAtendente" FontSize="14"/>
-                                            <TextBox 
-                                                    x:Name="inputNomeAtendente" 
-                                                    PlaceholderText="Insira o nome do(a) atendente"
-                                                    Width="260"
-                                                    />
+                                            <TextBox x:Name="inputNomeAtendente" 
+                                                     PlaceholderText="Insira o nome do(a) atendente"
+                                                     Width="260"
+                                                     IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                         </StackPanel>
                                     </StackPanel>
-
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -118,8 +151,14 @@
                             <StackPanel>
                                 <TextBlock x:Name="TextBlockTramitacao" Text="Em tramitação" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
-                                    <RadioButton x:Name="radio_agRespostaEnel" Content="Aguardando resposta da Enel" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_agAguardandoPrazo" Content="Aguardando prazo" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_agRespostaEnel" 
+                                                 Content="Aguardando resposta da Enel" 
+                                                 GroupName="StatusGroup"
+                                                 IsEnabled="{x:Bind IsEditableMode, Mode=OneWay}" />
+                                    <RadioButton x:Name="radio_agAguardandoPrazo" 
+                                                 Content="Aguardando prazo" 
+                                                 GroupName="StatusGroup"
+                                                 IsEnabled="{x:Bind IsEditableMode, Mode=OneWay}" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -127,14 +166,21 @@
                             <StackPanel>
                                 <TextBlock x:Name="TextBlockArquivado" Text="Arquivado" FontSize="14" FontWeight="SemiBold" Margin="0, 5"/>
                                 <StackPanel>
-                                    <RadioButton x:Name="radio_atendido" Content="Atendido" GroupName="StatusGroup"/>
-                                    <RadioButton x:Name="radio_naoAtendido" Content="Não Atendido" GroupName="StatusGroup"/>
+                                    <RadioButton x:Name="radio_atendido" 
+                                                 Content="Atendido" 
+                                                 GroupName="StatusGroup"
+                                                 IsEnabled="{x:Bind IsEditableMode, Mode=OneWay}" />
+                                    <RadioButton x:Name="radio_naoAtendido" 
+                                                 Content="Não Atendido" 
+                                                 GroupName="StatusGroup"
+                                                 IsEnabled="{x:Bind IsEditableMode, Mode=OneWay}" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
+                <!-- Seção Reclamante -->
                 <Grid Margin="160, 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -147,35 +193,62 @@
                         <Border Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" HorizontalAlignment="Left"/>
 
                         <Border x:Name="ReclamanteSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}"
-                Padding="40" Background="#FFF" Width="1000" Margin="10, 0, 0, 0">
+                                Padding="40" Background="#FFF" Width="1000" Margin="10, 0, 0, 0">
                             <StackPanel Spacing="10">
                                 <TextBlock x:Name="TextBlockReclamante" Text="Reclamante" FontSize="18" FontWeight="Bold" />
                                 <StackPanel Orientation="Horizontal" Spacing="20">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock x:Name="TextBlockNomeReclamante" Text="Nome *" FontSize="14"/>
-                                        <TextBox x:Name="inputNomeReclamante" PlaceholderText="Insira o nome completo" Width="300" MaxLength="100"/>
+                                        <TextBox x:Name="inputNomeReclamante" 
+                                                 PlaceholderText="Insira o nome completo" 
+                                                 Width="300" 
+                                                 MaxLength="100"
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock x:Name="TextBlockCpfReclamante" Text="CPF *" FontSize="14"/>
-                                        <TextBox x:Name="inputCpfReclamante" TextChanged="OnCpfTextChanged" MaxLength="14" PlaceholderText="Insira o CPF" Width="188"/>
+                                        <TextBox x:Name="inputCpfReclamante" 
+                                                 TextChanged="OnCpfTextChanged" 
+                                                 MaxLength="14" 
+                                                 PlaceholderText="Insira o CPF" 
+                                                 Width="188"
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="RG" FontSize="14"/>
-                                        <TextBox x:Name="inputRgReclamante" PlaceholderText="Insira o RG" Width="188" MaxLength="10"/>
+                                        <TextBox x:Name="inputRgReclamante" 
+                                                 PlaceholderText="Insira o RG" 
+                                                 Width="188" 
+                                                 MaxLength="10"
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Spacing="20">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock x:Name="TextBlockEmailReclamante" Text="E-mail" FontSize="14"/>
-                                        <TextBox x:Name="inputEmailReclamante" PlaceholderText="Insira o e-mail completo" Width="300" MaxLength="100"/>
+                                        <TextBox x:Name="inputEmailReclamante" 
+                                                 PlaceholderText="Insira o e-mail completo" 
+                                                 Width="300" 
+                                                 MaxLength="100"
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock x:Name="TextBlockCpfNumeroReclamante" Text="Telefone Celular" FontSize="14"/>
-                                        <TextBox x:Name="inputNumeroReclamante" PlaceholderText="Insira o número celular" Width="188" MaxLength="11"/>
+                                        <TextBox x:Name="inputNumeroReclamante" 
+                                                 PlaceholderText="Insira o número celular" 
+                                                 Width="188" 
+                                                 MaxLength="11"
+                                                 IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                     </StackPanel>
                                 </StackPanel>
 
-                                <CheckBox x:Name="ProcuradorCheckBox" Content="Tem procurador" Margin="10" Checked="ProcuradorCheckBox_Checked" Unchecked="ProcuradorCheckBox_Unchecked" />
+                                <CheckBox x:Name="ProcuradorCheckBox" 
+                                          Content="Tem procurador" 
+                                          Margin="10" 
+                                          Checked="ProcuradorCheckBox_Checked" 
+                                          Unchecked="ProcuradorCheckBox_Unchecked"
+                                          IsEnabled="{x:Bind IsEditableMode, Mode=OneWay}" />
+
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -184,25 +257,25 @@
                     <Grid Grid.Column="2">
                         <Border Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" HorizontalAlignment="Left"/>
                         <Border x:Name="ObservacaoSection" CornerRadius="0, 10, 10, 0" Shadow="{StaticResource SharedShadow}"
-                Padding="40" Background="#FFF" Width="434" Margin="10, 0, 0, 0">
+                                Padding="40" Background="#FFF" Width="434" Margin="10, 0, 0, 0">
                             <StackPanel Spacing="10">
                                 <TextBlock Text="Observação" FontSize="18" FontWeight="Bold" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock x:Name="TextBlockObservacao" FontSize="14"/>
-                                    <TextBox 
-                                        x:Name="inputObservacao" 
-                                        PlaceholderText="Insira a observação"
-                                        Width="340" 
-                                        Height="150"
-                                        TextWrapping="Wrap"
-                                        AcceptsReturn="True"/>
+                                    <TextBox x:Name="inputObservacao" 
+                                             PlaceholderText="Insira a observação"
+                                             Width="340" 
+                                             Height="150"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>
                     </Grid>
                 </Grid>
 
-                <!-- Contêiner principal para o StackPanel Procurador -->
+                <!-- Seção Procurador -->
                 <StackPanel Orientation="Horizontal" Margin="160, 0" x:Name="ProcuradorSection1" Visibility="Collapsed">
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
@@ -214,63 +287,86 @@
                         <StackPanel Orientation="Horizontal" Spacing="20">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="Nome *" FontSize="14"/>
-                                <TextBox x:Name="inputNomeProcurador" PlaceholderText="Insira o nome completo" Width="300" MaxLength="100"/>
+                                <TextBox x:Name="inputNomeProcurador" 
+                                         PlaceholderText="Insira o nome completo" 
+                                         Width="300" 
+                                         MaxLength="100"
+                                         IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="CPF *" FontSize="14"/>
-                                <TextBox x:Name="inputCpfProcurador" PlaceholderText="Insira o CPF" Width="188" MaxLength="14" TextChanged="OnCpfTextChanged" />
+                                <TextBox x:Name="inputCpfProcurador" 
+                                         PlaceholderText="Insira o CPF" 
+                                         Width="188" 
+                                         MaxLength="14" 
+                                         TextChanged="OnCpfTextChanged"
+                                         IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                             </StackPanel>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="RG" FontSize="14"/>
-                                <TextBox x:Name="inputRgProcurador" PlaceholderText="Insira o RG" Width="188" MaxLength="10" />
+                                <TextBox x:Name="inputRgProcurador" 
+                                         PlaceholderText="Insira o RG" 
+                                         Width="188" 
+                                         MaxLength="10"
+                                         IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Spacing="20">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock x:Name="TextBlockEmailProcurado" Text="E-mail" FontSize="14"/>
-                                    <TextBox x:Name="inputEmailProcurador" PlaceholderText="Insira o e-mail completo" Width="300" MaxLength="100"/>
+                                    <TextBox x:Name="inputEmailProcurador" 
+                                             PlaceholderText="Insira o e-mail completo" 
+                                             Width="300" 
+                                             MaxLength="100"
+                                             IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock x:Name="TextBlockNumeroProcurado" Text="Telefone Celular" FontSize="14"/>
-                                    <TextBox x:Name="inputNumeroProcurador" MaxLength="11" PlaceholderText="Insira o número celular" Width="188"/>
+                                    <TextBox x:Name="inputNumeroProcurador" 
+                                             MaxLength="11" 
+                                             PlaceholderText="Insira o número celular" 
+                                             Width="188"
+                                             IsReadOnly="{x:Bind IsReadOnlyMode, Mode=OneWay}" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
+                <!-- Seção Anexar Arquivos -->
                 <StackPanel Orientation="Horizontal" Margin="160,0">
                     <StackPanel Background="#003366" Width="10" CornerRadius="10, 0, 0, 10" />
 
-                    <StackPanel Padding="40" Spacing="20" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478">
+                    <StackPanel Padding="40" Spacing="20" Background="#FFF" x:Name="AnexarArquivosSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 10, 10, 0" Width="1478" >
                         <TextBlock Text="Anexar Arquivos" FontSize="18" FontWeight="Bold" />
 
                         <!-- Área para Arrastar e Soltar Arquivos -->
                         <Border x:Name="DragDropArea" 
-                BorderBrush="#d8d9d7" 
-                BorderThickness="1" 
-                Background="#F7F7F7" 
-                CornerRadius="5" 
-                Height="150" 
-                AllowDrop="True" 
-                Drop="DragDropArea_Drop" 
-                DragOver="DragDropArea_DragOver">
+                                BorderBrush="#d8d9d7" 
+                                BorderThickness="1" 
+                                Background="#F7F7F7" 
+                                CornerRadius="5" 
+                                Height="150" 
+                                AllowDrop="True" 
+                                Drop="DragDropArea_Drop" 
+                                DragOver="DragDropArea_DragOver">
 
                             <Grid>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
                                     <Button Content="Procurar Arquivos" 
-                            x:Name="PickFileButton" 
-                            Background="#003366" 
-                            Foreground="White" 
-                            Padding="10,5" 
-                            HorizontalAlignment="Center" 
-                            Click="PickFileButton_Click"
-                            CornerRadius="5"/>
+                                            x:Name="PickFileButton" 
+                                            Background="#003366" 
+                                            Foreground="White" 
+                                            Padding="10,5" 
+                                            HorizontalAlignment="Center" 
+                                            Click="PickFileButton_Click"
+                                            CornerRadius="5"
+                                            Visibility="{x:Bind BotoesVisiveis, Mode=OneWay}" />
 
                                     <TextBlock Text="ou arraste um arquivo até aqui" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" 
-                               FontSize="14" 
-                               Foreground="Gray" />
+                                               HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center" 
+                                               FontSize="14" 
+                                               Foreground="Gray" />
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -278,25 +374,24 @@
                         <!-- Lista de Arquivos Anexados -->
                         <StackPanel x:Name="ListaArquivos" Orientation="Vertical" Spacing="10">
                             <TextBlock Text="Nenhum arquivo selecionado."
-                       x:Name="MensagemNenhumArquivo"
-                       FontSize="14"
-                       Foreground="Gray" />
+                                       x:Name="MensagemNenhumArquivo"
+                                       FontSize="14"
+                                       Foreground="Gray" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
-
                 <!-- Botão de Continuar -->
-                <Button 
-                    x:Name="ButtonContinuar"
-                    Content="Continuar" 
-                    HorizontalAlignment="Right" 
-                    Padding="30,10" 
-                    FontSize="16"
-                    Background="#003366" 
-                    Foreground="White" 
-                    Margin="0,0,180,0" 
-                    Click="ContinuarButton_Click"/>
+                <Button x:Name="ButtonContinuar"
+                        Content="Continuar" 
+                        HorizontalAlignment="Right" 
+                        Padding="30,10" 
+                        FontSize="16"
+                        Background="#003366" 
+                        Foreground="White" 
+                        Margin="0,0,180,0" 
+                        Click="ContinuarButton_Click"
+                        Visibility="{x:Bind ContinuarVisivel, Mode=OneWay}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
