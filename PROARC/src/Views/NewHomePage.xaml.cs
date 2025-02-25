@@ -35,7 +35,7 @@ namespace PROARC.src.Views
             LoadDashboardData();
             _ = CarregarProcessos();
             ConfigureShadows();
-            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
+            //this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
 
@@ -142,36 +142,11 @@ namespace PROARC.src.Views
                 carregando.IsActive = false;
                 carregando.Visibility = Visibility.Collapsed;
                 _isLoading = false;
-                AtualizarEstadoDosBotoes();
+                
             }
         }
 
-        private void AtualizarEstadoDosBotoes()
-        {
-            BotaoPaginaAnterior.IsEnabled = _paginaAtual > 1;
-            BotaoProximaPagina.IsEnabled = _offset + _limit < _totalProcessos;
-        }
-
-        private async void ProximaPagina_Click(object sender, RoutedEventArgs e)
-        {
-            if (_isLoading || _offset + _limit >= _totalProcessos) return;
-
-            _paginaAtual++;
-            _offset = (_paginaAtual - 1) * _limit;
-            OnPropertyChanged(nameof(PaginaAtual));
-            await CarregarProcessos();
-        }
-
-        private async void PaginaAnterior_Click(object sender, RoutedEventArgs e)
-        {
-            if (_paginaAtual > 1)
-            {
-                _paginaAtual--;
-                _offset = (_paginaAtual - 1) * _limit;
-                OnPropertyChanged(nameof(PaginaAtual));
-                await CarregarProcessos();
-            }
-        }
+        
 
         private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
@@ -405,7 +380,7 @@ namespace PROARC.src.Views
                         }},
                         title: {{
                             display: true,
-                            text: 'Número de Reclamações', // Título do eixo X
+                            text: 'Número de Reclamações por Empresa', // Título do eixo X
                             color: 'black', // Cor do título do eixo X
                             font: {{
                                 size: 14 // Tamanho da fonte do título do eixo X

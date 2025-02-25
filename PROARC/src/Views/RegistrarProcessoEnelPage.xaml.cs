@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Storage.Pickers;
@@ -28,6 +27,8 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Globalization;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using PROARC.src.ViewModels;
+using Microsoft.UI.Xaml.Data;
 
 namespace PROARC.src.Views
 {
@@ -36,6 +37,38 @@ namespace PROARC.src.Views
         private string numeroProcesso;
         private string anoProcesso;
         private List<string> arquivosSelecionados = new();
+        private bool _isReadOnlyMode = false;
+        private ReclamacaoEnel reclamacaoOriginal;
+
+        public bool IsReadOnlyMode
+        {
+            get => _isReadOnlyMode;
+            set
+            {
+                if (_isReadOnlyMode != value)
+                {
+                    _isReadOnlyMode = value;
+                    OnPropertyChanged(nameof(BotoesVisiveis));
+                    OnPropertyChanged(nameof(MotivoHabilitado));
+                    OnPropertyChanged(nameof(ContinuarVisivel));
+                }
+            }
+        }
+
+        private Motivo motivoSelecionado;
+        public Motivo MotivoSelecionado
+        {
+            get => motivoSelecionado;
+            set
+            {
+                motivoSelecionado = value;
+            }
+        }
+
+        public bool IsEditableMode => !IsReadOnlyMode;
+        public Visibility BotoesVisiveis => IsReadOnlyMode ? Visibility.Collapsed : Visibility.Visible;
+        public bool MotivoHabilitado => !IsReadOnlyMode;
+        public Visibility ContinuarVisivel => IsReadOnlyMode ? Visibility.Collapsed : Visibility.Visible;
 
         public string NumeroProcesso
         {
@@ -44,7 +77,7 @@ namespace PROARC.src.Views
             {
                 if (int.TryParse(value, out int numero))
                 {
-                    value = numero.ToString("D3"); 
+                    value = numero.ToString("D3");
                 }
                 SetProperty(ref numeroProcesso, value);
             }
@@ -64,7 +97,6 @@ namespace PROARC.src.Views
             DataContext = this;
             CarregarMotivosAsync();
             ConfigureShadows();
-            
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -274,7 +306,6 @@ namespace PROARC.src.Views
 
         private async void ContinuarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Resetando estilos de erro
             ResetErrorStyles();
 
             NumeroProcesso = inputNProcesso.Text.Trim();
@@ -289,47 +320,11 @@ namespace PROARC.src.Views
             if (!CamposPreenchidos())
             {
                 ShowError("Preencha todos os campos obrigatórios antes de continuar.");
-                HighlightEmptyFields(); // 🔴 Adiciona bordas vermelhas nos campos vazios
+                HighlightEmptyFields();
                 return;
             }
 
-            // Coletar os arquivos anexados (caminhos completos)
-            var arquivosAnexados = ListaArquivos.Children.OfType<StackPanel>()
-                .Select(stackPanel => stackPanel.Children.OfType<TextBlock>().FirstOrDefault()?.Tag?.ToString())
-                .Where(path => !string.IsNullOrEmpty(path))
-                .ToList();
-
-            // Log dos arquivos a serem enviados
-            if (arquivosAnexados.Any())
-            {
-                foreach (var arquivo in arquivosAnexados)
-                {
-                    Debug.WriteLine($"Arquivo a ser enviado: {arquivo}");
-                }
-
-                // Enviar cada arquivo para o servidor
-                foreach (var caminhoArquivo in arquivosAnexados)
-                {
-                    if (File.Exists(caminhoArquivo))
-                    {
-                        string tituloPasta = $"E{NumeroProcesso}-{AnoProcesso}"; // Título da pasta
-                        Debug.WriteLine($"Enviando arquivo: {caminhoArquivo} para a pasta: {tituloPasta}");
-                        await FileNetworkControl.SendFile(caminhoArquivo, tituloPasta); // Chama o método do controlador
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"Arquivo não encontrado: {caminhoArquivo}");
-                    }
-                }
-            }
-            else
-            {
-                Debug.WriteLine("Nenhum arquivo encontrado para enviar.");
-            }
-
-            // Restante da lógica para salvar o processo...
             Motivo? motivoSelecionado = cbMotivo.SelectedItem != null ? new Motivo(cbMotivo.SelectedItem.ToString()) : null;
-
             string cpfLimpoReclamante = new string(inputCpfReclamante.Text.Where(char.IsDigit).ToArray());
 
             var reclamante = new Reclamante(
@@ -341,16 +336,15 @@ namespace PROARC.src.Views
             );
 
             Procurador procurador = null;
-
             if (ProcuradorCheckBox.IsChecked == true)
             {
                 string cpfLimpoProcurador = new string(inputCpfProcurador.Text.Where(char.IsDigit).ToArray());
                 procurador = new Procurador(
-                inputNomeProcurador.Text,
-                cpfLimpoProcurador,
-                string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
-                string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
-                string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
+                    inputNomeProcurador.Text,
+                    cpfLimpoProcurador,
+                    string.IsNullOrWhiteSpace(inputRgProcurador.Text) ? null : inputRgProcurador.Text,
+                    string.IsNullOrWhiteSpace(inputNumeroProcurador.Text) ? null : inputNumeroProcurador.Text,
+                    string.IsNullOrWhiteSpace(inputEmailProcurador.Text) ? null : inputEmailProcurador.Text
                 );
             }
 
@@ -364,14 +358,12 @@ namespace PROARC.src.Views
             string observacao = inputObservacao.Text;
 
             Reclamado? enel = await ReclamadoControl.GetAsync(74);
-
             if (enel != null)
             {
                 LinkedList<Reclamado> reclamados = new LinkedList<Reclamado>();
                 reclamados.AddLast(enel);
 
-                var reclamacaoEnel = new ReclamacaoEnel
-                (
+                var reclamacaoEnelAtualizada = new ReclamacaoEnel(
                     motivoSelecionado,
                     reclamante,
                     procurador,
@@ -387,16 +379,41 @@ namespace PROARC.src.Views
                     observacao
                 );
 
-                ButtonContinuar.IsEnabled = false;
-                bool success = await ReclamacaoControl.InsertAsync(reclamacaoEnel);
-                ButtonContinuar.IsEnabled = true;
-
-                if (success)
+                if (reclamacaoOriginal == null)
                 {
+                    ButtonContinuar.IsEnabled = false;
+                    bool success = await ReclamacaoControl.InsertAsync(reclamacaoEnelAtualizada);
+                    ButtonContinuar.IsEnabled = true;
+
+                    if (success)
+                    {
+                        var successDialog = new ContentDialog
+                        {
+                            Title = "Sucesso",
+                            Content = "O processo foi cadastrado com sucesso!",
+                            CloseButtonText = "OK",
+                            XamlRoot = this.Content.XamlRoot
+                        };
+
+                        await successDialog.ShowAsync();
+                        Frame.Navigate(typeof(RegistrarProcessoEnelPage), true);
+                    }
+                    else
+                    {
+                        ShowError("Falha ao cadastrar o processo. Tente novamente.");
+                    }
+                }
+                else if (!ReclamacoesIguais(reclamacaoOriginal, reclamacaoEnelAtualizada))
+                {
+                    ButtonContinuar.IsEnabled = false;
+                    await ReclamacaoControl.UpdateAsync(reclamacaoOriginal.Titulo, reclamacaoEnelAtualizada);
+                    ButtonContinuar.IsEnabled = true;
+
+                    reclamacaoOriginal = reclamacaoEnelAtualizada;
                     var successDialog = new ContentDialog
                     {
                         Title = "Sucesso",
-                        Content = "O processo foi cadastrado com sucesso!",
+                        Content = "O processo foi atualizado com sucesso!",
                         CloseButtonText = "OK",
                         XamlRoot = this.Content.XamlRoot
                     };
@@ -404,12 +421,22 @@ namespace PROARC.src.Views
                     await successDialog.ShowAsync();
                     Frame.Navigate(typeof(RegistrarProcessoEnelPage), true);
                 }
-                else
-                {
-                    ShowError("Falha ao cadastrar o processo. Tente novamente.");
-                }
             }
         }
+
+        private bool ReclamacoesIguais(ReclamacaoEnel original, ReclamacaoEnel nova)
+        {
+            return original.Atendente == nova.Atendente &&
+                   original.Observacao == nova.Observacao &&
+                   original.Situacao == nova.Situacao &&
+                   original.Reclamante.Nome == nova.Reclamante.Nome &&
+                   original.Reclamante.Rg == nova.Reclamante.Rg &&
+                   original.Reclamante.CpfFormatado == nova.Reclamante.CpfFormatado &&
+                   original.Reclamante.Email == nova.Reclamante.Email &&
+                   original.Reclamante.Telefone == nova.Reclamante.Telefone &&
+                   original.Motivo == nova.Motivo;
+        }
+
 
         private void HighlightEmptyFields()
         {
@@ -524,7 +551,6 @@ namespace PROARC.src.Views
 
         private string GetSelectedRadioButton()
         {
-
             if (radio_agRespostaEnel.IsChecked == true)
                 return "Aguardando resposta da Enel";
             if (radio_agAguardandoPrazo.IsChecked == true)
@@ -545,9 +571,7 @@ namespace PROARC.src.Views
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            // Adiciona filtros para tipos de arquivo permitidos
-            picker.FileTypeFilter.Add(".pdf");
-            picker.FileTypeFilter.Add(".docx");
+            picker.FileTypeFilter.Add("*");
 
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
@@ -566,41 +590,14 @@ namespace PROARC.src.Views
             {
                 var nomeArquivo = System.IO.Path.GetFileName(arquivo);
 
-                if (!ListaArquivos.Children.OfType<StackPanel>().Any(sp => sp.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo)))
+                if (!ListaArquivos.Children.OfType<TextBlock>().Any(tb => tb.Text == nomeArquivo))
                 {
-                    var textBlock = new TextBlock
+                    ListaArquivos.Children.Add(new TextBlock
                     {
                         Text = nomeArquivo,
-                        Tag = arquivo, // Armazena o caminho completo no Tag
                         FontSize = 14,
                         Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Green)
-                    };
-
-                    var button = new Button
-                    {
-                        Content = "X",
-                        Background = new SolidColorBrush(Microsoft.UI.Colors.Blue),
-                        Foreground = new SolidColorBrush(Microsoft.UI.Colors.White),
-                        Margin = new Thickness(10, 0, 0, 0),
-                        Padding = new Thickness(5),
-                        CornerRadius = new CornerRadius(5)
-                    };
-
-                    button.Click += (sender, e) =>
-                    {
-                        var stackPanel = (StackPanel)((Button)sender).Parent;
-                        ListaArquivos.Children.Remove(stackPanel);
-                        AtualizarMensagemNenhumArquivo();
-                    };
-
-                    var stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
-                    stackPanel.Children.Add(textBlock);
-                    stackPanel.Children.Add(button);
-
-                    ListaArquivos.Children.Add(stackPanel);
-
-                    // Log para verificar o arquivo adicionado
-                    Debug.WriteLine($"Arquivo adicionado: {nomeArquivo}, Caminho: {arquivo}");
+                    });
                 }
             }
 
@@ -645,14 +642,265 @@ namespace PROARC.src.Views
             ObservacaoSection.Translation = new Vector3(1, 1, 20);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void BtnEditar_Click(object sender, RoutedEventArgs e)
+        {
+            IsReadOnlyMode = false;
+
+            inputNProcesso.IsReadOnly = true;
+            inputAnoProcesso.IsReadOnly = true;
+            inputNomeAtendente.IsReadOnly = false;
+            inputNomeReclamante.IsReadOnly = false;
+            inputCpfReclamante.IsReadOnly = false;
+            inputEmailReclamante.IsReadOnly = false;
+            inputNumeroReclamante.IsReadOnly = false;
+            inputObservacao.IsReadOnly = false;
+            cbMotivo.IsEnabled = true;
+
+            radio_agRespostaEnel.IsEnabled = true;
+            radio_agAguardandoPrazo.IsEnabled = true;
+            radio_atendido.IsEnabled = true;
+            radio_naoAtendido.IsEnabled = true;
+
+            //btnEditar.Visibility = Visibility.Collapsed;
+            ButtonContinuar.Visibility = Visibility.Visible;
+            btnProcessoNovo.Visibility = Visibility.Collapsed;
+            btnProcessoAntigo.Visibility = Visibility.Collapsed;
+
+            inputNomeProcurador.IsReadOnly = false;
+            inputCpfProcurador.IsReadOnly = false;
+            inputRgProcurador.IsReadOnly = false;
+            inputNumeroProcurador.IsReadOnly = false;
+            inputEmailProcurador.IsReadOnly = false;
+            ProcuradorCheckBox.IsEnabled = true;
+        }
+
+        //protected override async void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    base.OnNavigatedTo(e);
+
+        //    if (e.Parameter is ReclamacaoViewModel reclamacaoViewModel)
+        //    {
+        //        IsReadOnlyMode = true;
+        //        btnEditar.Visibility = Visibility.Visible;
+        //        tituloTextBlock.Text = "RECLAMAÇÃO ENEL";
+        //        AnexarArquivosSection.Visibility = Visibility.Collapsed;
+        //        ConfigurarVisibilidadeBotoes(false);
+
+        //        string titulo = reclamacaoViewModel.Titulo;
+        //        ReclamacaoEnel reclamacao = (ReclamacaoEnel)await ReclamacaoControl.GetAsync(titulo);
+        //        reclamacaoOriginal = reclamacao;
+        //        string[] partesTitulo = reclamacao.Titulo.Split('/');
+
+        //        string numeroProcesso = partesTitulo[0];
+        //        numeroProcesso = numeroProcesso.Substring(1);
+        //        string anoProcesso = partesTitulo[1];   
+
+        //        inputNProcesso.Text = numeroProcesso; 
+        //        inputAnoProcesso.Text = anoProcesso;
+
+        //        inputNomeAtendente.Text = reclamacao.Atendente;
+        //        inputNomeReclamante.Text = reclamacao.Reclamante.Nome;
+        //        inputRgReclamante.Text = reclamacao.Reclamante.Rg;
+        //        inputCpfReclamante.Text = reclamacao.Reclamante.CpfFormatado;
+        //        inputEmailReclamante.Text = reclamacao.Reclamante.Email;
+        //        inputNumeroReclamante.Text = reclamacao.Reclamante.Telefone;
+        //        inputObservacao.Text = reclamacao.Observacao;
+
+        //        await CarregarMotivosAsync();
+        //        var motivoSelecionado = cbMotivo.Items.Cast<Motivo>().FirstOrDefault(m => m.Nome == reclamacaoViewModel.Motivo);
+        //        if (motivoSelecionado != null)
+        //        {
+        //            cbMotivo.SelectedItem = motivoSelecionado;
+        //        }
+
+        //        if (reclamacao.Procurador != null && !string.IsNullOrWhiteSpace(reclamacao.Procurador.Nome))
+        //        {
+        //            ProcuradorCheckBox.IsChecked = true;
+        //            ProcuradorSection1.Visibility = Visibility.Visible;
+
+        //            inputNomeProcurador.Text = reclamacao.Procurador.Nome;
+        //            inputCpfProcurador.Text = reclamacao.Procurador.Cpf;
+        //            inputRgProcurador.Text = reclamacao.Procurador.Rg;
+        //            inputNumeroProcurador.Text = reclamacao.Procurador.Telefone;
+        //            inputEmailProcurador.Text = reclamacao.Procurador.Email;
+
+        //            inputNomeProcurador.IsReadOnly = true;
+        //            inputCpfProcurador.IsReadOnly = true;
+        //            inputRgProcurador.IsReadOnly = true;
+        //            inputNumeroProcurador.IsReadOnly = true;
+        //            inputEmailProcurador.IsReadOnly = true;
+        //        }
+        //        else
+        //        {
+        //            ProcuradorSection1.Visibility = Visibility.Collapsed;
+        //            ProcuradorCheckBox.IsChecked = false;
+        //        }
+
+
+        //        switch (reclamacao.Situacao)
+        //        {
+        //            case "Aguardando resposta da Enel":
+        //                radio_agRespostaEnel.IsChecked = true;
+        //                break;
+        //            case "Aguardando prazo":
+        //                radio_agAguardandoPrazo.IsChecked = true;
+        //                break;
+        //            case "Atendido":
+        //                radio_atendido.IsChecked = true;
+        //                break;
+        //            case "Não Atendido":
+        //                radio_naoAtendido.IsChecked = true;
+        //                break;
+        //        }
+
+        //        IsReadOnlyMode = true;
+
+        //        btnProcessoNovo.Visibility = Visibility.Collapsed;
+        //        btnProcessoAntigo.Visibility = Visibility.Collapsed;
+
+        //        inputNProcesso.IsReadOnly = true;
+        //        inputAnoProcesso.IsReadOnly = true;
+        //        inputNomeAtendente.IsReadOnly = true;
+        //        inputNomeReclamante.IsReadOnly = true;
+        //        inputCpfReclamante.IsReadOnly = true;
+        //        inputEmailReclamante.IsReadOnly = true;
+        //        inputNumeroReclamante.IsReadOnly = true;
+        //        inputObservacao.IsReadOnly = true;
+        //        cbMotivo.IsEnabled = false;
+
+        //        radio_agRespostaEnel.IsEnabled = false;
+        //        radio_agAguardandoPrazo.IsEnabled = false;
+        //        radio_atendido.IsEnabled = false;
+        //        radio_naoAtendido.IsEnabled = false;
+        //    }
+        //    else
+        //    {
+        //        IsReadOnlyMode = false;
+        //        ConfigurarEstadoProcesso(true);
+        //        ConfigurarVisibilidadeBotoes(true);
+        //    }
+        //}
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            if (e.Parameter is bool isNovoProcesso)
+            if (e.Parameter is ReclamacaoViewModel reclamacaoViewModel)
             {
-                ConfigurarEstadoProcesso(isNovoProcesso);
+                IsReadOnlyMode = true;
+                btnEditar.Visibility = Visibility.Visible;
+                tituloTextBlock.Text = "RECLAMAÇÃO ENEL";
+                AnexarArquivosSection.Visibility = Visibility.Collapsed;
+                ConfigurarVisibilidadeBotoes(false);
+
+                string titulo = reclamacaoViewModel.Titulo;
+                ReclamacaoEnel reclamacao = (ReclamacaoEnel)await ReclamacaoControl.GetAsync(titulo);
+                reclamacaoOriginal = reclamacao;
+                string[] partesTitulo = reclamacao.Titulo.Split('/');
+
+                string numeroProcesso = partesTitulo[0];
+                numeroProcesso = numeroProcesso.Substring(1);
+                string anoProcesso = partesTitulo[1];
+
+                inputNProcesso.Text = numeroProcesso;
+                inputAnoProcesso.Text = anoProcesso;
+
+                inputNomeAtendente.Text = reclamacao.Atendente;
+                inputNomeReclamante.Text = reclamacao.Reclamante.Nome;
+                inputRgReclamante.Text = reclamacao.Reclamante.Rg;
+                inputCpfReclamante.Text = reclamacao.Reclamante.CpfFormatado;
+                inputEmailReclamante.Text = reclamacao.Reclamante.Email;
+                inputNumeroReclamante.Text = reclamacao.Reclamante.Telefone;
+                inputObservacao.Text = reclamacao.Observacao;
+
+                await CarregarMotivosAsync();
+                var motivoSelecionado = cbMotivo.Items.Cast<Motivo>().FirstOrDefault(m => m.Nome == reclamacaoViewModel.Motivo);
+                if (motivoSelecionado != null)
+                {
+                    cbMotivo.SelectedItem = motivoSelecionado;
+                }
+
+                // Verificar se há procurador e definir o estado do CheckBox
+                if (reclamacao.Procurador != null && !string.IsNullOrWhiteSpace(reclamacao.Procurador.Nome))
+                {
+                    ProcuradorCheckBox.IsChecked = true;
+                    ProcuradorSection1.Visibility = Visibility.Visible;
+
+                    inputNomeProcurador.Text = reclamacao.Procurador.Nome;
+                    inputCpfProcurador.Text = reclamacao.Procurador.Cpf;
+                    inputRgProcurador.Text = reclamacao.Procurador.Rg;
+                    inputNumeroProcurador.Text = reclamacao.Procurador.Telefone;
+                    inputEmailProcurador.Text = reclamacao.Procurador.Email;
+
+                    inputNomeProcurador.IsReadOnly = true;
+                    inputCpfProcurador.IsReadOnly = true;
+                    inputRgProcurador.IsReadOnly = true;
+                    inputNumeroProcurador.IsReadOnly = true;
+                    inputEmailProcurador.IsReadOnly = true;
+                }
+                else
+                {
+                    ProcuradorCheckBox.IsChecked = false;
+                    ProcuradorSection1.Visibility = Visibility.Collapsed;
+                }
+
+
+                switch (reclamacao.Situacao)
+                {
+                    case "Aguardando resposta da Enel":
+                        radio_agRespostaEnel.IsChecked = true;
+                        break;
+                    case "Aguardando prazo":
+                        radio_agAguardandoPrazo.IsChecked = true;
+                        break;
+                    case "Atendido":
+                        radio_atendido.IsChecked = true;
+                        break;
+                    case "Não Atendido":
+                        radio_naoAtendido.IsChecked = true;
+                        break;
+                }
+
+                IsReadOnlyMode = true;
+
+                btnProcessoNovo.Visibility = Visibility.Collapsed;
+                btnProcessoAntigo.Visibility = Visibility.Collapsed;
+
+                inputNProcesso.IsReadOnly = true;
+                inputAnoProcesso.IsReadOnly = true;
+                inputNomeAtendente.IsReadOnly = true;
+                inputNomeReclamante.IsReadOnly = true;
+                inputCpfReclamante.IsReadOnly = true;
+                inputEmailReclamante.IsReadOnly = true;
+                inputNumeroReclamante.IsReadOnly = true;
+                inputObservacao.IsReadOnly = true;
+                cbMotivo.IsEnabled = false;
+
+                radio_agRespostaEnel.IsEnabled = false;
+                radio_agAguardandoPrazo.IsEnabled = false;
+                radio_atendido.IsEnabled = false;
+                radio_naoAtendido.IsEnabled = false;
+
+                ProcuradorCheckBox.IsEnabled = false;
             }
+            else
+            {
+                IsReadOnlyMode = false;
+                ConfigurarEstadoProcesso(true);
+                ConfigurarVisibilidadeBotoes(true);
+            }
+        }
+
+
+        private void ConfigurarVisibilidadeBotoes(bool visivel)
+        {
+            IsReadOnlyMode = !visivel;
+            OnPropertyChanged(nameof(BotoesVisiveis));
+            OnPropertyChanged(nameof(MotivoHabilitado));
+            OnPropertyChanged(nameof(ContinuarVisivel));
+
+            btnEditar.Visibility = IsReadOnlyMode ? Visibility.Visible : Visibility.Collapsed;
+            ButtonContinuar.Visibility = IsReadOnlyMode ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

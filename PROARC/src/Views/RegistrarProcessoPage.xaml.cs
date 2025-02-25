@@ -807,7 +807,7 @@ namespace PROARC.src.Views
         }
 
         private bool CamposPreenchidos()
-        => new[] { inputNome, inputCpfReclamante}
+        => new[] { inputNome, inputCpfReclamante }
             .All(campo => !string.IsNullOrWhiteSpace(campo.Text))
             && cbMotivo.SelectedItem != null
             && calendario.Date != null

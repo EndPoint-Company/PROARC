@@ -4,10 +4,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Newtonsoft.Json.Linq;
 using PROARC.src.Control;
 using PROARC.src.Models;
@@ -76,65 +79,19 @@ namespace PROARC.src.Views
                 }
             }
         }
-
-
-
-
-
-
         public ProcessosListaPage()
         {
             this.InitializeComponent();
             this.DataContext = this;
             _ = CarregarProcessos();
-            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
+
         }
 
 
-        private async void PesquisarProcesso_KeyDown(object sender, KeyRoutedEventArgs e)
+        private async void PesquisarProcesso(object sender, TextChangedEventArgs e)
         {
-            // Verifica se a tecla pressionada foi "Enter"
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                var textBox = sender as TextBox;
-                string pesquisa = textBox.Text;
 
-                if (string.IsNullOrWhiteSpace(pesquisa))
-                {
-                    await CarregarProcessos();
-                    MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
-                    return;
-                }
-
-                try
-                {
-                    var processo = await ReclamacaoControl.GetAsync(pesquisa);
-                    Processos.Clear();
-
-                    if (processo != null)
-                    {
-                        var processoViewModel = new ReclamacaoViewModel(processo);
-                        processoViewModel.PropertyChanged += Processo_PropertyChanged;
-                        Processos.Add(processoViewModel);
-                        MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
-                    }
-                    else
-                    {
-                        MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de feedback
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"❌ Erro ao pesquisar processo: {ex.Message}");
-                    MensagemFeedback.Text = "Erro ao pesquisar processo.";
-                    MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de erro
-                }
-            }
         }
-
-
-
-
 
         private async Task CarregarProcessos()
         {
@@ -210,8 +167,7 @@ namespace PROARC.src.Views
 
         private void _NovoProcessoBtn_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(RegistrarProcesso01Page), true);
-        }   
+        }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
@@ -234,25 +190,123 @@ namespace PROARC.src.Views
 
         private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            if (sender is FrameworkElement element)
+            if (sender is FrameworkElement element && element.DataContext is ReclamacaoViewModel reclamacao)
             {
                 var menuFlyout = new MenuFlyout();
 
                 var visualizarItem = new MenuFlyoutItem { Text = "Visualizar Processo" };
-                var editarItem = new MenuFlyoutItem { Text = "Editar Processo" };
+                visualizarItem.Click += (s, args) => VisualizarProcesso(reclamacao);
 
                 var excluirItem = new MenuFlyoutItem
                 {
                     Text = "Excluir Processo",
                     Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red)
                 };
+                excluirItem.Click += (s, args) => ExcluirReclamacao(reclamacao);
 
                 menuFlyout.Items.Add(visualizarItem);
-                menuFlyout.Items.Add(editarItem);
+                //menuFlyout.Items.Add(editarItem);
                 menuFlyout.Items.Add(new MenuFlyoutSeparator());
                 menuFlyout.Items.Add(excluirItem);
 
                 menuFlyout.ShowAt(element, e.GetPosition(element));
+            }
+        }
+
+        private async void ExcluirReclamacao(ReclamacaoViewModel reclamacao)
+        {
+            //Popup de confirmação
+           ContentDialog confirmDialog = new ContentDialog
+           {
+               Title = "Confirmar Exclusão",
+               Content = "Tem certeza de que deseja excluir esta reclamação? Essa ação não pode ser desfeita.",
+               PrimaryButtonText = "Excluir",
+               CloseButtonText = "Cancelar",
+               DefaultButton = ContentDialogButton.Close,
+               XamlRoot = this.XamlRoot,
+               PrimaryButtonStyle = new Style(typeof(Button))
+               {
+                   Setters =
+           {
+                new Setter(Button.BackgroundProperty, new SolidColorBrush(Colors.Red)),
+                new Setter(Button.ForegroundProperty, new SolidColorBrush(Colors.White)),
+                new Setter(Button.CornerRadiusProperty, new CornerRadius(5))
+           }
+               }
+           };
+
+            ContentDialogResult result = await confirmDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                // Executa a exclusão
+                await ReclamacaoControl.DeleteAsync(reclamacao.Titulo);
+
+                // Popup de sucesso
+                ContentDialog sucessoDialog = new ContentDialog
+                {
+                    Title = "Sucesso",
+                    Content = "O processo foi excluído com sucesso!",
+                    CloseButtonText = "OK",
+                    XamlRoot = this.XamlRoot
+                };
+
+                await sucessoDialog.ShowAsync();
+            }
+        }
+
+
+        private async void PesquisarProcesso_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            // Verifica se a tecla pressionada foi "Enter"
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                var textBox = sender as TextBox;
+                string pesquisa = textBox.Text;
+
+                if (string.IsNullOrWhiteSpace(pesquisa))
+                {
+                    await CarregarProcessos();
+                    MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
+                    return;
+                }
+
+                try
+                {
+                    var processo = await ReclamacaoControl.GetAsync(pesquisa);
+                    Processos.Clear();
+
+                    if (processo != null)
+                    {
+                        var processoViewModel = new ReclamacaoViewModel(processo);
+                        processoViewModel.PropertyChanged += Processo_PropertyChanged;
+                        Processos.Add(processoViewModel);
+                        MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
+                    }
+                    else
+                    {
+                        MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de feedback
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌ Erro ao pesquisar processo: {ex.Message}");
+                    MensagemFeedback.Text = "Erro ao pesquisar processo.";
+                    MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de erro
+                }
+            }
+        }
+
+
+        private void VisualizarProcesso(ReclamacaoViewModel reclamacao)
+        {
+            if (reclamacao.Titulo.StartsWith("E"))
+            {
+                Frame.Navigate(typeof(RegistrarProcessoEnelPage), reclamacao);
+            }
+            else if (reclamacao.Titulo.StartsWith("G"))
+            {
+                Frame.Navigate(typeof(RegistrarProcesso01Page), reclamacao);
             }
         }
 

@@ -28,9 +28,11 @@ namespace PROARC.src.ViewModels
         {
             "Aguardando fazer notificação",
             "Aguardando realização da audiência",
-            "Aguardando resposta do reclamado",
+            "Aguardando resposta da empresa",
+            "Aguardando resposta da Enel",
+            "Aguardando prazo",
             "Aguardando envio da notificação",
-            "Aguardando documentaçãoda",
+            "Aguardando documentação",
             "Atendido",
             "Não Atendido"
         };
