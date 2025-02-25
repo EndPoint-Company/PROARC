@@ -8,7 +8,8 @@ namespace PROARC.src.Views
         {
             this.InitializeComponent();
 
-            contentFrame.Navigate(typeof(HomePage));
+            contentFrame.Navigate(typeof(NewHomePage));
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -19,20 +20,33 @@ namespace PROARC.src.Views
             {
                 string tag = selectedItem.Tag as string;
 
-                // Navegar para a p�gina correspondente
+                // Navegar para a página correspondente
                 switch (tag)
                 {
-                    case "SamplePage1":
-                        contentFrame.Navigate(typeof(HomePage));
+                    
+                    case "HomePage":
+                        contentFrame.Navigate(typeof(NewHomePage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage2":
+                    case "ListPageGeral":
                         contentFrame.Navigate(typeof(ProcessosListaPage));
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage3":
-                        contentFrame.Navigate(typeof(RegistrarProcesso01Page));
+                    case "CadastrarPageGeral":
+                        contentFrame.Navigate(typeof(RegistrarProcesso01Page), true);
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
-                    case "SamplePage4":
+                    case "LoginPage":
                         Frame.Navigate(typeof(LoginPage));
+                        args.SelectedItemContainer.IsSelected = false;
+                        break;
+                    case "ControleEmpresas":
+                        contentFrame.Navigate(typeof(ControleEmpresas));
+                        args.SelectedItemContainer.IsSelected = false;
+                        break;
+                    case "CadastrarPageEnel":
+                        contentFrame.Navigate(typeof(RegistrarProcessoEnelPage), true);
+                        args.SelectedItemContainer.IsSelected = false;
                         break;
                 }
             }

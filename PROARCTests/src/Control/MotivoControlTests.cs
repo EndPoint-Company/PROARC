@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Appointments.AppointmentsProvider;
 using PROARC.src.Models;
-using PROARC.src.Control.Database;
 using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control.Tests
@@ -15,117 +14,58 @@ namespace PROARC.src.Control.Tests
     [TestClass()]
     public class MotivoControlTests
     {
-        [TestMethod("teste de metodo getMotivo")]
-        public void GetMotivoTest()
+        [TestMethod()]
+        public async Task GetMotivoAsyncTest()
         {
-            try
-            {
-
-                Console.WriteLine(MotivoControl.GetMotivo("juros abusivos"));
-            }
-
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao buscar usuário com ID {id}: {e.Message}");
-            }
+            Console.WriteLine(await MotivoControl.GetAsync("Atraso na entrega"));
         }
 
-        [TestMethod("teste de metodo getMotivo por id")]
-        public void GetMotivoTest1()
+        [TestMethod()]
+        public async Task GetMotivoAsyncTest1()
         {
-            try
-            {
-
-                Console.WriteLine(MotivoControl.GetMotivo(1));
-
-            }
-
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao buscar usuário com ID {id}: {e.Message}");
-            }
+            Console.WriteLine((await MotivoControl.GetAsync(2)).Nome);
         }
 
-        [TestMethod("teste de metodo addmotivo")]
-        public void AddMotivoTest()
+        [TestMethod()]
+        public async Task GetIdMotivoAsyncTest()
         {
-            try
-            {
-
-                //Motivo motivo = new Motivo("juros abismaticos", "exemplo exemplo exemplo");
-                // MotivoControl.AddMotivo(motivo);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao adicionar usuario {e.Message}");
-            }
+            int? abacaxi = await MotivoControl.GetIdAsync("Cobrança indevida");
+            Console.WriteLine(abacaxi);
         }
 
-        [TestMethod("teste do metodo removerMotivo")]
-        public void RemoverMotivoTest()
+        [TestMethod()]
+        public async Task GetAllMotivosAsyncTest()
         {
-            try
+            List<Motivo> motivo = await MotivoControl.GetAllAsync();
+
+            foreach (Motivo motivos in motivo)
             {
-
-                //MotivoControl.RemoverMotivo("juros abusivos");
-
-            }
-
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao buscar Motivo com {nome}: {e.Message}");
+                Console.WriteLine(motivos);
             }
         }
 
         [TestMethod()]
-        public void AtualizarMotivoTest()
+        public async Task AddMotivoAsyncTest()
         {
-            try
-            {
-
-               //MotivoControl.AtualizarMotivo("Motivo Exemplo", "juros catastroficos", "deu certo");
-
-            }
-
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao buscar Motivo com nome {nome}: {e.Message}");
-            }
-        }
-
-
-        [TestMethod()]
-        public void GetAllMotivosTest()
-        {
-            try
-            {
-                LinkedList<Motivo>? motivos = MotivoControl.GetAllMotivos();
-
-                if (motivos != null && motivos.Count > 0)
-                {
-                    Console.WriteLine("Lista de Motivos:");
-                    foreach (Motivo motivo in motivos)
-                    {
-                        Console.WriteLine($"Nome: {motivo.Nome}, Nível de Permissão: {motivo.Descricao}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Nenhum usuário encontrado ou houve um erro na consulta.");
-                }
-
-            }
-
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao buscar usuário com ID {id}: {e.Message}");
-            }
+            await MotivoControl.InsertAsync(new Motivo("juros abusivos"));
         }
 
         [TestMethod()]
-        public void GetMotivoIdTest()
+        public async Task UpdateMotivoAsyncTest()
         {
-           Console.WriteLine(MotivoControl.GetMotivoId("juros abismaticos"));
+            await MotivoControl.UpdateAsync("juros bananasticos", "Atraso na entrega");
+        }
+
+        [TestMethod()]
+        public async Task RemoveMotivoAsyncTest()
+        {
+            await MotivoControl.DeleteAsync("juros abusivos");
+        }
+
+        [TestMethod()]
+        public async Task CountMotivosTest()
+        {
+            Console.WriteLine(await MotivoControl.CountAsync());
         }
     }
 }

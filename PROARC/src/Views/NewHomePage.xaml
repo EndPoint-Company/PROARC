@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="PROARC.src.Views.NewHomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PROARC.src.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:PROARC.src.Models"
+    xmlns:viewModels="using:PROARC.src.ViewModels"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <ThemeShadow x:Key="SharedShadow" />
+        <DataTemplate x:Key="ContactListViewTemplate" x:DataType="models:Usuario">
+            <TextBlock Text="{x:Bind Nome}" x:Phase="1" Margin="0,5,0,5"/>
+        </DataTemplate>
+    </Page.Resources>
+
+    <ScrollView IsTabStop="True"
+    VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel>
+
+            <!-- Tela completa -->
+            <StackPanel Orientation="Horizontal" Margin="32,0,32,0">
+                
+                <!--Lado Esquedo : Lista de Reclamações e botões de navegação-->
+                <StackPanel Orientation="Vertical">
+
+
+                    <!--LLista de Reclamaçõe-->
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Background="#003366" Width="10" CornerRadius="12, 0, 0, 12" />
+                        <StackPanel Background="#FFF" x:Name="ReclamacoesSection" Shadow="{StaticResource SharedShadow}" CornerRadius="0,12,12,0" Height="650" Width="800">
+                            <Grid Margin="30,20,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="180" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Reclamação" FontSize="24" FontWeight="SemiBold" Grid.Column="0" />
+                                <TextBlock Text="Reclamante" FontSize="24" FontWeight="SemiBold" Grid.Column="1" />
+                                <TextBlock Text="Reclamado" FontSize="24" FontWeight="SemiBold" Grid.Column="2" />
+                                <TextBlock Text="Situação" FontSize="24" FontWeight="SemiBold" Grid.Column="3" />
+                            </Grid>
+
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                <ListView ItemsSource="{Binding Processos}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="viewModels:ReclamacaoViewModel">
+                                            <Grid Margin="10,2,0,0" RightTapped="Processo_RightTapped">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="180" />
+                                                    <ColumnDefinition Width="180" />
+                                                    <ColumnDefinition Width="180" />
+                                                    <ColumnDefinition Width="180" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{x:Bind Titulo}" Grid.Column="0" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="{x:Bind Titulo}" Placement="Mouse"/>
+                                        </ToolTipService.ToolTip>
+                                                </TextBlock>
+
+                                                <TextBlock Text="{x:Bind Reclamante}" Grid.Column="1" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="{x:Bind Reclamante}" Placement="Mouse"/>
+                                        </ToolTipService.ToolTip>
+                                                </TextBlock>
+
+                                                <TextBlock Text="{x:Bind PrimeiroReclamadoNome}" Grid.Column="2" FontSize="16" Margin="5" TextTrimming="CharacterEllipsis">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="{x:Bind PrimeiroReclamadoNome}" Placement="Mouse"/>
+                                        </ToolTipService.ToolTip>
+                                                </TextBlock>
+
+                                                <ComboBox ItemsSource="{x:Bind StatusList}" 
+                                              SelectedItem="{x:Bind Status, Mode=TwoWay}" 
+                                              Grid.Column="3" 
+                                              FontSize="16" 
+                                              Margin="5">
+                                                </ComboBox>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </ScrollViewer>
+
+
+                            <ProgressRing x:Name="carregando" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" Margin="0, 0, 0, 10"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                                <Button x:Name="BotaoPaginaAnterior" Content="Anterior" Click="PaginaAnterior_Click" />
+                                <TextBlock Text="{x:Bind PaginaAtual, Mode=OneWay}" FontSize="18" VerticalAlignment="Center"/>
+                                <Button x:Name="BotaoProximaPagina" Content="Próximo" Click="ProximaPagina_Click" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+
+
+
+                    <StackPanel Orientation="Horizontal" Margin="0,32,0,0" >
+                        <Button Click="CadastrarReclamacaoGeralButton_Click" Width="195" Height="152" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <!-- Ícone e Título lado a lado -->
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                                    <FontIcon Glyph="&#xE774;" FontSize ="50" Foreground="Navy" Margin="0,0,10,0"/>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <TextBlock Text="Cadastrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                                        <TextBlock Text="Reclamação" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                                        <TextBlock Text="Geral" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="CadastrarReclamacaoEnelButton_Click" Margin="10,0,0,0" Width="195" Height="152" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <!-- Ícone e Título lado a lado -->
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                                    <FontIcon Glyph="&#xE905;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0">
+                                        <TextBlock Text="Cadastrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                                        <TextBlock Text="Reclamação" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                                        <TextBlock Text="Enel" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="ListarReclamacaoButton_Click" Margin="10,0,0,0" Width="195" Height="152" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                                    <FontIcon Glyph="&#xF0E3;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                                        <TextBlock Text="Listar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                                        <TextBlock Text="Reclamações" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="CadastrarReclamadoButton_Click" Margin="10,0,0,0" Width="195" Height="152" Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="20" CornerRadius="12">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+                                    <FontIcon Glyph="&#xE731;" FontSize="50" Foreground="Navy" Margin="0,0,10,0"/>
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10">
+                                        <TextBlock Text="Cadastrrar" FontSize="16" FontWeight="SemiBold" Foreground="Navy"/>
+                                        <TextBlock Text="Reclamado" FontSize="16" FontWeight="Light" Foreground="Gray"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+
+
+                    </StackPanel>
+                
+                </StackPanel>
+            
+                <!--Lado direito : Coposto por três graficos-->
+                <StackPanel Margin="32,0,0,0">
+
+                    <!--Grafico maior (em cima)-->
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Background="#003366" Width="10" CornerRadius="12, 0, 0, 12" />
+                        <StackPanel Background="#FFF" x:Name="GraficoGrande01Section" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 12, 12, 0">
+                            <FlipView MaxWidth="900" Height="400" Background="Transparent" Padding="10">
+                                <WebView2 x:Name="WebViewChart" Width="900" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="C"/>
+                                <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="D"/>
+                                <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="E"/>
+                            </FlipView>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,32,0,0">
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Background="#003366" Width="10" CornerRadius="12, 0, 0, 12" />
+                            <StackPanel Background="#FFF" x:Name="Grafico02Section" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 12, 12, 0">
+                                <FlipView MaxWidth="429" Height="400" Background="Transparent" Padding="10">
+                                    <WebView2 x:Name="WebViewChart2"
+                                         Width="429"
+                                         Height="400"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Bottom"
+                                         Margin="0,0,0,20"/>
+                                    <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="C"/>
+                                    <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="D"/>
+                                    <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="E"/>
+                                </FlipView>
+                            </StackPanel>
+                        </StackPanel>
+
+
+                        <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
+                            <StackPanel Background="#003366" Width="10" CornerRadius="12, 0, 0, 12" />
+                            <StackPanel Background="#FFF" x:Name="Grafico03Section" Shadow="{StaticResource SharedShadow}" CornerRadius="0, 12, 12, 0">
+                                <FlipView MaxWidth="429" Height="400" Background="Transparent" Padding="10">
+                                    <WebView2 x:Name="WebViewChart3" Width="429" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Image Source="/Assets/1292844.png"/>
+                                    <Image Source="/Assets/jujutsu.png" />
+                                    <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="C"/>
+                                    <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="D"/>
+                                    <Image Source="/Assets/proarc-logo-dark-256x256.png" AutomationProperties.Name="E"/>
+                                </FlipView>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollView>
+</Page>

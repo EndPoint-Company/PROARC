@@ -1,11 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PROARC.src.Control;
-using PROARC.src.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments.AppointmentsProvider;
+using PROARC.src.Models;
+using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control.Tests
 {
@@ -13,92 +15,48 @@ namespace PROARC.src.Control.Tests
     public class ReclamadoControlTests
     {
         [TestMethod()]
-        public void GetReclamadoTest()
+        public async Task GetReclamadoByIdAsyncTest()
         {
-            try
-            {
-                Console.WriteLine(ReclamadoControl.GetReclamado(1));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
+            Console.WriteLine(await ReclamadoControl.GetAsync(1));
         }
 
         [TestMethod()]
-        public void GetAllReclamadosTest()
+        public async Task GetAllReclamadosAsyncTest()
         {
+            List<Reclamado> abacate = await ReclamadoControl.GetAllAsync();
 
-            try
+            foreach (Reclamado abacates in abacate)
             {
-                LinkedList<Reclamado>? reclamados = ReclamadoControl.GetAllReclamados();
-
-                if (reclamados != null && reclamados.Count > 0)
-                {
-                    Console.WriteLine("Lista de Reclamados:");
-                    foreach (Reclamado reclamado in reclamados)
-                    {
-                        Console.WriteLine(reclamado + "\n");
-
-
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Nenhum Reclamado encontrado ou houve um erro na consulta.");
-                }
-
-            }
-
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao buscar Reclamado com ID {id}: {e.Message}");
+                Console.WriteLine(abacates.ToString() + "\n");
             }
         }
 
         [TestMethod()]
-        public void AddReclamadoTest()
+        public async Task InsertAsyncTest()
         {
-            try
-            {
-                // Reclamado reclamado = new Reclamado("Jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
-                // ReclamadoControl.AddReclamado(reclamado);
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao adicionar Reclamado: {e.Message}");
-            }
-
+            //certo
+            await ReclamadoControl.InsertAsync(new Reclamado("balde de lixo", "12312312318", null, 12342, "guaraci", "centro", "ipubas", "ce", "12312312", "12312323410", "cabecinha@gmail.com"));
         }
 
         [TestMethod()]
-        public void AtualizarReclamadoTest()
-        {
-            //Reclamado reclamado = new Reclamado("jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
-            //ReclamadoControl.AtualizarReclamado(6, reclamado);
+        public async Task UpdateReclamadoByIdAsyncTest()
+        {   
+            //certo
+            //await ReclamadoControl.UpdateAsync(3, new Reclamado("balde de lixo", "12312312318", null, 12342, "guaraci", "centro", "ipubas", "ce", "12312312", "12312323410", "cabecinha@gmail.com"));
         }
 
         [TestMethod()]
-        public void GetReclamadoIdTest()
+        public async Task RemoveReclamadoByIdAsyncTest()
         {
-            ReclamadoControl.GetReclamadoId("12345678900", "João da Silva");
+            //certo
+            await ReclamadoControl.DeleteAsync(3);
         }
 
         [TestMethod()]
-        public void AddReclamadoTest1()
+        public async Task CountReclamadosAsyncTest()
         {
-            try
-            {
-                Reclamado reclamado = new Reclamado("Jeferson", 148, "guaraci", "centro", "mv@gmail.com", "ipubi", "pe", "123123", "70934922403");
-                ReclamadoControl.AddReclamado(reclamado);
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao adicionar Reclamado: {e.Message}");
-            }
+            //certo
+           Console.WriteLine( await ReclamadoControl.CountAsync());
         }
     }
 }

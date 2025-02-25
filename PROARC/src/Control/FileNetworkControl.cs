@@ -1,58 +1,82 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 using System.IO;
-using PROARC.src.Control.Database;
-using PROARC.src.Models.Tipos;
 
 namespace PROARC.src.Control
 {
     public static class FileNetworkControl
     {
-        // Classe pra gerenciar a transferência de arquivos entre Windows (cliente) e Linux (server)
-        // Possível utilização de Samba no server side.
-
-        // Localmente
-        // Formato dos caminhos (ex.) -> C:/Users/Documentos/Proarc/
-        private static string? local_DefaultPath = Local_GetDefaultFolder();
-
-        public static void Local_SetDefaultFolder(string path)
+        public async static Task SendFile(string filePathClient, string titulo)
         {
-            string sql = $"USE ProArc; INSERT INTO DefaultPath (remote, local) VALUES (NULL, '{path}');";
-            DatabaseOperations.QuerySqlCommandNoReturn(sql);
+            using TcpClient client = new();
+            await client.ConnectAsync(NetworkControl.GetAddr());
 
-            local_DefaultPath = path;
+            NetworkStream NetworkStream = client.GetStream();
+            Stream FileStream = File.OpenRead(filePathClient);
+            byte[] FileBuffer = new byte[FileStream.Length];
+
+            await client.Client.SendAsync(Encoding.UTF8.GetBytes("FTS"));
+
+            await Task.Delay(1000);
+
+            await client.Client.SendAsync(Encoding.UTF8.GetBytes(titulo));
+
+            await Task.Delay(1000);
+
+            await client.Client.SendAsync(Encoding.UTF8.GetBytes(Path.GetFileName(filePathClient)));
+
+            await FileStream.ReadAsync(FileBuffer, 0, (int)FileStream.Length);
+            await NetworkStream.WriteAsync(FileBuffer, 0, FileBuffer.GetLength(0));
+            NetworkStream.Close();
         }
 
-        public static string? Local_GetDefaultFolder()
+        public async static Task ReceiveFile(string titulo, string arquivo)
         {
-            // Revisar
-            string sql = $"USE ProArc; SELECT local FROM DefaultPath;";
-            List<string> local = DatabaseOperations.QuerySqlCommand(sql);
+            try
+            {
+                using TcpClient client = new();
+                await client.ConnectAsync(NetworkControl.GetAddr());
 
-            return local[0];
+                using NetworkStream NetworkStream = client.GetStream();
+
+                await client.Client.SendAsync(Encoding.UTF8.GetBytes("FTR"));
+
+                await Task.Delay(1000);
+
+                await client.Client.SendAsync(Encoding.UTF8.GetBytes(titulo));
+
+                await Task.Delay(1000);
+
+                await client.Client.SendAsync(Encoding.UTF8.GetBytes(arquivo));
+
+                Console.WriteLine("[+] Comando e caminho enviados ao servidor.");
+
+                int BlockSize = 1024;
+                Byte[] DataByte = new Byte[BlockSize];
+                int DataRead;
+
+                string caminho = @"C:\Users\Mykae\Downloads\recv\uhuu.mp3";
+
+                Console.WriteLine($"[+] Recebendo arquivo e salvando em: {caminho}");
+
+                // Abre o arquivo para escrita no caminho fornecido
+                using (Stream FileStream = File.OpenWrite(caminho))
+                {
+                    while ((DataRead = NetworkStream.Read(DataByte, 0, BlockSize)) > 0)
+                    {
+                        FileStream.Write(DataByte, 0, DataRead);
+                    }
+                }
+
+                Console.WriteLine("[+] Arquivo recebido com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[-] Erro ao receber o arquivo: {ex.Message}");
+            }
         }
 
-        public static void Local_CriarProcessoAdministrativo(string numeroProcesso)
-        {
-            Directory.CreateDirectory($"{local_DefaultPath}/{numeroProcesso}");
-        }
-
-        public static void Local_CriarDiretorio(ArquivoTipo tipo, string numeroProcesso)
-        {
-            Directory.CreateDirectory($"{local_DefaultPath}/{numeroProcesso}/{tipo}");
-        }
-
-        public static void Local_AdicionarAquivoToDiretorio(ArquivoTipo tipo, string numeroProcesso, string arquivoPath)
-        {
-            File.Copy(arquivoPath, $"{local_DefaultPath}/{numeroProcesso}/{tipo}/" + System.IO.Path.GetFileName(arquivoPath));
-        }
-
-        public static void Local_CriarAllDiretorios(string numero_processo)
-        {
-            Local_CriarDiretorio(ArquivoTipo.TermoDeReclamação, numero_processo);
-            Local_CriarDiretorio(ArquivoTipo.Notificacao, numero_processo);
-            Local_CriarDiretorio(ArquivoTipo.Procuracao, numero_processo);
-            Local_CriarDiretorio(ArquivoTipo.AtaDeAudiencia, numero_processo);
-            Local_CriarDiretorio(ArquivoTipo.OutrosAnexos, numero_processo);
-        }
     }
 }

@@ -12,12 +12,15 @@ namespace PROARC.src.Control.Tests
     public class FileNetworkControlTests
     {
         [TestMethod()]
-        public void Local_CriarFolderProcessoAdministrativoTest()
+        public async Task SendFileTest()
         {
-            FileNetworkControl.Local_SetDefaultFolder(@"D:/ProarcFiles/Teste1");
-            FileNetworkControl.Local_CriarProcessoAdministrativo("0001-2024");
-            FileNetworkControl.Local_CriarDiretorio(Models.Tipos.ArquivoTipo.AtaDeAudiencia, "0001-2024");
-            FileNetworkControl.Local_AdicionarAquivoToDiretorio(Models.Tipos.ArquivoTipo.AtaDeAudiencia, "0001-2024", "C:\\Users\\Mykael\\Documents\\anexo b.pdf");
+            await FileNetworkControl.SendFile(@"C:\Users\henri\OneDrive\Área de Trabalho\mcai macaco\Seminários-RC2024-2-Turma1A.pdf", "G001-2025");
+        }
+
+        [TestMethod()]
+        public async Task ReceiveFileTest()
+        {
+            await FileNetworkControl.ReceiveFile("G001-2025", "counting_stars.mp3");
         }
     }
 }

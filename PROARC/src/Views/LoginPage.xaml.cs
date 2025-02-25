@@ -1,5 +1,20 @@
+using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
+using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.IO;
+using System.Threading.Tasks;
+using Azure;
+using Microsoft.UI.Xaml.Input;
+using PROARC.src.Control;
 
 namespace PROARC.src.Views
 {
@@ -9,19 +24,54 @@ namespace PROARC.src.Views
         {
             this.InitializeComponent();
             this.RequestedTheme = Microsoft.UI.Xaml.ElementTheme.Light;
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(HomeNavigationPage));
+            ErrorPanel.Visibility = Visibility.Collapsed;
+            carregando.Visibility = Visibility.Visible;
+            carregando.IsActive = true;
+            LoginButton.IsEnabled = false;
+
+            bool senhaValida = false;
+
+            try
+            {
+                senhaValida = await LoginConnect(CaixaSenha.Password);
+            }
+            catch (SocketException ex)
+            {
+                ErrorText.Text = $"Erro ao conectar com o servidor.";
+            }
+
+            carregando.Visibility = Visibility.Collapsed;
+            carregando.IsActive = false;
+
+            if (senhaValida)
+            {
+                Frame.Navigate(typeof(HomeNavigationPage));
+            }
+            else
+            {
+                ErrorPanel.Visibility = Visibility.Visible;
+            }
+
+            LoginButton.IsEnabled = true;
         }
 
-        //private void LoginButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Suponha que o login foi bem-sucedido, então mostramos o NavigationView
-        //    var parentPage = (RegistrarProcesso01Page)this.Parent;
-        //    parentPage.nvSample.Visibility = Visibility.Visible; // Restaura o NavigationView
-        //    parentPage.contentFrame.Navigate(typeof(HomePage)); // Navega para a HomePage ou a página desejada após o login
-        //}
+
+        private async Task<bool> LoginConnect(string password)
+        {
+            return await UsuarioControl.LoginConnect(password);
+        }
+
+        private void PasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                LoginButton_Click(sender, e);
+            }
+        }   
     }
 }

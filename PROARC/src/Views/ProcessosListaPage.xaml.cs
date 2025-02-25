@@ -1,31 +1,224 @@
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Collections.ObjectModel;
-using PROARC.src.Models.Arquivos;
-using PROARC.src.Models.Tipos;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using Newtonsoft.Json.Linq;
+using PROARC.src.Control;
+using PROARC.src.Models;
+using PROARC.src.Models.Arquivos;
+using PROARC.src.Models.Tipos;
+using PROARC.src.ViewModels;
 
 namespace PROARC.src.Views
 {
-    public sealed partial class ProcessosListaPage : Page
+    public sealed partial class ProcessosListaPage : Page, INotifyPropertyChanged
     {
-        public ObservableCollection<ProcessoAdministrativo> Processos { get; set; }
+        public ObservableCollection<ReclamacaoViewModel> Processos { get; set; } = new();
+        private bool _isLoading;
+        private int _limit = 15;
+        private int _offset = 0;
+        private int _paginaAtual = 1;
+        private int _totalProcessos = 0;
+
+        public int PaginaAtual
+        {
+            get => _paginaAtual;
+            set
+            {
+                if (_paginaAtual != value)
+                {
+                    _paginaAtual = value;
+                    OnPropertyChanged(nameof(PaginaAtual));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            });
+        }
+
+        private async void Processo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Status")
+            {
+                if (sender is ReclamacaoViewModel processoViewModel)
+                {
+                    var modeloOriginal = processoViewModel.ObterModeloOriginal();
+
+
+                    if (modeloOriginal.Situacao == processoViewModel.Status)
+                    {
+                        Debug.WriteLine(" Nenhuma altera√ß√£o detectada, ignorando atualiza√ß√£o.");
+                        return;
+                    }
+
+                    modeloOriginal.Situacao = processoViewModel.Status; // Atualiza o modelo original aqui
+
+                    if (modeloOriginal is ReclamacaoEnel reclamacaoEnel)
+                    {
+                        await ReclamacaoControl.UpdateAsync(processoViewModel.Titulo, reclamacaoEnel);
+                    }
+                    else if (modeloOriginal is ReclamacaoGeral reclamacaoGeral)
+                    {
+                        await ReclamacaoControl.UpdateAsync(processoViewModel.Titulo, reclamacaoGeral);
+                    }
+                }
+            }
+        }
+
+
+
+
+
 
         public ProcessosListaPage()
         {
             this.InitializeComponent();
-
-            // Inicializando a coleÁ„o de processos
-            Processos = new ObservableCollection<ProcessoAdministrativo>
-            {
-                new ProcessoAdministrativo("Caminho/Para/Processo1", "0001/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.EmTramitacaoAguardandoEnvioDaNotificacao, DateTime.Now, DateTime.Now),
-                new ProcessoAdministrativo("Caminho/Para/Processo2", "0002/2024", 2023, new Motivo("CobranÁa indevida"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.ArquivadoAtendido, DateTime.Now, DateTime.Now),
-                new ProcessoAdministrativo("Caminho/Para/Processo3", "0003/2024", 2023, new Motivo("Juros abusivos"), new("Enel"), new("Jubiscreu"), DateTime.Now, Status.ArquivadoNaoAtendido, DateTime.Now, DateTime.Now),
-            };
-
             this.DataContext = this;
+            _ = CarregarProcessos();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Corre√ß√£o aqui
+        }
+
+
+        private async void PesquisarProcesso_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            // Verifica se a tecla pressionada foi "Enter"
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                var textBox = sender as TextBox;
+                string pesquisa = textBox.Text;
+
+                if (string.IsNullOrWhiteSpace(pesquisa))
+                {
+                    await CarregarProcessos();
+                    MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
+                    return;
+                }
+
+                try
+                {
+                    var processo = await ReclamacaoControl.GetAsync(pesquisa);
+                    Processos.Clear();
+
+                    if (processo != null)
+                    {
+                        var processoViewModel = new ReclamacaoViewModel(processo);
+                        processoViewModel.PropertyChanged += Processo_PropertyChanged;
+                        Processos.Add(processoViewModel);
+                        MensagemFeedback.Visibility = Visibility.Collapsed; // Oculta a mensagem de feedback
+                    }
+                    else
+                    {
+                        MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de feedback
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"‚ùå Erro ao pesquisar processo: {ex.Message}");
+                    MensagemFeedback.Text = "Erro ao pesquisar processo.";
+                    MensagemFeedback.Visibility = Visibility.Visible; // Exibe a mensagem de erro
+                }
+            }
+        }
+
+
+
+
+
+        private async Task CarregarProcessos()
+        {
+            if (_isLoading) return;
+
+            carregando.Visibility = Visibility.Visible;
+            carregando.IsActive = true;
+            _isLoading = true;
+
+            try
+            {
+                if (_totalProcessos == 0)
+                {
+                    _totalProcessos = await ReclamacaoControl.CountAsync();
+                }
+
+                var processos = await ReclamacaoControl.GetNRows(_limit, _offset);
+                DispatcherQueue.TryEnqueue(() => Processos.Clear());
+
+                if (processos != null && processos.Any())
+                {
+                    foreach (var processo in processos)
+                    {
+                        if (processo != null)
+                        {
+                            var processoViewModel = new ReclamacaoViewModel(processo);
+                            processoViewModel.PropertyChanged += Processo_PropertyChanged; // Escutar mudan√ßas
+
+                            DispatcherQueue.TryEnqueue(() => Processos.Add(processoViewModel));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"‚ùå Erro ao carregar processos: {ex.Message}");
+            }
+            finally
+            {
+                carregando.IsActive = false;
+                carregando.Visibility = Visibility.Collapsed;
+                _isLoading = false;
+                AtualizarEstadoDosBotoes();
+            }
+        }
+
+        private void AtualizarEstadoDosBotoes()
+        {
+            BotaoPaginaAnterior.IsEnabled = _paginaAtual > 1;
+            BotaoProximaPagina.IsEnabled = _offset + _limit < _totalProcessos;
+        }
+
+        private async void ProximaPagina_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isLoading || _offset + _limit >= _totalProcessos) return;
+
+            _paginaAtual++;
+            _offset = (_paginaAtual - 1) * _limit;
+            OnPropertyChanged(nameof(PaginaAtual));
+            await CarregarProcessos();
+        }
+
+        private async void PaginaAnterior_Click(object sender, RoutedEventArgs e)
+        {
+            if (_paginaAtual > 1)
+            {
+                _paginaAtual--;
+                _offset = (_paginaAtual - 1) * _limit;
+                OnPropertyChanged(nameof(PaginaAtual));
+                await CarregarProcessos();
+            }
+        }
+
+        private void _NovoProcessoBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(RegistrarProcesso01Page), true);
+        }   
+
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                FlyoutBase.ShowAttachedFlyout(element);
+            }
         }
 
         private void ProcessoItem_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -36,44 +229,41 @@ namespace PROARC.src.Views
 
         private void ProcessoItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            // Aqui vocÍ pode ocultar o Flyout se necess·rio (geralmente feito automaticamente pelo sistema)
+            // Aqui voc√™ pode ocultar o Flyout se necess√°rio (geralmente feito automaticamente pelo sistema)
         }
 
-        private void Processo_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+        private void Processo_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is ProcessoAdministrativo processo)
+            if (sender is FrameworkElement element)
             {
-                // Crie um MenuFlyout
                 var menuFlyout = new MenuFlyout();
 
-                // Adicione opÁıes ao MenuFlyout
                 var visualizarItem = new MenuFlyoutItem { Text = "Visualizar Processo" };
-                //visualizarItem.Click += (s, args) => VisualizarProcesso(processo);
-
                 var editarItem = new MenuFlyoutItem { Text = "Editar Processo" };
-                editarItem.Click += (s, args) => EditarProcesso(processo);
 
                 var excluirItem = new MenuFlyoutItem
                 {
                     Text = "Excluir Processo",
-                    Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red) // Define a cor vermelha
+                    Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Red)
                 };
-                //excluirItem.Click += (s, args) => ExcluirProcesso(processo);
 
                 menuFlyout.Items.Add(visualizarItem);
                 menuFlyout.Items.Add(editarItem);
                 menuFlyout.Items.Add(new MenuFlyoutSeparator());
                 menuFlyout.Items.Add(excluirItem);
 
-                // Exiba o menu no ponto clicado
                 menuFlyout.ShowAt(element, e.GetPosition(element));
             }
         }
 
-
-        private void EditarProcesso(ProcessoAdministrativo processo)
+        private void OnDragStarting(UIElement sender, DragStartingEventArgs args)
         {
-            Frame.Navigate(typeof(RegistrarProcesso01Page));
+            args.Cancel = true; // Cancela qualquer tentativa de arrasto
+        }
+
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
         }
     }
 }
