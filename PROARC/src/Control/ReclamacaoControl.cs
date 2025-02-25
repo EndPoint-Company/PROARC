@@ -8,6 +8,7 @@ using static PROARC.src.Control.NetworkControl;
 using PROARC.src.Models.Tipos;
 using PROARC.src.Models;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace PROARC.src.Control
 {
@@ -138,6 +139,7 @@ namespace PROARC.src.Control
         {
             var request = new { action = "get_reclamacao_por_titulo", titulo };
             string response = await SendRequestAsync(request);
+            Console.WriteLine(response);
             JToken jsonToken = JToken.Parse(response);
 
             if (jsonToken.Type == JTokenType.String)
@@ -168,14 +170,18 @@ namespace PROARC.src.Control
                 (string?)reclamanteObj?.Value["email"] ?? ""
             );
 
+            JProperty? primeiroProcurador = procuradorToken.Children<JProperty>().FirstOrDefault();
+            JObject? dadosProcurador = primeiroProcurador?.Value as JObject;
+
             Procurador procurador = new(
-                (string?)procuradorToken?["nome"] ?? "",
-                (string?)procuradorToken?["cpf"] ?? "",
-                (string?)procuradorToken?["rg"] ?? "",
-                (string?)procuradorToken?["telefone"] ?? "",
-                (string?)procuradorToken?["email"] ?? ""
+                (string?)dadosProcurador?["nome"] ?? "",
+                (string?)dadosProcurador?["cpf"] ?? "",
+                (string?)dadosProcurador?["rg"] ?? "",
+                (string?)dadosProcurador?["telefone"] ?? "",
+                (string?)dadosProcurador?["email"] ?? ""
             );
 
+            Console.WriteLine(procurador);
             LinkedList<Reclamado> reclamados = new();
             foreach (JObject obj in reclamadosToken)
             {
@@ -345,13 +351,15 @@ namespace PROARC.src.Control
             using JsonDocument doc = JsonDocument.Parse(response);
             var root = doc.RootElement;
 
-            if (root.TryGetProperty("count", out JsonElement countElement))
+            if (root.TryGetProperty("count", out JsonElement countElement) &&
+                countElement.ValueKind == JsonValueKind.Number)
             {
                 return countElement.GetInt32();
             }
 
             return 0;
         }
+
 
         public static async Task<int> CountEAsync()
         {

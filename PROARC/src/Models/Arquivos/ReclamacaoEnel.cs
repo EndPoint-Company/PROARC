@@ -45,5 +45,9 @@ namespace PROARC.src.Models.Arquivos
         public string? ContatoEnelEmail { get => this.contatoEnelEmail; set { this.contatoEnelEmail = value; } }
         public string? Observacao { get => this.observacao; set { this.observacao = value; } }
 
+        public static explicit operator ReclamacaoEnel(Task<Reclamacao> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
