@@ -28,6 +28,7 @@ namespace PROARC.src.Views
             this.InitializeComponent();
             ConfigureShadows();
             this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
+            PreencherComboBoxUfTodosReclamados();
         }
 
         // CADASTRAR EMPRESA
@@ -78,7 +79,7 @@ namespace PROARC.src.Views
                 };
 
                 await successDialog.ShowAsync();
-                this.Frame.Navigate(typeof(ControleEmpresas));
+                CarregarDados();
             }
             else
             {
@@ -87,8 +88,39 @@ namespace PROARC.src.Views
         }
 
         private bool CamposPreenchidos()
-            => new[] { inputNome, inputNumero, inputRua, inputBairro, inputCidade, inputUf, inputCep }
-                .All(campo => !string.IsNullOrWhiteSpace(campo.Text));
+     => new object[] { inputNome, inputNumero, inputRua, inputBairro, inputCidade, inputCep }
+         .All(campo => !string.IsNullOrWhiteSpace((campo as TextBox)?.Text))
+        && inputUf.SelectedItem != null;
+
+        private void CarregarDados()
+        {
+            // Lista de UFs do Brasil
+            List<string> ufs = new List<string>
+    {
+        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+        "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+        "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    };
+
+            // Preenche o ComboBox de UF
+            inputUf.ItemsSource = ufs;
+
+            // Limpa os campos do formulário
+            inputNome.Text = string.Empty;
+            inputNumero.Text = string.Empty;
+            inputRua.Text = string.Empty;
+            inputBairro.Text = string.Empty;
+            inputCidade.Text = string.Empty;
+            inputUf.SelectedItem = null;
+            inputCep.Text = string.Empty;
+            inputCnpjCpf.Text = string.Empty;
+            inputEmail.Text = string.Empty;
+            inputTelefone.Text = string.Empty;
+            comboBoxTipoDocumento.SelectedItem = null;
+
+            // Desativa o campo CNPJ/CPF até que o tipo de documento seja selecionado novamente
+            inputCnpjCpf.IsEnabled = false;
+        }
 
 
         // POP-UP DE ERRO
@@ -118,6 +150,22 @@ namespace PROARC.src.Views
         private string RemoverCaracteresEspeciais(string documento)
         {
             return Regex.Replace(documento, @"\D", "");
+        }
+
+        private void PreencherComboBoxUfTodosReclamados()
+        {
+            List<string> ufs = new List<string>
+            {
+                "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+                "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+                "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+            };
+
+            var comboBoxUf = FindName("inputUf") as ComboBox;
+            if (comboBoxUf != null)
+            {
+                comboBoxUf.ItemsSource = ufs;
+            }
         }
 
         private void OnTipoDocumentoChanged(object sender, SelectionChangedEventArgs e)

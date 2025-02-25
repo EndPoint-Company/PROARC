@@ -84,6 +84,7 @@ namespace PROARC.src.Views
             this.InitializeComponent();
             this.DataContext = this;
             _ = CarregarProcessos();
+
         }
 
 

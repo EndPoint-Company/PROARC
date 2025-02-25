@@ -21,7 +21,7 @@
         <ScrollViewer>
             <StackPanel Padding="20" Spacing="32" Margin="0,0,0, 40">
                 <!-- Título -->
-                <TextBlock Text="CADASTRAR RECLAMAÇÃO" 
+                <TextBlock Text="CADASTRAR RECLAMAÇÃO GERAL" 
                                FontSize="32" 
                                FontWeight="Bold" 
                                Margin="160,40, 160, 0" />

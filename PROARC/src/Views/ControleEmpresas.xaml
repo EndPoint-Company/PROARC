@@ -88,7 +88,8 @@
 
                             <StackPanel>
                                 <TextBlock x:Name="TextBlockUf" Text="UF *" FontSize="14"/>
-                                <TextBox x:Name="inputUf" PlaceholderText="Insira a UF" Width="80" />
+                                <ComboBox x:Name="inputUf" PlaceholderText="Selecione a UF" Padding="11" Width="80"/>
+                                <!--<TextBox x:Name="inputUf" PlaceholderText="Insira a UF" Width="80" />-->
                             </StackPanel>
 
                             <StackPanel>
