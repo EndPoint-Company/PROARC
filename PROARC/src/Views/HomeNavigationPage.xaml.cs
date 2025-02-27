@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
 
 namespace PROARC.src.Views
@@ -12,7 +14,7 @@ namespace PROARC.src.Views
             this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled; // Correção aqui
         }
 
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private async void NavigationView_SelectionChangedAsync(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             var selectedItem = args.SelectedItem as NavigationViewItem;
 
@@ -48,6 +50,12 @@ namespace PROARC.src.Views
                         contentFrame.Navigate(typeof(RegistrarProcessoEnelPage), true);
                         args.SelectedItemContainer.IsSelected = false;
                         break;
+                    case "EditMotivoDialog":
+                        var dialog = new EditMotivoDialog();
+                        await dialog.ShowAsync();
+                        args.SelectedItemContainer.IsSelected = false;
+                        break;
+
                 }
             }
         }

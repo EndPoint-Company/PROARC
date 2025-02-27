@@ -113,7 +113,6 @@ namespace PROARC.src.Views
         private async Task CarregarMotivosAsync()
          => cbMotivo.ItemsSource = await MotivoControl.GetAllAsync();
 
-
         private void ProcessoNovo_Click(object sender, RoutedEventArgs e)
         => ConfigurarEstadoProcesso(true);
 

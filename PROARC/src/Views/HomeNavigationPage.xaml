@@ -13,7 +13,7 @@
                     IsSettingsVisible="True"
                     IsBackButtonVisible="Collapsed"
                     IsBackEnabled="False"
-                    SelectionChanged="NavigationView_SelectionChanged"
+                    SelectionChanged="NavigationView_SelectionChangedAsync"
                     AlwaysShowHeader="True"
                     PaneTitle=""
                     PaneDisplayMode="Left"
@@ -46,6 +46,12 @@
             <NavigationViewItem Content="Cadastrar Reclamado" Tag="ControleEmpresas" x:Name="ControleEmpresas">
                 <NavigationViewItem.Icon>
                     <FontIcon Glyph="&#xE731;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+
+            <NavigationViewItem Content="Editar Motivos" Tag="EditMotivoDialog" x:Name="EditMotivoDialogItem">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE70F;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
         </NavigationView.MenuItems>
