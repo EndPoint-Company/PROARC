@@ -102,9 +102,9 @@ namespace PROARC.src.Control
             await SendRequestAsync(request);
         }
 
-        public static async Task UpdateAsync(string nome, string? novoNome = null, string? novaDescricao = null)
+        public static async Task UpdateAsync(string nome, string? novoNome = null)
         {
-            var request = new { action = "update_motivo_by_id", nome, novoNome, novaDescricao };
+            var request = new { action = "update_motivo_por_id", nome, novoNome};
             await SendRequestAsync(request);
         }
 
